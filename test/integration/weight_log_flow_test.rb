@@ -7,7 +7,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     # セッションに保持しなければならない値はペンディング
     # テストを詰めていく中で決める
-    get "/users", nil, {"user_id" => 1}
+    get "/users/1", nil, {"user_id" => 1}
     
     assert_response :success
     assert_equal "履歴が未登録です。", flash[:notice]

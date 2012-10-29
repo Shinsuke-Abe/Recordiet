@@ -60,6 +60,6 @@ module Recordiet
     config.assets.version = '1.0'
     
     # SSLアクセス
-    conifg.force_ssl = true
+    config.force_ssl = true
   end
 end
