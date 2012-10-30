@@ -4,16 +4,17 @@ require 'test_helper'
 class WeightLogFlowTest < ActionDispatch::IntegrationTest
   fixtures :all
   
-  test "ユーザログイン済：履歴未登録の状態では一覧ではなくメッセージを表示する" do
+  test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
     https!
-    # セッションに保持しなければならない値はペンディング
-    # テストを詰めていく中で決める
-    get "/users/1", nil, {"user_id" => 1}
-    
+    get "/login"
     assert_response :success
+    
+    post_via_redirect "/login", :username => "john", :password => "pass1234"
+    assert_equal "/user", path
     assert_equal "履歴が未登録です。", flash[:notice]
   end
-  # ユーザログイン済：履歴の登録済の一覧が表示
+  
+  # 履歴登録済：ログインすると履歴ページに一覧を表示する
   
   # test "the truth" do
   #   assert true
