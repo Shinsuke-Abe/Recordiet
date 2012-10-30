@@ -6,7 +6,15 @@ class LoginsControllerTest < ActionController::TestCase
     get :show
     assert_response :success
   end
-  #正しいユーザ名とパスワードを入力すると履歴画面に遷移する
+  
+  test "正しいユーザ名とパスワードを入力すると履歴画面に遷移する" do
+    post :create, {"mail_address" => "john@mail.com", "password" => "pass1234"}
+    assert_redirected_to user_path
+    assert_equal session[:mail_address], "john@mail.com"
+  end
+  #
+  
+  # 間違ったユーザ名とパスワードを入力するとログインフォームを再表示する
   # test "the truth" do
   #   assert true
   # end
