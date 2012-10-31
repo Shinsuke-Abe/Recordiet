@@ -8,7 +8,7 @@ class LoginsControllerTest < ActionController::TestCase
   end
   
   test "正しいユーザ名とパスワードを入力すると履歴画面に遷移する" do
-    post :create, {"mail_address" => "john@mail.com", "password" => "pass1234"}
+    post :create, :user => {"mail_address" => "john@mail.com", "password" => "pass1234"}
     assert_redirected_to user_path
     assert_equal session[:mail_address], "john@mail.com"
   end

@@ -1,6 +1,6 @@
 Recordiet::Application.routes.draw do
   resource :login
-  resources :users
+  resource :user
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
