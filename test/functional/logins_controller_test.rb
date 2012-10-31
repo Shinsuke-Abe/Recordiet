@@ -11,6 +11,7 @@ class LoginsControllerTest < ActionController::TestCase
     post :create, :user => {"mail_address" => "john@mail.com", "password" => "pass1234"}
     assert_redirected_to user_path
     assert_equal session[:mail_address], "john@mail.com"
+    
   end
   #
   
