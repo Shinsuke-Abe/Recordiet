@@ -9,3 +9,8 @@ two:
   mail_address: MyString
   display_name: MyString
   password: MyString
+
+john:
+  mail_address: john@mail.com
+  display_name: john denver
+  password: pass1234
