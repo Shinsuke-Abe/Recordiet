@@ -1,3 +1,4 @@
+# encofing: utf-8
 class LoginsController < ApplicationController
   def show
     @user = User.new
