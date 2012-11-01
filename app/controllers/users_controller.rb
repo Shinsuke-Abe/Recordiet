@@ -1,3 +1,4 @@
+# encoding: utf-8
 class UsersController < ApplicationController
   # GET /users
   # GET /users.json
@@ -13,7 +14,10 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @user = User.find(params[:id])
+    #@user = User.find(params[:id])
+    @user = User.find(:first, :conditions => {:mail_address => session[:mail_address]})
+    
+    flash[:notice] = "履歴が未登録です。"
 
     respond_to do |format|
       format.html # show.html.erb

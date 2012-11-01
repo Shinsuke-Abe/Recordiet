@@ -9,7 +9,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     get "/login"
     assert_response :success
     
-    post_via_redirect "/login", :mail_address => "john@mail.com", :password => "pass1234"
+    post_via_redirect "/login", :user => {:mail_address => "john@mail.com", :password => "pass1234"}
     assert_equal "/user", path
     assert_equal "履歴が未登録です。", flash[:notice]
   end
