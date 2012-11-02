@@ -6,9 +6,9 @@ one:
   password: MyString
 
 two:
-  mail_address: MyString
-  display_name: MyString
-  password: MyString
+  mail_address: MyString2
+  display_name: MyString2
+  password: MyString2
 
 john:
   mail_address: john@mail.com

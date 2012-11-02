@@ -14,8 +14,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    #@user = User.find(params[:id])
-    @user = User.find(:first, :conditions => {:mail_address => session[:mail_address]})
+    @user = User.find(session[:id])
     
     flash[:notice] = "履歴が未登録です。"
 

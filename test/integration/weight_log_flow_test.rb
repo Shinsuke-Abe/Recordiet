@@ -14,13 +14,13 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_equal "履歴が未登録です。", flash[:notice]
   end
   
-  test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
-    https!
-    post_via_redirect "/login", :user => {:mail_address => "eric@mail.com", :password => "pass9876"}
-    assert_equal "/user", path
-    assert assigns(:user)
-    assert assigns(:user => :weight_logs)
-  end
+  # test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
+    # https!
+    # post_via_redirect "/login", :user => {:mail_address => "eric@mail.com", :password => "pass9876"}
+    # assert_equal "/user", path
+    # assert assigns(:user)
+    # assert assigns(:user => :weight_logs)
+  # end
   
   # test "the truth" do
   #   assert true

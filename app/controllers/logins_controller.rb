@@ -6,8 +6,8 @@ class LoginsController < ApplicationController
   
   def create
     @user = User.new(params[:user])
-    if User.authenticate(@user.mail_address, @user.password)
-      session[:mail_address] = "john@mail.com"
+    if authed_user = User.authenticate(@user.mail_address, @user.password)
+      session[:id] = authed_user.id
       redirect_to user_path
     else
       flash[:notice] = "メールアドレスかパスワードが間違っています。"

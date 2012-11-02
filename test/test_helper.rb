@@ -7,7 +7,11 @@ class ActiveSupport::TestCase
   #
   # Note: You'll currently still have to declare fixtures explicitly in integration tests
   # -- they do not yet inherit this setting
-  fixtures :all
+  fixtures :all, :users
 
   # Add more helper methods to be used by all tests here...
+  # def randomuser
+    # p users
+    # users.to_a.at(rand(users.length))[1]
+  # end
 end
