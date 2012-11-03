@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  measured_date: 2012-11-03
-  weight: 1.5
-  user: 
+  measured_date: <%= 13.days.from_now.to_s(:db) %>
+  weight: 74.9
+  user: eric
 
 two:
-  measured_date: 2012-11-03
-  weight: 1.5
-  user: 
+  measured_date: <%= 14.days.from_now.to_s(:db) %>
+  weight: 75.0
+  user: eric

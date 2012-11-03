@@ -20,6 +20,9 @@ class UserTest < ActiveSupport::TestCase
     assert_nil User.authenticate("nemo@mail.com", "pass1234")
   end
   
+  # 履歴あり：ユーザの履歴の存在確認
+  # 履歴なし：ユーザの履歴の存在確認
+  
   # test "the truth" do
   #   assert true
   # end
