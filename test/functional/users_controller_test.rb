@@ -1,9 +1,38 @@
+# encoding: utf-8
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
   
-  # show:履歴を持つユーザを表示する
-  # show:履歴を持たないユーザを表示する
+  test "show:履歴を持たないユーザを表示する" do
+    session[:id] = users(:john).id
+    
+    get :show
+    assert_response :success
+    
+    assigned_john = assigns(:user)
+    assert_not_nil assigned_john
+    assert_equal assigned_john, users(:john)
+    assert assigned_john.weight_logs.empty?
+    assert_equal "履歴が未登録です。", flash[:notice]
+  end
+  
+  test "show:履歴を持つユーザを表示する" do
+    session[:id] = users(:eric).id
+    
+    get :show
+    assert_response :success
+    
+    assigned_eric = assigns(:user)
+    assert_not_nil assigned_eric
+    assert_nil flash[:notice]
+    assert_equal assigned_eric.weight_logs.length, 2
+    for weight_log in assinged_eric.weight_logs do
+      assert users(:eric).weight_logs.include?(weight_log)
+    end
+  end
+  
+  # 
+  # 
   # setup do
     # @user = users(:one)
   # end
