@@ -6,7 +6,9 @@ class LoginsController < ApplicationController
   
   def create
     @user = User.new(params[:user])
-    if authed_user = User.authenticate(@user.mail_address, @user.password)
+    authed_user = User.authenticate(@user.mail_address, @user.password)
+    
+    if authed_user
       session[:id] = authed_user.id
       redirect_to user_path
     else
