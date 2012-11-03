@@ -34,6 +34,21 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert assigns(:user).weight_logs
   end
   
+  test "体重履歴を登録する" do
+    https!
+    login_action users(:john).mail_address, users(:john).password
+    
+    assert_equal "/user", path
+    assert_show_user_without_log
+    
+    post_via_redirect "/weight_logs/", :weight_log => {
+      :measured_date => 1.day.ago,
+      :weight => 73.8
+    }
+    assert_equal "/user", path
+    assert !assigns(:user).weight_logs.empty?
+  end
+  
   private
   def assert_show_user_without_log
     assert_equal "/user", path
