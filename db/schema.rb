@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121029161717) do
+ActiveRecord::Schema.define(:version => 20121103055046) do
 
   create_table "users", :force => true do |t|
     t.string   "mail_address"
@@ -20,5 +20,15 @@ ActiveRecord::Schema.define(:version => 20121029161717) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
+
+  create_table "weight_logs", :force => true do |t|
+    t.date     "measured_date"
+    t.float    "weight"
+    t.integer  "user_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "weight_logs", ["user_id"], :name => "index_weight_logs_on_user_id"
 
 end

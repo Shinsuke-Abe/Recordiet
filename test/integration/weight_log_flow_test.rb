@@ -31,8 +31,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
     https!
     post_via_redirect "/login", :user => {
-      :mail_address => "eric@mail.com",
-      :password => "pass9876"}
+      :mail_address => "clapton@cream.com",
+      :password => "ocean461"}
     assert_equal "/user", path
     assert assigns(:user)
     assert assigns(:user => :weight_logs)

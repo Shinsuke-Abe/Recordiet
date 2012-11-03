@@ -14,3 +14,8 @@ john:
   mail_address: john@mail.com
   display_name: john denver
   password: pass1234
+
+eric:
+  mail_address: clapton@cream.com
+  display_name: guitar god
+  password: ocean461
