@@ -26,13 +26,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigned_eric
     assert_nil flash[:notice]
     assert_equal assigned_eric.weight_logs.length, 2
-    for weight_log in assinged_eric.weight_logs do
-      assert users(:eric).weight_logs.include?(weight_log)
+    for weight_log in users(:eric).weight_logs do
+      assert assigned_eric.weight_logs.include?(weight_log)
     end
   end
   
-  # 
-  # 
   # setup do
     # @user = users(:one)
   # end

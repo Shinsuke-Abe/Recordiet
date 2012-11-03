@@ -17,7 +17,9 @@ class UsersController < ApplicationController
   def show
     @user = User.find(session[:id])
     
-    flash[:notice] = "履歴が未登録です。"
+    if @user.weight_logs.empty?
+      flash[:notice] = "履歴が未登録です。"
+    end
 
     respond_to do |format|
       format.html # show.html.erb
