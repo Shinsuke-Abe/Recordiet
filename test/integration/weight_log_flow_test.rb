@@ -9,9 +9,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     get "/login"
     assert_response :success
     
-    post_via_redirect "/login", :user => {
-      :mail_address => "john@mail.com",
-      :password => "pass1234"}
+    login_action users(:john).mail_address, users(:john).password
     assert_show_user_without_log
   end
   
@@ -30,21 +28,22 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
     https!
-    post_via_redirect "/login", :user => {
-      :mail_address => "clapton@cream.com",
-      :password => "ocean461"}
+    login_action users(:eric).mail_address, users(:eric).password
     assert_equal "/user", path
     assert assigns(:user)
-    assert assigns(:user => :weight_logs)
+    assert assigns(:user).weight_logs
   end
-  
-  # test "the truth" do
-  #   assert true
-  # end
   
   private
   def assert_show_user_without_log
     assert_equal "/user", path
     assert_equal "履歴が未登録です。", flash[:notice]
+  end
+  
+  def login_action(mail_address, password)
+    post_via_redirect "/login", :user => {
+      :mail_address => mail_address,
+      :password => password
+    }
   end
 end

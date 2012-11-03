@@ -4,12 +4,8 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
   
   test "show:履歴を持たないユーザを表示する" do
-    session[:id] = users(:john).id
+    assigned_john = show_user_action(:john)
     
-    get :show
-    assert_response :success
-    
-    assigned_john = assigns(:user)
     assert_not_nil assigned_john
     assert_equal assigned_john, users(:john)
     assert assigned_john.weight_logs.empty?
@@ -17,20 +13,22 @@ class UsersControllerTest < ActionController::TestCase
   end
   
   test "show:履歴を持つユーザを表示する" do
-    session[:id] = users(:eric).id
+    assigned_eric = show_user_action(:eric)
+    
+    assert_not_nil assigned_eric
+    assert_nil flash[:notice]
+    assert_weight_logs users(:eric), assigned_eric
+  end
+  
+  private
+  def show_user_action(name)
+    session[:id] = users(name).id
     
     get :show
     assert_response :success
     
-    assigned_eric = assigns(:user)
-    assert_not_nil assigned_eric
-    assert_nil flash[:notice]
-    assert_equal assigned_eric.weight_logs.length, 2
-    for weight_log in users(:eric).weight_logs do
-      assert assigned_eric.weight_logs.include?(weight_log)
-    end
+    assigns(:user)
   end
-  
   # setup do
     # @user = users(:one)
   # end
