@@ -11,8 +11,9 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/1
-  # GET /users/1.json
+  # GET /user
+  # GET /user
+  # show user report
   def show
     @user = User.find(session[:id])
     
@@ -24,8 +25,9 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/new
-  # GET /users/new.json
+  # GET /user/new
+  # GET /user/new.json
+  # show user register form
   def new
     @user = User.new
 
@@ -40,14 +42,16 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  # POST /users
-  # POST /users.json
+  # POST /user
+  # POST /user.json
+  # register new user
   def create
     @user = User.new(params[:user])
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
+        session[:id] = @user.id
+        format.html { redirect_to user_path }
         format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }
