@@ -20,8 +20,20 @@ class UserTest < ActiveSupport::TestCase
     assert_nil User.authenticate("nemo@mail.com", "pass1234")
   end
   
-  # 履歴あり：ユーザの履歴の存在確認
-  # 履歴なし：ユーザの履歴の存在確認
+  test "履歴あり：ユーザの履歴の存在確認" do
+    eric = User.find(users(:eric).id)
+    
+    assert_equal eric.weight_logs.length, 2
+    for weight_log in users(:eric).weight_logs do
+      assert eric.weight_logs.include?(weight_log)
+    end
+  end
+  
+  test "履歴なし：ユーザの履歴の存在確認" do
+    john = User.find(users(:john))
+    
+    assert john.weight_logs.empty?
+  end
   
   # test "the truth" do
   #   assert true
