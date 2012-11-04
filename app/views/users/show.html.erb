@@ -24,16 +24,18 @@
 <% end %>
 
 <h2>体重履歴</h2>
-<% @user.weight_logs.each do |weight_log| %>
-  <p>
-  	<p>計測日：</p>
-  	<%= weight_log.measured_date %>
-  </p>
-  <p>
-  	<p>体重：</p>
-  	<%= weight_log.weight %>
-  </p>
-<% end %>
+<table>
+  <tr>
+  	<th>計測日</th>
+  	<th>体重</th>
+  </tr>
+  <% @user.weight_logs.each do |weight_log| %>
+  	<tr>
+  		<td><%= weight_log.measured_date %></td>
+  		<td><%= weight_log.weight %></td>
+  	</tr>
+  <% end %>
+</table>
 
 <!--
 <%= link_to 'Edit', edit_user_path %> |
