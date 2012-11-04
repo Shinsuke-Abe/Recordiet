@@ -24,11 +24,38 @@ class WeightLogsControllerTest < ActionController::TestCase
     }
     
     eric_log_not_added = assigns(:user)
-    p users(:eric).weight_logs
-    p eric_log_not_added.weight_logs
     assert_equal(
       users(:eric).weight_logs.length,
       User.find(users(:eric).id).weight_logs.length)
+    assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
+  end
+  
+  test "指定したログの内容を修正することができる" do
+    session[:id] = users(:eric).id
+    put :update, {
+      :id => users(:eric).weight_logs[1].id,
+      :weight_log =>{
+        :measured_date => Date.yesterday,
+        :weight => 69.0
+      }}
+    
+    weight_log_of_eric = User.find(users(:eric).id).weight_logs
+    updated_log = weight_log_of_eric[
+      weight_log_of_eric.index{|weight_log|
+        weight_log.id == users(:eric).weight_logs[1].id}] 
+    assert_equal Date.yesterday, updated_log.measured_date
+    assert_equal 69.0, updated_log.weight
+  end
+  
+  test "ログの変更内容の体重が未入力の場合はエラーメッセージを表示する" do
+    session[:id] = users(:eric).id
+    put :update, {
+      :id => users(:eric).weight_logs[1].id,
+      :weight_log =>{
+        :measured_date => Date.yesterday,
+        :weight => nil
+      }}
+    
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
 end

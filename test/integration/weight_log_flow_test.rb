@@ -53,10 +53,10 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action users(:eric).mail_address, users(:eric).password
     
-    get edit_weight_log_path(users(:eric).weight_logs[1].id)
+    get "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s + "/edit"
     assert_response :success
     
-    put_via_redirect weight_log_path(users(:eric).weight_logs[1].id), :weight_log => {
+    put_via_redirect "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s, :weight_log => {
       :measured_date => Date.yesterday,
       :weight => 69.0
     }

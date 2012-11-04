@@ -11,4 +11,21 @@ class WeightLogsController < ApplicationController
     
     redirect_to user_path
   end
+  
+  # show weight_log edit form
+  def edit
+    @user = User.find(session[:id])
+    @weight_log = WeightLog.find(params[:id])
+  end
+  
+  # update weight_log
+  def update
+    @weight_log = WeightLog.find(params[:id])
+    
+    unless @weight_log.update_attributes(params[:weight_log])
+      flash[:notice] = "記録の登録には計測日と体重が必要です。"
+    end
+    
+    redirect_to user_path
+  end
 end
