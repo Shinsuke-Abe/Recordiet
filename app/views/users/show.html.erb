@@ -10,6 +10,19 @@
   <%= @user.display_name %>
 </p>
 
+<h2>体重履歴を追加</h2>
+<%= form_for([@user, @user.weight_logs.build]) do |f| %>
+  <div class="field">
+  	計測日：<%= f.date_select :measured_date %>
+  </div>
+  <div class="field">
+  	体重：<%= f.number_field :weight , :step => 0.1 %>
+  </div>
+  <div class="actions">
+    <%= f.submit "記録" %>
+  </div>
+<% end %>
+
 <h2>体重履歴</h2>
 <% @user.weight_logs.each do |weight_log| %>
   <p>
@@ -25,6 +38,3 @@
 <!--
 <%= link_to 'Edit', edit_user_path %> |
 -->
-<%
-#<%= link_to 'Back', users_path %>
-%>

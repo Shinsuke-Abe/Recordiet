@@ -41,8 +41,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_equal "/user", path
     assert_show_user_without_log
     
-    post_via_redirect "/weight_logs/", :weight_log => {
-      :measured_date => 1.day.ago,
+    post_via_redirect "/user/weight_logs/", :weight_log => {
+      :measured_date => Date.today - 1,
       :weight => 73.8
     }
     assert_equal "/user", path
