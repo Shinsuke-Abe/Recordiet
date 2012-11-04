@@ -55,7 +55,7 @@ class WeightLogsControllerTest < ActionController::TestCase
         :measured_date => Date.yesterday,
         :weight => nil
       }}
-    
+      
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
 end

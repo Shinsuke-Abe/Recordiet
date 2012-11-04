@@ -28,11 +28,13 @@
   <tr>
   	<th>計測日</th>
   	<th>体重</th>
+  	<th></th>
   </tr>
   <% @user.weight_logs.each do |weight_log| %>
   	<tr>
   		<td><%= weight_log.measured_date %></td>
   		<td><%= weight_log.weight %></td>
+  		<td><%= link_to "変更", "/user/weight_logs/" + weight_log.id.to_s + "/edit" %></td>
   	</tr>
   <% end %>
 </table>
