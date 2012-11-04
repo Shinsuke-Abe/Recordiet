@@ -26,10 +26,9 @@ class WeightLogsControllerTest < ActionController::TestCase
     eric_log_not_added = assigns(:user)
     p users(:eric).weight_logs
     p eric_log_not_added.weight_logs
-    assert_equal users(:eric).weight_logs.length, eric_log_not_added.weight_logs.length
+    assert_equal(
+      users(:eric).weight_logs.length,
+      User.find(users(:eric).id).weight_logs.length)
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
-  # test "the truth" do
-  #   assert true
-  # end
 end

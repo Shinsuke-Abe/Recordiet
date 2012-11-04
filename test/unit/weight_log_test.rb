@@ -25,9 +25,4 @@ class WeightLogTest < ActiveSupport::TestCase
     )
     assert new_weight_log.invalid?
   end
-  # 日付の入力は必須
-  # 体重の入力は必須
-  # test "the truth" do
-  #   assert true
-  # end
 end
