@@ -11,11 +11,11 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "認証要求でパスワードが一致しない場合はnilを返す" do
-    assert_nil User.authenticate("john@mail.com", "pass9876")
+    assert_nil User.authenticate(users(:john), "pass9876")
   end
   
   test "認証要求でメールアドレスが一致しない場合はnilを返す" do
-    assert_nil User.authenticate("nemo@mail.com", "pass1234")
+    assert_nil User.authenticate("nemo@mail.com", users(:john))
   end
   
   test "履歴あり：ユーザの履歴の存在確認" do
@@ -29,8 +29,4 @@ class UserTest < ActiveSupport::TestCase
     
     assert john.weight_logs.empty?
   end
-  
-  # test "the truth" do
-  #   assert true
-  # end
 end
