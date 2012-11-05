@@ -29,12 +29,14 @@
   	<th>計測日</th>
   	<th>体重</th>
   	<th></th>
+  	<th></th>
   </tr>
   <% @user.weight_logs.select{|log| log.id != nil }.each do |weight_log| %>
   	<tr>
   		<td><%= weight_log.measured_date %></td>
   		<td><%= weight_log.weight %></td>
   		<td><%= link_to "変更", "/user/weight_logs/" + weight_log.id.to_s + "/edit" %></td>
+  		<td><%= link_to "削除", "/user/weight_logs/" + weight_log.id.to_s, method: :delete, data: { confirm: '本当に削除しますか？' } %></td>
   	</tr>
   <% end %>
 </table>
