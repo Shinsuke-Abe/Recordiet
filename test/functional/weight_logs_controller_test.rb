@@ -5,13 +5,14 @@ class WeightLogsControllerTest < ActionController::TestCase
   fixtures :users, :weight_logs
   
   test "ログイン済のユーザに履歴を登録することができる" do
-    session[:id] = users(:john).id
-    post :create, :weight_log => {
-      :measured_date => Date.today - 1,
-      :weight => 70.9
-    }
-    
-    john_log_added = assigns(:user)
+    john_log_added = register_weight_log_action(:john, Date.today - 1, 70.9)
+#    session[:id] = users(:john).id
+#    post :create, :weight_log => {
+#      :measured_date => ,
+#      :weight => 
+#    }
+#    
+#    john_log_added = assigns(:user)
     assert_equal 1, john_log_added.weight_logs.length
     assert_equal Date.today - 1, john_log_added.weight_logs[0].measured_date
     assert_equal 70.9, john_log_added.weight_logs[0].weight
@@ -57,5 +58,16 @@ class WeightLogsControllerTest < ActionController::TestCase
       }}
       
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
+  end
+  
+  private 
+  def register_weight_log_action(name, measured_date = nil, weight = nil)
+    session[:id] = users(name).id
+    post :create, :weight_log => {
+      :measured_date => measured_date,
+      :weight => weight
+    }
+    
+    assigns(:user)
   end
 end
