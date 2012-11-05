@@ -64,6 +64,15 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert !assigns(:user).weight_logs.empty?
   end
   
+  test "体重履歴を削除する" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    delete_via_redirect "/user/weight_logs/" + users(:eric).weight_logs[0].id.to_s
+    assert_equal "/user", path
+    assert_equal 1, User.find(users(:eric).id).weight_logs.length
+  end
+  
   private
   def assert_show_user_without_log
     assert_equal "/user", path

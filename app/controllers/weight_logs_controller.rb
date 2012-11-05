@@ -27,4 +27,12 @@ class WeightLogsController < ApplicationController
     
     redirect_to user_path
   end
+  
+  # delete weight_log
+  def destroy
+    @weight_log = WeightLog.find(params[:id])
+    @weight_log.destroy
+    
+    redirect_to user_path
+  end
 end

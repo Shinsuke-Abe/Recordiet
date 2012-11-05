@@ -46,6 +46,15 @@ class WeightLogsControllerTest < ActionController::TestCase
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
   
+  test "ログを削除するとログの件数が減る" do
+    session[:id] = users(:eric).id
+    delete :destroy, :id => users(:eric).weight_logs[0].id
+    
+    weight_logs_of_eric = User.find(users(:eric).id).weight_logs
+    assert_equal users(:eric).weight_logs.length - 1, weight_logs_of_eric.length
+    assert_nil weight_logs_of_eric.index{|log| log.id == users(:eric).weight_logs[0].id}
+  end
+  
   private 
   def register_weight_log_action(name, measured_date = nil, weight = nil)
     session[:id] = users(name).id
