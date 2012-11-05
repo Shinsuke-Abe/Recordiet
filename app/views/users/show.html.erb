@@ -35,8 +35,8 @@
   	<tr>
   		<td><%= weight_log.measured_date %></td>
   		<td><%= weight_log.weight %></td>
-  		<td><%= link_to "変更", "/user/weight_logs/" + weight_log.id.to_s + "/edit" %></td>
-  		<td><%= link_to "削除", "/user/weight_logs/" + weight_log.id.to_s, method: :delete, data: { confirm: '本当に削除しますか？' } %></td>
+  		<td><%= link_to "変更", weight_log_url(weight_log.id.to_s) + "/edit" %></td>
+  		<td><%= link_to "削除", weight_log_url(weight_log.id.to_s), method: :delete, data: { confirm: '本当に削除しますか？' } %></td>
   	</tr>
   <% end %>
 </table>
