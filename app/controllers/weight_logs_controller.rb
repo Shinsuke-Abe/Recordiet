@@ -14,7 +14,6 @@ class WeightLogsController < ApplicationController
   
   # show weight_log edit form
   def edit
-    @user = User.find(session[:id])
     @weight_log = WeightLog.find(params[:id])
   end
   
