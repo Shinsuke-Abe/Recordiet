@@ -21,11 +21,12 @@ class WeightLogsController < ApplicationController
   def update
     @weight_log = WeightLog.find(params[:id])
     
-    unless @weight_log.update_attributes(params[:weight_log])
+    if @weight_log.update_attributes(params[:weight_log])
+      redirect_to user_path
+    else
       flash[:notice] = "記録の登録には計測日と体重が必要です。"
+      render :action => "edit" 
     end
-    
-    redirect_to user_path
   end
   
   # delete weight_log

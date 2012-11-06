@@ -73,6 +73,21 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_equal 1, User.find(users(:eric).id).weight_logs.length
   end
   
+  test "体重の変更で未入力エラー" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    get "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s + "/edit"
+    assert_response :success
+    
+    put_via_redirect "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s, :weight_log => {
+      :measured_date => Date.yesterday,
+      :weight => nil
+    }
+    assert_equal "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s, path
+    assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
+  end
+  
   private
   def assert_show_user_without_log
     assert_equal "/user", path
