@@ -88,6 +88,22 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
   
+  test "目標とご褒美を設定する" do
+    https!
+    login_action users(:john).mail_address, users(:eric).password
+    
+    get "/user/milestone/new"
+    assert_response :success
+    
+    post_via_redirect "/user/milestone", :milestone => {
+      :weight => 67.0,
+      :date => Date.today + 30.days,
+      :reward => "焼き肉食べ放題"
+    }
+    assert_equal "/user", path
+    assert assigns(:user).mileston
+  end
+  
   private
   def assert_show_user_without_log
     assert_equal "/user", path
