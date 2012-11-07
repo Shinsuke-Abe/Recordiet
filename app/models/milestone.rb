@@ -3,4 +3,5 @@ class Milestone < ActiveRecord::Base
   attr_accessible :date, :reward, :weight
   
   validates :weight, :presence => true
+  validates :date, :date => {:after_or_equal_to => Date.today}
 end
