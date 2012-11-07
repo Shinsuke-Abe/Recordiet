@@ -1,7 +1,13 @@
+# encoding: utf-8
 require 'test_helper'
 
 class MilestoneTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  fixtures :users, :milestones
+  
+  test "目標体重の入力は必須" do
+    new_milestone = Milestone.new(
+      :date => Date.tomorrow,
+      :reward => "旅行")
+    assert new_milestone.invalid?
+  end
 end
