@@ -36,8 +36,8 @@ class WeightLogTest < ActiveSupport::TestCase
     log_added_eric = User.find(users(:eric).id)
     
     assert_equal 3, log_added_eric.weight_logs.length
-    assert_equal Date.yesterday, log_added_eric.weight_logs[0].measured_date
-    assert_equal weight_logs[:two].measured_date, log_added_eric.weight_logs[1].measured_date
-    assert_equal weight_logs[:one].measured_date, log_added_eric.weight_logs[2].measured_date
+    assert_equal weight_logs(:two).measured_date, log_added_eric.weight_logs[0].measured_date
+    assert_equal weight_logs(:one).measured_date, log_added_eric.weight_logs[1].measured_date
+    assert_equal Date.yesterday, log_added_eric.weight_logs[2].measured_date
   end
 end
