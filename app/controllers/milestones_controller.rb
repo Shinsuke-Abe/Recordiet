@@ -14,4 +14,10 @@ class MilestonesController < ApplicationController
       render :action => "new"
     end
   end
+  
+  # GET /user/milestone/edit
+  def edit
+    @user = User.find(session[:id])
+    @milestone = @user.milestone
+  end
 end

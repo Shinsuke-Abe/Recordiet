@@ -98,7 +98,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action users(:eric).mail_address, users(:eric).password
     
-    get "/user/milestone/" +  + users(:eric).milestone.id + "/edit"
+    get "/user/milestone/edit"
     assert_response :success
     
     put_via_redirect "/user/milestone/" + users(:eric).milestone.id, :milestone => {

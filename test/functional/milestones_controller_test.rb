@@ -23,4 +23,13 @@ class MilestonesControllerTest < ActionController::TestCase
     assert_equal Date.today + 60.days, johns_milestone.date
     assert_equal "ケーキバイキング", johns_milestone.reward
   end
+  
+  test "編集フォームを開く" do
+    session[:id] = users(:eric)
+    get :edit
+    assigns(:user)
+    assigns(:milestone)
+    
+    assert_equal milestones(:one), assigns(:milestone)
+  end
 end
