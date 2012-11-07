@@ -101,7 +101,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :reward => "焼き肉食べ放題"
     }
     assert_equal "/user", path
-    assert assigns(:user).mileston
+    assert assigns(:user).milestone
   end
   
   private
