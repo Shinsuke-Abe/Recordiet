@@ -1,7 +1,17 @@
 class MilestonesController < ApplicationController
-  # /user/milestone/new
+  # GET /user/milestone/new
   def new
     @user = User.find(session[:id])
     @milestone = @user.build_milestone()
+  end
+  
+  # POST /user/milestone/
+  def create
+    @user = User.find(session[:id])
+    if @milestone = @user.create_milestone(params[:milestone])
+      redirect_to user_path
+    else
+      render :action => "new"
+    end
   end
 end
