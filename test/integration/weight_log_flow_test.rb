@@ -94,6 +94,22 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert assigns(:user).milestone
   end
   
+  test "目標を修正する" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    get "/user/milestone/" +  + users(:eric).milestone.id + "/edit"
+    assert_response :success
+    
+    put_via_redirect "/user/milestone/" + users(:eric).milestone.id, :milestone => {
+      :weight => 65.0,
+      :date => Date.today + 60.days,
+      :reward => "ラーメン"
+    }
+    assert_equal "/user", path
+    assert assigns(:user).milestone
+  end
+  
   private
   def assert_show_user_without_log
     assert_equal "/user", path
