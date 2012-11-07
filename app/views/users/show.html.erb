@@ -16,13 +16,17 @@
     <tr>
       <td>目標体重</td>
       <td><%= @user.milestone.weight %></td>
-      <td>あと <%= @user.weight_logs.select{|log| log.id != nil }.index(@user.weight_logs.length - 1) - @user.milestone.weight %> kg</td>
+      <td>
+      	<% unless @user.weight_logs.empty? %>
+      	  あと <%= (@user.weight_logs.select{|log| log.id != nil }[0].weight - @user.milestone.weight).round(2) %> kg
+      	<% end%>
+      </td>
     </tr>
     <% if @user.milestone.date %>
       <tr>
         <td>期限</td>
         <td><%= @user.milestone.date %></td>
-        <td>あと <%= @user.milestone.date - Date.today %> 日</td>
+        <td>あと <%= (@user.milestone.date - Date.today).to_i %> 日</td>
       </tr>
     <% end %>
   </table>
