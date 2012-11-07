@@ -1,6 +1,7 @@
 class MilestonesController < ApplicationController
   # /user/milestone/new
   def new
-    @milestone = Milestone.new
+    @user = User.find(session[:id])
+    @milestone = @user.build_milestone()
   end
 end
