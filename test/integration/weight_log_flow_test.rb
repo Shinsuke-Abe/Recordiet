@@ -90,7 +90,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   test "目標とご褒美を設定する" do
     https!
-    login_action users(:john).mail_address, users(:eric).password
+    login_action users(:john).mail_address, users(:john).password
     
     get "/user/milestone/new"
     assert_response :success
