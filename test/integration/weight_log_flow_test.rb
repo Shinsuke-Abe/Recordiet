@@ -53,13 +53,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action users(:eric).mail_address, users(:eric).password
     
-    get "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s + "/edit"
-    assert_response :success
-    
-    put_via_redirect "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s, :weight_log => {
-      :measured_date => Date.yesterday,
-      :weight => 69.0
-    }
+    edit_weight_log_action users(:eric).weight_logs[1], Date.yesterday, 69.0
+
     assert_equal "/user", path
     assert !assigns(:user).weight_logs.empty?
   end
@@ -77,13 +72,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action users(:eric).mail_address, users(:eric).password
     
-    get "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s + "/edit"
-    assert_response :success
+    edit_weight_log_action users(:eric).weight_logs[1], Date.yesterday, nil
     
-    put_via_redirect "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s, :weight_log => {
-      :measured_date => Date.yesterday,
-      :weight => nil
-    }
     assert_equal "/user/weight_logs/" + users(:eric).weight_logs[1].id.to_s, path
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
@@ -114,6 +104,16 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     post_via_redirect "/login", :user => {
       :mail_address => mail_address,
       :password => password
+    }
+  end
+  
+  def edit_weight_log_action(weight_log, measure_date, weight)
+    get "/user/weight_logs/" + weight_log.id.to_s + "/edit"
+    assert_response :success
+    
+    put_via_redirect "/user/weight_logs/" + weight_log.id.to_s, :weight_log => {
+      :measured_date => measure_date,
+      :weight => weight
     }
   end
 end
