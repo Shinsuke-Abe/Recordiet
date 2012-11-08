@@ -20,4 +20,16 @@ class MilestonesController < ApplicationController
     @user = User.find(session[:id])
     @milestone = @user.milestone
   end
+  
+  # PUT /user/milestone/
+  def update
+    @user = User.find(session[:id])
+    @milestone = @user.milestone
+    
+    if @milestone.update_attributes(params[:milestone])
+      redirect_to user_path
+    else
+      render :action => "edit" 
+    end
+  end
 end

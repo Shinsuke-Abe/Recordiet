@@ -101,7 +101,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     get "/user/milestone/edit"
     assert_response :success
     
-    put_via_redirect "/user/milestone/" + users(:eric).milestone.id, :milestone => {
+    put_via_redirect "/user/milestone/", :milestone => {
       :weight => 65.0,
       :date => Date.today + 60.days,
       :reward => "ラーメン"

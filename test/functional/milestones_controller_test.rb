@@ -32,4 +32,17 @@ class MilestonesControllerTest < ActionController::TestCase
     
     assert_equal milestones(:one), assigns(:milestone)
   end
+  
+  test "目標を修正する" do
+    session[:id] = users(:eric)
+    post :update, :milestone => {
+        :weight => 54.6,
+        :date => Date.today + 90.days,
+        :reward => "臨時小遣い"}
+    
+    erics_milestone = User.find(users(:eric).id).milestone
+    assert_equal 54.6, erics_milestone.weight
+    assert_equal Date.today + 90.days, erics_milestone.date
+    assert_equal "臨時小遣い", erics_milestone.reward
+  end
 end
