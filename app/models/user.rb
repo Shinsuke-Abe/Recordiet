@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   attr_accessible :display_name, :mail_address, :password
   
   has_many :weight_logs
+  has_many :achieved_milestone_logs
   has_one :milestone
   
   def User.authenticate(mail_address, password)
