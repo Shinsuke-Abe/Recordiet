@@ -110,6 +110,31 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert assigns(:user).milestone
   end
   
+  test "履歴登録時に目標を達成した場合はメッセージが表示される" do
+    https!
+    login_action users(:john).mail_address, users(:john).password
+    
+    get "/user/milestone/new"
+    assert_response :success
+    
+    post_via_redirect "/user/milestone/", :milestone => {
+      :weight => 67.5,
+      :date => Date.today + 40.days,
+      :reward => "ホルモン"
+    }
+    assert_equal "/user", path
+    
+    post_via_redirect "/user/weight_logs/", :weight_log => {
+      :measured_date => Date.yesterday,
+      :weight => 67.4
+    }
+    
+    assert_equal "/user", path
+    assert_equal(
+      "目標を達成しました！おめでとうございます。<br/>ご褒美はホルモンです、楽しんで下さい！",
+      flash[:notice])
+  end
+  
   private
   def assert_show_user_without_log
     assert_equal "/user", path
