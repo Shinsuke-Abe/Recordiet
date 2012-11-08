@@ -6,8 +6,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
     https!
-    get "/login"
-    assert_response :success
+    show_form_action "/login"
     
     login_action users(:john).mail_address, users(:john).password
     assert_show_user_without_log
@@ -15,8 +14,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   test "ユーザ登録が成功する" do
     https!
-    get "/user/new"
-    assert_response :success
+    show_form_action "/user/new"
     assert assigns(:user)
     
     post_via_redirect "/user", :user => {
@@ -82,24 +80,17 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action users(:john).mail_address, users(:john).password
     
-    get "/user/milestone/new"
-    assert_response :success
-    
-    post_via_redirect "/user/milestone", :milestone => {
-      :weight => 67.0,
-      :date => Date.today + 30.days,
-      :reward => "焼き肉食べ放題"
-    }
-    assert_equal "/user", path
-    assert assigns(:user).milestone
+    create_milestone_action(
+      67.0,
+      Date.today + 30.days,
+      "焼き肉食べ放題")
   end
   
   test "目標を修正する" do
     https!
     login_action users(:eric).mail_address, users(:eric).password
     
-    get "/user/milestone/edit"
-    assert_response :success
+    show_form_action "/user/milestone/edit"
     
     put_via_redirect "/user/milestone/", :milestone => {
       :weight => 65.0,
@@ -114,16 +105,10 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action users(:john).mail_address, users(:john).password
     
-    get "/user/milestone/new"
-    assert_response :success
-    
-    post_via_redirect "/user/milestone/", :milestone => {
-      :weight => 67.5,
-      :date => Date.today + 40.days,
-      :reward => "ホルモン"
-    }
-    assert_equal "/user", path
-    assert assigns(:user).milestone
+    create_milestone_action(
+      67.5,
+      Date.today + 40.days,
+      "ホルモン")
     
     assert_show_user_without_log
     post_via_redirect "/user/weight_logs/", :weight_log => {
@@ -152,12 +137,28 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   end
   
   def edit_weight_log_action(weight_log, measure_date, weight)
-    get "/user/weight_logs/" + weight_log.id.to_s + "/edit"
-    assert_response :success
+    show_form_action "/user/weight_logs/" + weight_log.id.to_s + "/edit"
     
     put_via_redirect "/user/weight_logs/" + weight_log.id.to_s, :weight_log => {
       :measured_date => measure_date,
       :weight => weight
     }
+  end
+  
+  def create_milestone_action(weight, date, reward)
+    show_form_action "/user/milestone/new"
+    
+    post_via_redirect "/user/milestone/", :milestone => {
+      :weight => weight,
+      :date => date,
+      :reward => reward
+    }
+    assert_equal "/user", path
+    assert assigns(:user).milestone
+  end
+  
+  def show_form_action(uri)
+    get uri
+    assert_response :success
   end
 end
