@@ -5,8 +5,10 @@ class WeightLogsController < ApplicationController
     @user = User.find(session[:id])
     @weight_log = @user.weight_logs.create(params[:weight_log])
     
-    if @weight_log.errors
+    if !@weight_log.errors.empty?
       flash[:notice] = "記録の登録には計測日と体重が必要です。"
+    elsif @user.milestone and @user.milestone.achieve?(@weight_log)
+      flash[:notice] = "目標を達成しました！おめでとうございます。<br/>ご褒美は#{@user.milestone.reward}です、楽しんで下さい！"
     end
     
     redirect_to user_path

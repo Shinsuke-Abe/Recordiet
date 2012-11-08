@@ -123,9 +123,11 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :reward => "ホルモン"
     }
     assert_equal "/user", path
+    assert assigns(:user).milestone
     
+    assert_show_user_without_log
     post_via_redirect "/user/weight_logs/", :weight_log => {
-      :measured_date => Date.yesterday,
+      :measured_date => Date.today - 1,
       :weight => 67.4
     }
     
