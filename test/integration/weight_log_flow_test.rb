@@ -135,6 +135,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_equal(
       "目標を達成しました！おめでとうございます。<br/>ご褒美はホルモンです、楽しんで下さい！",
       flash[:notice])
+    assert assigns(:user).achieved_milestone_logs
   end
   
   private
