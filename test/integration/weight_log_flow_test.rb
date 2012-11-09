@@ -39,7 +39,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :measured_date => Date.today - 1,
       :weight => 73.8
     }
-    assert_equal "/user", path
+    assert_show_user_log
     assert !assigns(:user).weight_logs.empty?
   end
   
@@ -49,7 +49,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     edit_weight_log_action users(:eric).weight_logs[1], Date.yesterday, 69.0
 
-    assert_equal "/user", path
+    assert_show_user_log
     assert !assigns(:user).weight_logs.empty?
   end
   
@@ -58,7 +58,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     login_action users(:eric).mail_address, users(:eric).password
     
     delete_via_redirect "/user/weight_logs/" + users(:eric).weight_logs[0].id.to_s
-    assert_equal "/user", path
+    
+    assert_show_user_log
     assert_equal 1, User.find(users(:eric).id).weight_logs.length
   end
   
@@ -93,7 +94,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :date => Date.today + 60.days,
       :reward => "ラーメン"
     }
-    assert_equal "/user", path
+    
+    assert_show_user_log
     assert assigns(:user).milestone
   end
   
@@ -112,7 +114,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :weight => 67.4
     }
     
-    assert_equal "/user", path
+    assert_show_user_log
     assert_equal(
       "目標を達成しました！おめでとうございます。<br/>ご褒美はホルモンです、楽しんで下さい！",
       flash[:notice])
@@ -120,6 +122,11 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   end
   
   private
+  def assert_show_user_log
+    assert_equal "/user", path
+    assert assigns(:user)
+  end
+  
   def assert_show_user_without_log
     assert_equal "履歴が未登録です。", flash[:notice]
   end
@@ -129,8 +136,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :mail_address => mail_address,
       :password => password
     }
-    assert_equal "/user", path
-    assert assigns(:user)
+    assert_show_user_log
   end
   
   def edit_weight_log_action(weight_log, measure_date, weight)
@@ -150,7 +156,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :date => date,
       :reward => reward
     }
-    assert_equal "/user", path
+    assert_show_user_log
     assert assigns(:user).milestone
   end
   
