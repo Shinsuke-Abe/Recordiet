@@ -12,16 +12,16 @@ class MilestonesControllerTest < ActionController::TestCase
   end
   
   test "目標を新規保存する" do
-    session[:id] = users(:john)
-    post :create, :milestone => {
+    expected_data = {
       :weight => 64.0,
       :date => Date.today + 60.days,
       :reward => "ケーキバイキング"}
+      
+    session[:id] = users(:john)
+    post :create, :milestone => expected_data
     
     johns_milestone = User.find(users(:john).id).milestone
-    assert_equal 64.0, johns_milestone.weight
-    assert_equal Date.today + 60.days, johns_milestone.date
-    assert_equal "ケーキバイキング", johns_milestone.reward
+    assert_milestone expected_data, johns_milestone
   end
   
   test "編集フォームを開く" do
@@ -34,15 +34,22 @@ class MilestonesControllerTest < ActionController::TestCase
   end
   
   test "目標を修正する" do
+    expected_data = {
+      :weight => 54.6,
+      :date => Date.today + 90.days,
+      :reward => "臨時小遣い"}
+      
     session[:id] = users(:eric)
-    post :update, :milestone => {
-        :weight => 54.6,
-        :date => Date.today + 90.days,
-        :reward => "臨時小遣い"}
+    post :update, :milestone => expected_data
     
     erics_milestone = User.find(users(:eric).id).milestone
-    assert_equal 54.6, erics_milestone.weight
-    assert_equal Date.today + 90.days, erics_milestone.date
-    assert_equal "臨時小遣い", erics_milestone.reward
+    assert_milestone expected_data, erics_milestone
+  end
+  
+  private
+  def assert_milestone(expected, actual)
+    assert_equal expected[:weight], actual.weight
+    assert_equal expected[:date], actual.date
+    assert_equal expected[:reward], actual.reward
   end
 end
