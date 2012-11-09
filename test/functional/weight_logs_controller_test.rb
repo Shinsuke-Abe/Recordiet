@@ -12,8 +12,7 @@ class WeightLogsControllerTest < ActionController::TestCase
       expected_data[:weight])
 
     assert_equal 1, john_log_added.weight_logs.length
-    assert_equal expected_data[:measured_date], john_log_added.weight_logs[0].measured_date
-    assert_equal expected_data[:weight], john_log_added.weight_logs[0].weight
+    assert_weight_log expected_data, john_log_added.weight_logs[0]
   end
   
   test "計測日未指定の場合はエラーメッセージを表示する" do
@@ -35,9 +34,8 @@ class WeightLogsControllerTest < ActionController::TestCase
     weight_log_of_eric = User.find(users(:eric).id).weight_logs
     updated_log = weight_log_of_eric[
       weight_log_of_eric.index{|weight_log|
-        weight_log.id == users(:eric).weight_logs[1].id}] 
-    assert_equal expected_data[:measured_date], updated_log.measured_date
-    assert_equal expected_data[:weight], updated_log.weight
+        weight_log.id == users(:eric).weight_logs[1].id}]
+    assert_weight_log expected_data, updated_log
   end
   
   test "ログの変更内容の体重が未入力の場合はエラーメッセージを表示する" do
@@ -102,5 +100,10 @@ class WeightLogsControllerTest < ActionController::TestCase
         :measured_date => measured_date,
         :weight => weight
       }}
+  end
+  
+  def assert_weight_log(expected, actual)
+    assert_equal expected[:measured_date], actual.measured_date
+    assert_equal expected[:weight], actual.weight
   end
 end
