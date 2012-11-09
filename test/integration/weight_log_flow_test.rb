@@ -90,9 +90,9 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action users(:eric).mail_address, users(:eric).password
     
-    show_form_action "/user/milestone/edit"
+    show_form_action "/milestone/edit"
     
-    put_via_redirect "/user/milestone/", :milestone => {
+    put_via_redirect "/milestone/", :milestone => {
       :weight => 65.0,
       :date => Date.today + 60.days,
       :reward => "ラーメン"
@@ -146,9 +146,9 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   end
   
   def create_milestone_action(weight, date, reward)
-    show_form_action "/user/milestone/new"
+    show_form_action "/milestone/new"
     
-    post_via_redirect "/user/milestone/", :milestone => {
+    post_via_redirect "/milestone/", :milestone => {
       :weight => weight,
       :date => date,
       :reward => reward

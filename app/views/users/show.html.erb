@@ -30,9 +30,9 @@
       </tr>
     <% end %>
   </table>
-  <%= link_to "変更", user_milestone_path + "/edit" %>
+  <%= link_to "変更", edit_milestone_path %>
 <% else %>
-  <%= link_to "目標を設定する", user_milestones_path + "/new" %>
+  <%= link_to "目標を設定する", new_milestone_path %>
 <% end %>
 
 <h2>体重履歴を追加</h2>

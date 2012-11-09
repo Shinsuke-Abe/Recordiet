@@ -2,8 +2,9 @@ Recordiet::Application.routes.draw do
   resource :login
   resource :user do
     resources :weight_logs
-    resource :milestone
   end
+  
+  resource :milestone
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
