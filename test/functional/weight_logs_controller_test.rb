@@ -1,22 +1,22 @@
 # encoding: utf-8
 require 'test_helper'
 
+
 class WeightLogsControllerTest < ActionController::TestCase
   fixtures :users, :weight_logs
   
   test "ログイン済のユーザに履歴を登録することができる" do
     expected_data = { :measured_date => Date.today - 1, :weight => 70.9}
-    john_log_added = register_weight_log_action(
-      :john,
-      expected_data[:measured_date],
-      expected_data[:weight])
+    john_log_added = register_weight_log_action(:john, expected_data)
 
     assert_equal 1, john_log_added.weight_logs.length
     assert_weight_log expected_data, john_log_added.weight_logs[0]
   end
   
   test "計測日未指定の場合はエラーメッセージを表示する" do
-    eric_log_not_added = register_weight_log_action(:john, nil, 55.5)
+    eric_log_not_added = register_weight_log_action(:john, {
+      :measured_date => nil,
+      :weight => 55.5})
     
     assert_equal(
       users(:eric).weight_logs.length,
@@ -26,10 +26,7 @@ class WeightLogsControllerTest < ActionController::TestCase
   
   test "指定したログの内容を修正することができる" do
     expected_data = {:measured_date => Date.yesterday, :weight => 69.0}
-    update_weight_log_action(
-      :eric,
-      expected_data[:measured_date],
-      expected_data[:weight])
+    update_weight_log_action(:eric, expected_data)
     
     weight_log_of_eric = User.find(users(:eric).id).weight_logs
     updated_log = weight_log_of_eric[
@@ -39,7 +36,7 @@ class WeightLogsControllerTest < ActionController::TestCase
   end
   
   test "ログの変更内容の体重が未入力の場合はエラーメッセージを表示する" do
-    update_weight_log_action(:eric, Date.yesterday)
+    update_weight_log_action(:eric, {:measured_date => Date.yesterday, :weight => nil})
       
     assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
@@ -82,24 +79,18 @@ class WeightLogsControllerTest < ActionController::TestCase
     assigned_user
   end
   
-  def register_weight_log_action(name, measured_date = nil, weight = nil)
+  def register_weight_log_action(name, new_log)
     session[:id] = users(name).id
-    post :create, :weight_log => {
-      :measured_date => measured_date,
-      :weight => weight
-    }
+    post :create, :weight_log => new_log
     
     assigns(:user)
   end
   
-  def update_weight_log_action(name, measured_date = nil, weight = nil)
+  def update_weight_log_action(name, updated_log)
     session[:id] = users(name).id
     put :update, {
       :id => users(name).weight_logs[1].id,
-      :weight_log =>{
-        :measured_date => measured_date,
-        :weight => weight
-      }}
+      :weight_log =>updated_log}
   end
   
   def assert_weight_log(expected, actual)
