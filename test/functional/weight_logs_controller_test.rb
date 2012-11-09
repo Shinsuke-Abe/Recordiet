@@ -55,7 +55,35 @@ class WeightLogsControllerTest < ActionController::TestCase
     assert_nil weight_logs_of_eric.index{|log| log.id == users(:eric).weight_logs[0].id}
   end
   
+  test "履歴を持たないユーザを表示する" do
+    assigned_john = show_weight_logs_logged_in_user_action(:john)
+    
+    assert take_off_form_data(assigned_john.weight_logs).empty?
+    assert_equal "履歴が未登録です。", flash[:notice]
+  end
+  
+  test "履歴を持つユーザを表示する" do
+    assigned_eric = show_weight_logs_logged_in_user_action(:eric)
+    
+    assert_nil flash[:notice]
+    assert_weight_logs users(:eric), assigned_eric
+  end
+  
   private 
+  def show_weight_logs_logged_in_user_action(name)
+    session[:id] = users(name).id
+    
+    get :index
+    assert_response :success
+    
+    assigned_user = assigns(:user)
+    
+    assert_not_nil assigned_user
+    assert_equal users(name), assigned_user
+    
+    assigned_user
+  end
+  
   def register_weight_log_action(name, measured_date = nil, weight = nil)
     session[:id] = users(name).id
     post :create, :weight_log => {

@@ -10,7 +10,7 @@ class LoginsController < ApplicationController
     
     if authed_user
       session[:id] = authed_user.id
-      redirect_to user_path
+      redirect_to weight_logs_path
     else
       flash[:notice] = "メールアドレスかパスワードが間違っています。"
       render :action => "show"

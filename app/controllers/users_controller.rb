@@ -16,10 +16,6 @@ class UsersController < ApplicationController
   # show user report
   def show
     @user = User.find(session[:id])
-    
-    if @user.weight_logs.empty?
-      flash[:notice] = "履歴が未登録です。"
-    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -53,7 +49,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         session[:id] = @user.id
-        format.html { redirect_to user_path }
+        format.html { redirect_to weight_logs_path }
         format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: "new" }

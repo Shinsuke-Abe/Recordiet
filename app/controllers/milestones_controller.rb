@@ -9,7 +9,7 @@ class MilestonesController < ApplicationController
   def create
     @user = User.find(session[:id])
     if @milestone = @user.create_milestone(params[:milestone])
-      redirect_to user_path
+      redirect_to weight_logs_path
     else
       render :action => "new"
     end
@@ -27,7 +27,7 @@ class MilestonesController < ApplicationController
     @milestone = @user.milestone
     
     if @milestone.update_attributes(params[:milestone])
-      redirect_to user_path
+      redirect_to weight_logs_path
     else
       render :action => "edit" 
     end

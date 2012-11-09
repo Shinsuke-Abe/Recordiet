@@ -13,7 +13,7 @@ class LoginsControllerTest < ActionController::TestCase
     one = users(:one)
     login_action one.mail_address, one.password
     
-    assert_redirected_to user_path
+    assert_redirected_to weight_logs_path
     assert_equal session[:id], one.id
   end
   

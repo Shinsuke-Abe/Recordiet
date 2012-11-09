@@ -117,7 +117,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   private
   def assert_show_user_log
-    assert_equal "/user", path
+    assert_equal weight_logs_path, path
     assert assigns(:user)
   end
   
