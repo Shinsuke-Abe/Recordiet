@@ -11,6 +11,10 @@ end
 
 group :development, :test do
   gem 'sqlite3'
+  gem "minitest", "~> 2.10.0"
+  gem "turn", "~> 0.8.3"
+  gem 'test-unit', '~> 2.0.0'
+  gem 'autotest-rails'
 end
 
 # Gems used only for assets and not required
