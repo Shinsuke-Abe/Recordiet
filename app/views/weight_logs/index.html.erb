@@ -1,12 +1,13 @@
 <p id="notice"><%= notice %></p>
 
+<h2>ユーザ情報</h2>
 <p>
-  <b>Mail address:</b>
+  <b>メールアドレス:</b>
   <%= @user.mail_address %>
 </p>
 
 <p>
-  <b>Display name:</b>
+  <b>お名前:</b>
   <%= @user.display_name %>
 </p>
 
@@ -36,17 +37,8 @@
 <% end %>
 
 <h2>体重履歴を追加</h2>
-<%= form_for @user.weight_logs.build do |f| %>
-  <div class="field">
-  	計測日：<%= f.date_select :measured_date %>
-  </div>
-  <div class="field">
-  	体重：<%= f.number_field :weight , :step => 0.1 %>
-  </div>
-  <div class="actions">
-    <%= f.submit "記録" %>
-  </div>
-<% end %>
+<% @weight_log = @user.weight_logs.build %>
+<%= render 'form' %>
 
 <h2>体重履歴</h2>
 <table>

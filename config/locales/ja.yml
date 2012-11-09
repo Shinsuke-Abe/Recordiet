@@ -195,3 +195,18 @@ ja:
   activerecord:
     errors:
       <<: *errors
+    attributes:
+      user:
+        display_name: "名前"
+        mail_address: "メールアドレス"
+        password: "パスワード"
+      weight_log:
+        measured_date: "計測日"
+        weight: "体重"
+      milestone:
+        date: "期限"
+        reward: "ご褒美"
+        weight: "目標体重"
+      achieved_mileston:
+        achieved_date: "達成日"
+        milestone_weight: "目標体重"

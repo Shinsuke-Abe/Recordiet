@@ -1,7 +1,7 @@
 <%= form_for @milestone, :url => milestone_path do |f| %>
   <% if @milestone.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@milestone.errors.count, "error") %> prohibited this weight log from being saved:</h2>
+      <h2><%= pluralize(@milestone.errors.count, "") %> 個のエラーが発生しました。:</h2>
 
       <ul>
       <% @milestone.errors.full_messages.each do |msg| %>
