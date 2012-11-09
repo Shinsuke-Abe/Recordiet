@@ -5,7 +5,7 @@ class WeightLogsController < ApplicationController
     @user = User.find(session[:id])
     
     if @user.weight_logs.empty?
-      flash[:notice] = "履歴が未登録です。"
+      flash[:notice] = WeightLogsHelper::WEIGHT_LOG_NOT_FOUND
     end
   end
   
@@ -15,12 +15,12 @@ class WeightLogsController < ApplicationController
     @weight_log = @user.weight_logs.create(params[:weight_log])
     
     if !@weight_log.errors.empty?
-      flash[:notice] = "記録の登録には計測日と体重が必要です。"
+      flash[:notice] = WeightLogsHelper::REQUIRED_WEIGHT_AND_DATE
     elsif @user.milestone and @user.milestone.achieve?(@weight_log)
       @user.achieved_milestone_logs.create(
         :achieved_date => @weight_log.measured_date,
         :milestone_weight => @user.milestone.weight)
-      flash[:notice] = "目標を達成しました！おめでとうございます。<br/>ご褒美は#{@user.milestone.reward}です、楽しんで下さい！"
+      flash[:notice] = sprintf(WeightLogsHelper::ACHIEVE_MILESTONE, @user.milestone.reward)
     end
     
     redirect_to weight_logs_path
@@ -38,7 +38,7 @@ class WeightLogsController < ApplicationController
     if @weight_log.update_attributes(params[:weight_log])
       redirect_to weight_logs_path
     else
-      flash[:notice] = "記録の登録には計測日と体重が必要です。"
+      flash[:notice] = WeightLogsHelper::REQUIRED_WEIGHT_AND_DATE
       render :action => "edit" 
     end
   end

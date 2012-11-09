@@ -12,7 +12,7 @@ class LoginsController < ApplicationController
       session[:id] = authed_user.id
       redirect_to weight_logs_path
     else
-      flash[:notice] = "メールアドレスかパスワードが間違っています。"
+      flash[:notice] = LoginsHelper::INCORRECT_LOGIN_INFORMATION
       render :action => "show"
     end
   end
