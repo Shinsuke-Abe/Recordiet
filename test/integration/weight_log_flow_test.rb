@@ -27,16 +27,12 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
     https!
     login_action users(:eric).mail_address, users(:eric).password
-    assert_equal "/user", path
-    assert assigns(:user)
     assert assigns(:user).weight_logs
   end
   
   test "体重履歴を登録する" do
     https!
     login_action users(:john).mail_address, users(:john).password
-    
-    assert_equal "/user", path
     assert_show_user_without_log
     
     post_via_redirect "/user/weight_logs/", :weight_log => {
@@ -125,7 +121,6 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   private
   def assert_show_user_without_log
-    assert_equal "/user", path
     assert_equal "履歴が未登録です。", flash[:notice]
   end
   
@@ -134,6 +129,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :mail_address => mail_address,
       :password => password
     }
+    assert_equal "/user", path
+    assert assigns(:user)
   end
   
   def edit_weight_log_action(weight_log, measure_date, weight)
