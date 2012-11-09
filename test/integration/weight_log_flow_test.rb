@@ -35,11 +35,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     login_action users(:john).mail_address, users(:john).password
     assert_show_user_without_log
     
-    post_via_redirect weight_logs_path, :weight_log => {
-      :measured_date => Date.today - 1,
-      :weight => 73.8
-    }
-    assert_show_user_log
+    create_weight_log_action(Date.today - 1, 73.8)
+    
     assert !assigns(:user).weight_logs.empty?
   end
   
@@ -109,10 +106,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       "ホルモン")
     
     assert_show_user_without_log
-    post_via_redirect weight_logs_path, :weight_log => {
-      :measured_date => Date.today - 1,
-      :weight => 67.4
-    }
+    create_weight_log_action(Date.today - 1, 67.4)
     
     assert_show_user_log
     assert_equal(
@@ -135,6 +129,14 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     post_via_redirect "/login", :user => {
       :mail_address => mail_address,
       :password => password
+    }
+    assert_show_user_log
+  end
+  
+  def create_weight_log_action(measure_date, weight)
+    post_via_redirect weight_logs_path, :weight_log => {
+      :measured_date => measure_date,
+      :weight => weight
     }
     assert_show_user_log
   end
