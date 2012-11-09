@@ -17,7 +17,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     show_form_action new_user_path
     assert assigns(:user)
     
-    post_via_redirect "/user", :user => {
+    post_via_redirect user_path, :user => {
       :mail_address => "jimmy@ledzeppelin.com",
       :display_name => "jimmy page",
       :password => "guitar"}
