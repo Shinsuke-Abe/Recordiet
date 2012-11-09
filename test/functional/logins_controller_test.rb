@@ -21,7 +21,7 @@ class LoginsControllerTest < ActionController::TestCase
     login_action "nemo@mail.com", "noname1234"
     
     assert_response :success
-    assert_equal LoginsHelper::INCORRECT_LOGIN_INFORMATION, flash[:notice]
+    assert_equal LoginsHelper::INCORRECT_LOGIN_INFORMATION, flash[:alert]
   end
   
   private

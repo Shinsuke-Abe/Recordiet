@@ -12,7 +12,7 @@ class LoginsController < ApplicationController
       session[:id] = authed_user.id
       redirect_to weight_logs_path
     else
-      flash[:notice] = LoginsHelper::INCORRECT_LOGIN_INFORMATION
+      flash[:alert] = LoginsHelper::INCORRECT_LOGIN_INFORMATION
       render :action => "show"
     end
   end
