@@ -36,7 +36,7 @@
 <% end %>
 
 <h2>体重履歴を追加</h2>
-<%= form_for([@user, @user.weight_logs.build]) do |f| %>
+<%= form_for @user.weight_logs.build do |f| %>
   <div class="field">
   	計測日：<%= f.date_select :measured_date %>
   </div>
@@ -60,8 +60,8 @@
   	<tr>
   		<td><%= weight_log.measured_date %></td>
   		<td><%= weight_log.weight %></td>
-  		<td><%= link_to "変更", weight_log_url(weight_log.id.to_s) + "/edit" %></td>
-  		<td><%= link_to "削除", weight_log_url(weight_log.id.to_s), method: :delete, data: { confirm: '本当に削除しますか？' } %></td>
+  		<td><%= link_to "変更", edit_weight_log_path(weight_log.id) %></td>
+  		<td><%= link_to "削除", weight_log_path(weight_log.id), method: :delete, data: { confirm: '本当に削除しますか？' } %></td>
   	</tr>
   <% end %>
 </table>
