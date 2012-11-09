@@ -37,7 +37,11 @@
 <% end %>
 
 <h2>体重履歴を追加</h2>
-<% @weight_log = @user.weight_logs.build %>
+<%
+  unless @weight_log
+  	@weight_log = @user.weight_logs.build
+  end
+%>
 <%= render 'form' %>
 
 <h2>体重履歴</h2>

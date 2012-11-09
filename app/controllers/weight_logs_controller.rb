@@ -14,16 +14,14 @@ class WeightLogsController < ApplicationController
     @user = User.find(session[:id])
     @weight_log = @user.weight_logs.create(params[:weight_log])
     
-    if !@weight_log.errors.empty?
-      flash[:notice] = WeightLogsHelper::REQUIRED_WEIGHT_AND_DATE
-    elsif @user.milestone and @user.milestone.achieve?(@weight_log)
+    if @user.milestone and @user.milestone.achieve?(@weight_log)
       @user.achieved_milestone_logs.create(
         :achieved_date => @weight_log.measured_date,
         :milestone_weight => @user.milestone.weight)
       flash[:notice] = sprintf(WeightLogsHelper::ACHIEVE_MILESTONE, @user.milestone.reward)
     end
     
-    redirect_to weight_logs_path
+    render :action => "index"
   end
   
   # show weight_log edit form
@@ -38,7 +36,6 @@ class WeightLogsController < ApplicationController
     if @weight_log.update_attributes(params[:weight_log])
       redirect_to weight_logs_path
     else
-      flash[:notice] = WeightLogsHelper::REQUIRED_WEIGHT_AND_DATE
       render :action => "edit" 
     end
   end

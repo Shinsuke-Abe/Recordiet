@@ -13,7 +13,7 @@ class WeightLogsControllerTest < ActionController::TestCase
     assert_weight_log expected_data, john_log_added.weight_logs[0]
   end
   
-  test "計測日未指定の場合はエラーメッセージを表示する" do
+  test "計測日未指定の場合は履歴が追加されない" do
     eric_log_not_added = register_weight_log_action(:john, {
       :measured_date => nil,
       :weight => 55.5})
@@ -21,7 +21,6 @@ class WeightLogsControllerTest < ActionController::TestCase
     assert_equal(
       users(:eric).weight_logs.length,
       User.find(users(:eric).id).weight_logs.length)
-    assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
   
   test "指定したログの内容を修正することができる" do
@@ -37,8 +36,6 @@ class WeightLogsControllerTest < ActionController::TestCase
   
   test "ログの変更内容の体重が未入力の場合はエラーメッセージを表示する" do
     update_weight_log_action(:eric, {:measured_date => Date.yesterday, :weight => nil})
-      
-    assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
   
   test "ログを削除するとログの件数が減る" do
@@ -54,7 +51,7 @@ class WeightLogsControllerTest < ActionController::TestCase
     assigned_john = show_weight_logs_logged_in_user_action(:john)
     
     assert take_off_form_data(assigned_john.weight_logs).empty?
-    assert_equal "履歴が未登録です。", flash[:notice]
+    assert_equal WeightLogsHelper::WEIGHT_LOG_NOT_FOUND, flash[:notice]
   end
   
   test "履歴を持つユーザを表示する" do

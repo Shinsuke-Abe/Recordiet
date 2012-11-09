@@ -67,7 +67,6 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     edit_weight_log_action users(:eric).weight_logs[1], Date.yesterday, nil
     
     assert_equal weight_log_path(users(:eric).weight_logs[1].id), path
-    assert_equal "記録の登録には計測日と体重が必要です。", flash[:notice]
   end
   
   test "目標とご褒美を設定する" do
@@ -110,7 +109,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     assert_show_user_log
     assert_equal(
-      "目標を達成しました！おめでとうございます。<br/>ご褒美はホルモンです、楽しんで下さい！",
+      sprintf(WeightLogsHelper::ACHIEVE_MILESTONE, "ホルモン"),
       flash[:notice])
     assert assigns(:user).achieved_milestone_logs
   end
@@ -122,7 +121,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   end
   
   def assert_show_user_without_log
-    assert_equal "履歴が未登録です。", flash[:notice]
+    assert_equal WeightLogsHelper::WEIGHT_LOG_NOT_FOUND, flash[:notice]
   end
   
   def login_action(mail_address, password)
