@@ -6,7 +6,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
     https!
-    show_form_action "/login"
+    show_form_action login_path
     
     login_action users(:john).mail_address, users(:john).password
     assert_show_user_without_log
@@ -14,7 +14,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   
   test "ユーザ登録が成功する" do
     https!
-    show_form_action "/user/new"
+    show_form_action new_user_path
     assert assigns(:user)
     
     post_via_redirect "/user", :user => {
@@ -126,7 +126,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   end
   
   def login_action(mail_address, password)
-    post_via_redirect "/login", :user => {
+    post_via_redirect login_path, :user => {
       :mail_address => mail_address,
       :password => password
     }
