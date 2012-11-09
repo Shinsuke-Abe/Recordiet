@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  achieved_date: 2012-11-08
-  milestone_weight: 1.5
-  user: 
+  achieved_date: 2012-11-01
+  milestone_weight: 65.5
+  user: eric
 
 two:
-  achieved_date: 2012-11-08
-  milestone_weight: 1.5
-  user: 
+  achieved_date: 2012-11-04
+  milestone_weight: 64.8
+  user: eric

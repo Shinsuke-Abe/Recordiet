@@ -114,6 +114,15 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert assigns(:user).achieved_milestone_logs
   end
   
+  test "目標の達成履歴を表示する" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    show_form_action achieved_milestone_logs_path
+    
+    assert !assigns(:achieved_milestone_logs).empty?
+  end
+  
   private
   def assert_show_user_log
     assert_equal weight_logs_path, path

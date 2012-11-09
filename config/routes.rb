@@ -1,9 +1,12 @@
 Recordiet::Application.routes.draw do
+  get "achieved_milestone_logs/index"
+
   resource :login
   resource :user
   
   resources :weight_logs
   resource :milestone
+  resources :achieved_milestone_logs
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
