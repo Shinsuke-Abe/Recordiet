@@ -2,6 +2,7 @@
 require 'test_helper'
 
 class WeightLogFlowTest < ActionDispatch::IntegrationTest
+  include WeightLogsHelper
   fixtures :all
   
   test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
@@ -109,7 +110,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     assert_show_user_log
     assert_equal(
-      sprintf(WeightLogsHelper::ACHIEVE_MILESTONE, "ホルモン"),
+      achieve_message("ホルモン"),
       flash[:notice])
     assert assigns(:user).achieved_milestone_logs
   end

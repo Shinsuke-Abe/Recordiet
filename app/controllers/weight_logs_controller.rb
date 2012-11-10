@@ -1,6 +1,7 @@
 # encoding: utf-8
 class WeightLogsController < ApplicationController
   include ApplicationHelper
+  include WeightLogsHelper
   before_filter :required_login
   
   # show weight logs list logged in user
@@ -21,7 +22,8 @@ class WeightLogsController < ApplicationController
       @user.achieved_milestone_logs.create(
         :achieved_date => @weight_log.measured_date,
         :milestone_weight => @user.milestone.weight)
-      flash[:notice] = sprintf(WeightLogsHelper::ACHIEVE_MILESTONE, @user.milestone.reward)
+        
+      flash[:notice] = achieve_message(@user.milestone.reward)
     end
     
     render :action => "index"
