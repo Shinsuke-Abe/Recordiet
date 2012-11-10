@@ -140,6 +140,16 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     # TODO user_controllerは編集と削除が加わったときにアクセス制御を行う
   end
   
+  test "ログアウトする" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    delete_via_redirect login_path
+    assert_equal login_path, path
+    
+    required_login_filtered weight_logs_path
+  end
+  
   private
   def assert_show_user_log
     assert_equal weight_logs_path, path

@@ -16,4 +16,9 @@ class LoginsController < ApplicationController
       render :action => "show"
     end
   end
+  
+  def destroy
+    session[:id] = nil
+    redirect_to login_path
+  end
 end
