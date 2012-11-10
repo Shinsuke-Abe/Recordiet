@@ -123,6 +123,22 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert !assigns(:achieved_milestone_logs).empty?
   end
   
+  test "未ログインユーザにアクセス制御をかける" do
+    https!
+    # weight_logs_controllerは全メソッド
+    required_login_filtered weight_logs_path
+    required_login_filtered edit_weight_log_path(users(:john).id)
+    
+    # milestones_controllerは全メソッド
+    required_login_filtered new_milestone_path
+    required_login_filtered edit_milestone_path
+    
+    # achieved_milestone_logs_controllerは全メソッド
+    required_login_filtered achieved_milestone_logs_path
+    
+    # TODO user_controllerは編集と削除が加わったときにアクセス制御を行う
+  end
+  
   private
   def assert_show_user_log
     assert_equal weight_logs_path, path
@@ -173,5 +189,10 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   def show_form_action(uri)
     get uri
     assert_response :success
+  end
+  
+  def required_login_filtered(uri)
+    get uri
+    assert login_path, path
   end
 end

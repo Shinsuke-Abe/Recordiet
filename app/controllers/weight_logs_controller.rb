@@ -1,5 +1,8 @@
 # encoding: utf-8
 class WeightLogsController < ApplicationController
+  include ApplicationHelper
+  before_filter :required_login
+  
   # show weight logs list logged in user
   def index
     @user = User.find(session[:id])

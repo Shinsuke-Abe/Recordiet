@@ -1,4 +1,7 @@
 class MilestonesController < ApplicationController
+  include ApplicationHelper
+  before_filter :required_login
+  
   # GET /user/milestone/new
   def new
     @user = User.find(session[:id])
