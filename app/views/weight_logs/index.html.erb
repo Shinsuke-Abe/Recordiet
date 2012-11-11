@@ -1,7 +1,7 @@
-<h1>メイン画面</h1>
+<h2>体重履歴</h2>
 <p id="notice"><%= simple_format(notice) %></p>
 
-<h2>ユーザ情報</h2>
+<h3>ユーザ情報</h3>
 <p>
   <b>メールアドレス:</b>
   <%= @user.mail_address %>
@@ -12,33 +12,30 @@
   <%= @user.display_name %>
 </p>
 
-<h2>目標</h2>
+<h3>目標</h3>
 <% if @user.milestone %>
-  <table>
-    <tr>
-      <td>目標体重</td>
-      <td><%= @user.milestone.weight %></td>
-      <td>
-      	<% unless @user.weight_logs.empty? %>
-      	  あと <%= (take_off_form_data(@user.weight_logs)[0].weight - @user.milestone.weight).round(2) %> kg
-      	<% end%>
-      </td>
-    </tr>
-    <% if @user.milestone.date %>
-      <tr>
-        <td>期限</td>
-        <td><%= @user.milestone.date %></td>
-        <td>あと <%= (@user.milestone.date - Date.today).to_i %> 日</td>
-      </tr>
-    <% end %>
-  </table>
-  <%= link_to "変更", edit_milestone_path %>
+  <div class="row">
+  	<div class="span1">目標体重</div>
+  	<div class="span2"><%= @user.milestone.weight %> kg</div>
+  	<div class="span6">
+  	  <% unless @user.weight_logs.empty? %>
+        あと <%= (take_off_form_data(@user.weight_logs)[0].weight - @user.milestone.weight).round(2) %> kg
+      <% end%>
+  	</div>
+  </div>
+  <% if @user.milestone.date %>
+    <div class="row">
+      <div class="span1">期限</div>
+      <div class="span2"><%= @user.milestone.date %></div>
+      <div class="span6">あと <%= (@user.milestone.date - Date.today).to_i %> 日</div>
+    </div>
+  <% end %>
+  <%= link_to "変更", edit_milestone_path, :class => "btn btn-small" %>
 <% else %>
-  <%= link_to "目標を設定する", new_milestone_path %>
+  <%= link_to "目標を設定する", new_milestone_path, :class => "btn btn-small" %>
 <% end %>
-<%= link_to "過去の目標達成履歴を表示する", achieved_milestone_logs_path %>
 
-<h2>体重履歴を追加</h2>
+<h3>履歴を追加</h3>
 <%
   unless @weight_log
   	@weight_log = @user.weight_logs.build
@@ -46,24 +43,25 @@
 %>
 <%= render 'form' %>
 
-<h2>体重履歴</h2>
-<table>
-  <tr>
-  	<th>計測日</th>
-  	<th>体重</th>
-  	<th></th>
-  	<th></th>
-  </tr>
+<h3>履歴</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+	  <th>計測日</th>
+	  <th>体重</th>
+	  <th></th>
+    </tr>
+  </thead>
+  <tbody>
   <% take_off_form_data(@user.weight_logs).each do |weight_log| %>
   	<tr>
   		<td><%= weight_log.measured_date %></td>
   		<td><%= weight_log.weight %></td>
-  		<td><%= link_to "変更", edit_weight_log_path(weight_log.id) %></td>
-  		<td><%= link_to "削除", weight_log_path(weight_log.id), method: :delete, data: { confirm: '本当に削除しますか？' } %></td>
+  		<td>
+  		  <%= link_to "変更", edit_weight_log_path(weight_log.id), :class => "btn btn-mini" %>
+  		  <%= link_to "削除", weight_log_path(weight_log.id), method: :delete, data: { confirm: '本当に削除しますか？' }, :class => "btn btn-mini btn-danger"%>
+  		</td>
   	</tr>
   <% end %>
+  </tbody>
 </table>
-
-<!--
-<%= link_to 'Edit', edit_user_path %> |
--->
