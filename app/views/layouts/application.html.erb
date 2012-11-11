@@ -73,9 +73,12 @@
                   <%= link_to "変更", edit_milestone_path, :class => "btn" %>
                 </h4>
                 <div>
-  	              <% unless take_off_form_data(@user.weight_logs).empty? %>
-                    あと <%= (take_off_form_data(@user.weight_logs)[0].weight - @user.milestone.weight).round(2) %> kg
-                  <% end%>
+  	              <%
+  	                taked_off_weight_logs = take_off_form_data(@user.weight_logs)
+  	                unless taked_off_weight_logs.empty?
+  	              %>
+                    あと <%= (taked_off_weight_logs[0].weight - @user.milestone.weight).round(2) %> kg
+                  <% end %>
                 </div>
                 <div>
                   <% if @user.milestone.date %>
