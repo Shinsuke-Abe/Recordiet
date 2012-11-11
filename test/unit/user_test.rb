@@ -29,4 +29,28 @@ class UserTest < ActiveSupport::TestCase
     
     assert john.weight_logs.empty?
   end
+  
+  test "メールアドレスが未入力の場合はエラー" do
+    new_user = User.new(
+      :mail_address => nil,
+      :display_name => "new user name",
+      :password => "userpass")
+    assert new_user.invalid?
+  end
+  
+  test "表示名が未入力の場合はエラー" do
+    new_user = User.new(
+      :mail_address => "newuser@mail.com",
+      :display_name => nil,
+      :password => "userpass")
+    assert new_user.invalid?
+  end
+  
+  test "パスワードが未入力の場合はエラー" do
+    new_user = User.new(
+      :mail_address => "newuser@mail.com",
+      :display_name => "new user name",
+      :password => nil)
+    assert new_user.invalid?
+  end
 end
