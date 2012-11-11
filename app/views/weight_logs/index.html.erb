@@ -1,40 +1,6 @@
 <h2>体重履歴</h2>
 <p id="notice"><%= simple_format(notice) %></p>
 
-<h3>ユーザ情報</h3>
-<p>
-  <b>メールアドレス:</b>
-  <%= @user.mail_address %>
-</p>
-
-<p>
-  <b>お名前:</b>
-  <%= @user.display_name %>
-</p>
-
-<h3>目標</h3>
-<% if @user.milestone %>
-  <div class="row">
-  	<div class="span1">目標体重</div>
-  	<div class="span2"><%= @user.milestone.weight %> kg</div>
-  	<div class="span6">
-  	  <% unless @user.weight_logs.empty? %>
-        あと <%= (take_off_form_data(@user.weight_logs)[0].weight - @user.milestone.weight).round(2) %> kg
-      <% end%>
-  	</div>
-  </div>
-  <% if @user.milestone.date %>
-    <div class="row">
-      <div class="span1">期限</div>
-      <div class="span2"><%= @user.milestone.date %></div>
-      <div class="span6">あと <%= (@user.milestone.date - Date.today).to_i %> 日</div>
-    </div>
-  <% end %>
-  <%= link_to "変更", edit_milestone_path, :class => "btn btn-small" %>
-<% else %>
-  <%= link_to "目標を設定する", new_milestone_path, :class => "btn btn-small" %>
-<% end %>
-
 <h3>履歴を追加</h3>
 <%
   unless @weight_log

@@ -1,5 +1,7 @@
 # encoding: utf-8
 class LoginsController < ApplicationController
+  layout "nonavigation"
+  
   def show
     @user = User.new
   end

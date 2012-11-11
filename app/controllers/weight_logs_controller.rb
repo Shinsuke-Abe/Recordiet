@@ -6,8 +6,6 @@ class WeightLogsController < ApplicationController
   
   # show weight logs list logged in user
   def index
-    @user = User.find(session[:id])
-    
     if @user.weight_logs.empty?
       flash[:notice] = WeightLogsHelper::WEIGHT_LOG_NOT_FOUND
     end
@@ -15,7 +13,6 @@ class WeightLogsController < ApplicationController
   
   # add weight logs to login user
   def create
-    @user = User.find(session[:id])
     @weight_log = @user.weight_logs.create(params[:weight_log])
     
     if @user.milestone and @user.milestone.achieve?(@weight_log)

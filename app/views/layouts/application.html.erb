@@ -36,7 +36,7 @@
   </head>
   <body>
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-fixed-top navbar-inverse">
       <div class="navbar-inner">
         <div class="container">
           <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
@@ -63,13 +63,31 @@
           </div>
           <div class="span3">
             <div class="well sidebar-nav">
-              <h3>Sidebar</h3>
-              <ul class="nav nav-list">
-                <li class="nav-header">Sidebar</li>
-                <li><%= link_to "体重履歴", weight_logs_path  %></li>
-                <li><%= link_to "目標達成履歴", achieved_milestone_logs_path  %></li>
-                <li><%= link_to "ログアウト", login_path, method: :delete, data: { confirm: 'ログアウトします。よろしいですか？' } %></li>
-              </ul>
+              <h3>
+              	<%= @user.display_name %>
+              	<%= link_to "ログアウト", login_path, method: :delete, data: { confirm: 'ログアウトします。よろしいですか？' }, :class => "btn"%>
+              </h3>
+              <% if @user.milestone %>
+                <h4>
+                  目標
+                  <%= link_to "変更", edit_milestone_path, :class => "btn" %>
+                </h4>
+                <div>
+  	              <% unless take_off_form_data(@user.weight_logs).empty? %>
+                    あと <%= (take_off_form_data(@user.weight_logs)[0].weight - @user.milestone.weight).round(2) %> kg
+                  <% end%>
+                </div>
+                <div>
+                  <% if @user.milestone.date %>
+                    あと <%= (@user.milestone.date - Date.today).to_i %> 日
+                  <% end %>
+                </div>
+              <% else %>
+                <h4>
+                  目標
+                  <%= link_to "目標を設定する", new_milestone_path, :class => "btn" %>
+                </h4>
+              <% end %>
             </div><!--/.well -->
           </div><!--/span-->
         </div><!--/row-->

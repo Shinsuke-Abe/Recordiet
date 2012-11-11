@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     @user = User.new
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render layout: "nonavigation"}
       format.json { render json: @user }
     end
   end
@@ -52,7 +52,7 @@ class UsersController < ApplicationController
         format.html { redirect_to weight_logs_path }
         format.json { render json: @user, status: :created, location: @user }
       else
-        format.html { render action: "new" }
+        format.html { render action: "new", layout: "nonavigation" }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

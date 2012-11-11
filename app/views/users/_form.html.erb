@@ -10,20 +10,20 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :mail_address %><br />
-    <%= f.text_field :mail_address %>
+    
+  <div class="control-group">
+    <div class="control-label"><%= f.label :mail_address %></div>
+    <div class="controls"><%= f.text_field :mail_address %></div>
   </div>
-  <div class="field">
-    <%= f.label :display_name %><br />
-    <%= f.text_field :display_name %>
+  <div class="control-group">
+    <div class="control-label"><%= f.label :display_name %></div>
+    <div class="controls"><%= f.text_field :display_name %></div>
   </div>
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password %>
+  <div class="control-group">
+    <div class="control-label"><%= f.label :password %></div>
+    <div class="controls"><%= f.password_field :password %></div>
   </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit nil, :class => "btn btn-success btn-large" %>
   </div>
 <% end %>
