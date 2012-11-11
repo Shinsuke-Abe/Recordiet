@@ -36,6 +36,7 @@ class WeightLogsControllerTest < ActionController::TestCase
   
   test "ログの変更内容の体重が未入力の場合はエラーメッセージを表示する" do
     update_weight_log_action(:eric, {:measured_date => Date.yesterday, :weight => nil})
+    assert assigns(:weight_log).errors
   end
   
   test "ログを削除するとログの件数が減る" do
