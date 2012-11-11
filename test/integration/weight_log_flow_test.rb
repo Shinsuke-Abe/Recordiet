@@ -150,6 +150,21 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     required_login_filtered weight_logs_path
   end
   
+  test "食事内容を登録する" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    show_form_action new_weight_log_menu_path(users(:eric).weight_logs[0])
+    
+    post_via_redirect weight_log_menu_path(users(:eric).weight_logs[0]), :menu => {
+      :type => 1,
+      :detail => "ご飯
+      みそ汁
+      納豆"
+    }
+    assert_show_user_log
+  end
+  
   private
   def assert_show_user_log
     assert_equal weight_logs_path, path
