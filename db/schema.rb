@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121108112552) do
+ActiveRecord::Schema.define(:version => 20121111114345) do
 
   create_table "achieved_milestone_logs", :force => true do |t|
     t.date     "achieved_date"
@@ -22,6 +22,16 @@ ActiveRecord::Schema.define(:version => 20121108112552) do
   end
 
   add_index "achieved_milestone_logs", ["user_id"], :name => "index_achieved_milestone_logs_on_user_id"
+
+  create_table "menus", :force => true do |t|
+    t.integer  "type"
+    t.text     "detail"
+    t.integer  "weight_log_id"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "menus", ["weight_log_id"], :name => "index_menus_on_weight_log_id"
 
   create_table "milestones", :force => true do |t|
     t.float    "weight"

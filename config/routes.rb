@@ -4,7 +4,9 @@ Recordiet::Application.routes.draw do
   resource :login
   resource :user
   
-  resources :weight_logs
+  resources :weight_logs do
+    resources :menus
+  end
   resource :milestone
   resources :achieved_milestone_logs
 
