@@ -156,7 +156,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     show_form_action new_weight_log_menu_path(users(:eric).weight_logs[0])
     
-    post_via_redirect weight_log_menu_path(users(:eric).weight_logs[0]), :menu => {
+    post_via_redirect weight_log_menus_path(users(:eric).weight_logs[0]), :menu => {
       :type => 1,
       :detail => "ご飯
       みそ汁

@@ -16,17 +16,21 @@
 	  <th>計測日</th>
 	  <th>体重</th>
 	  <th></th>
+	  <th></th>
     </tr>
   </thead>
   <tbody>
   <% take_off_form_data(@user.weight_logs).each do |weight_log| %>
   	<tr>
-  		<td><%= weight_log.measured_date %></td>
-  		<td><%= weight_log.weight %></td>
-  		<td>
-  		  <%= link_to "変更", edit_weight_log_path(weight_log.id), :class => "btn btn-mini" %>
-  		  <%= link_to "削除", weight_log_path(weight_log.id), method: :delete, data: { confirm: '本当に削除しますか？' }, :class => "btn btn-mini btn-danger"%>
-  		</td>
+  	  <td><%= weight_log.measured_date %></td>
+  	  <td><%= weight_log.weight %></td>
+  	  <td>
+  	    <%= link_to "変更", edit_weight_log_path(weight_log.id), :class => "btn btn-mini" %>
+  	    <%= link_to "削除", weight_log_path(weight_log.id), method: :delete, data: { confirm: '本当に削除しますか？' }, :class => "btn btn-mini btn-danger"%>
+  	  </td>
+  	  <td>
+  	    <%= link_to "食事内容追加", new_weight_log_menu_path(weight_log), :class => "btn btn-mini" %>
+  	  </td>
   	</tr>
   <% end %>
   </tbody>

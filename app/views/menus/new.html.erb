@@ -1,0 +1,32 @@
+<h2>食事記録登録</h2>
+<%= form_for [@weight_log, @menu] do |f| %>
+  <% if @menu.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@menu.errors.count, "") %> 個のエラーが発生しました。:</h2>
+
+      <ul>
+      <% @menu.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% typeoptions = [
+  	["朝食", 1],
+  	["昼食", 2],
+  	["夕食", 3],
+  	["間食", 4],
+  	["その他", 5]
+  ] %>
+  <div class="control-group">
+    <div class="control-label">種類</div>
+    <div class="controls"><%= f.select :type, typeoptions %></div>
+  </div>
+  <div class="control-group">
+    <div class="control-label">食事内容</div>
+    <div class="controls"><%= f.text_area :detail %></div>
+  </div>
+  <div class="form-actions">
+    <%= f.submit nil, :class => "btn btn-success btn-large" %>
+  </div>
+<% end %>
