@@ -80,6 +80,19 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       "焼き肉食べ放題")
   end
   
+  test "目標の設定でエラーが発生した場合はフォームが再表示される" do
+    https!
+    login_action users(:john).mail_address, users(:john).password
+    
+    post_via_redirect milestone_path, :milestone => {
+      :weight => nil,
+      :date => Date.today + 30.days,
+      :reward => "後で交渉"
+    }
+    
+    assert_equal milestone_path, path
+  end
+  
   test "目標を修正する" do
     https!
     login_action users(:eric).mail_address, users(:eric).password
@@ -94,6 +107,21 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     assert_show_user_log
     assert assigns(:user).milestone
+  end
+  
+  test "目標の修正でエラーが発生した場合はフォームが再表示される" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    show_form_action edit_milestone_path
+    
+    put_via_redirect milestone_path, :milestone => {
+      :weight => nil,
+      :date => Date.today + 60.days,
+      :reward => "後で決める"
+    }
+    
+    assert_equal milestone_path, path
   end
   
   test "履歴登録時に目標を達成した場合はメッセージが表示される" do
@@ -163,6 +191,20 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       納豆"
     }
     assert_show_user_log
+  end
+  
+  test "食事内容の登録でエラーが発生した場合はフォームが再表示される" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    show_form_action new_weight_log_menu_path(users(:eric).weight_logs[0])
+    
+    post_via_redirect weight_log_menus_path(users(:eric).weight_logs[0]), :menu => {
+      :type => 1,
+      :detail => nil
+    }
+    
+    assert_equal weight_log_menus_path(users(:eric).weight_logs[0]), path
   end
   
   private

@@ -43,26 +43,27 @@
           </div>
           <div class="span3">
             <div class="well sidebar-nav">
+              <% user_sidebar_display = User.find(session[:id]) %>
               <h3>
-              	<%= @user.display_name %>
+              	<%= user_sidebar_display.display_name %>
               	<%= link_to "ログアウト", login_path, method: :delete, data: { confirm: 'ログアウトします。よろしいですか？' }, :class => "btn"%>
               </h3>
-              <% if @user.milestone %>
+              <% if user_sidebar_display.milestone %>
                 <h4>
                   目標
                   <%= link_to "変更", edit_milestone_path, :class => "btn" %>
                 </h4>
                 <div>
   	              <%
-  	                taked_off_weight_logs = take_off_form_data(@user.weight_logs)
+  	                taked_off_weight_logs = take_off_form_data(user_sidebar_display.weight_logs)
   	                unless taked_off_weight_logs.empty?
   	              %>
-                    あと <%= (taked_off_weight_logs[0].weight - @user.milestone.weight).round(2) %> kg
+                    あと <%= (taked_off_weight_logs[0].weight - user_sidebar_display.milestone.weight).round(2) %> kg
                   <% end %>
                 </div>
                 <div>
-                  <% if @user.milestone.date %>
-                    あと <%= (@user.milestone.date - Date.today).to_i %> 日
+                  <% if user_sidebar_display.milestone.date %>
+                    あと <%= (user_sidebar_display.milestone.date - Date.today).to_i %> 日
                   <% end %>
                 </div>
               <% else %>

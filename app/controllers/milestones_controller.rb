@@ -9,7 +9,8 @@ class MilestonesController < ApplicationController
   
   # POST /user/milestone/
   def create
-    if @milestone = @user.create_milestone(params[:milestone])
+    @milestone = @user.create_milestone(params[:milestone])
+    if @milestone.errors.empty?
       redirect_to weight_logs_path
     else
       render :action => "new"
