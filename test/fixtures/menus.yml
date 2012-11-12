@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  type: 1
+  menu_type: 1
   detail: MyText
   weight_log: 
 
 two:
-  type: 1
+  menu_type: 1
   detail: MyText
   weight_log: 

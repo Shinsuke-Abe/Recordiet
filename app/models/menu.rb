@@ -1,7 +1,7 @@
 class Menu < ActiveRecord::Base
   belongs_to :weight_log
-  attr_accessible :detail, :type
+  attr_accessible :detail, :menu_type
   
-  validates :type, :detail, :presence => true
-  validates :type, :inclusion => { :in => 1..5 }
+  validates :menu_type, :detail, :presence => true
+  validates :menu_type, :inclusion => { :in => 1..5 }
 end
