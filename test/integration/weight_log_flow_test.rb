@@ -207,6 +207,13 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_equal weight_log_menus_path(users(:eric).weight_logs[0]), path
   end
   
+  test "指定した履歴の食事内容を表示できる" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    show_form_action weight_log_menus_path(users(:eric).weight_logs[0])
+  end
+  
   private
   def assert_show_user_log
     assert_equal weight_logs_path, path

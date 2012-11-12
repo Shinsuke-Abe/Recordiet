@@ -2,6 +2,10 @@ class MenusController < ApplicationController
   include ApplicationHelper
   before_filter :required_login
   
+  def index
+    @weight_log = WeightLog.find(params[:weight_log_id])
+  end
+  
   def new
     @weight_log = WeightLog.find(params[:weight_log_id])
     @menu = @weight_log.menus.build

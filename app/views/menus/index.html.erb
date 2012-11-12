@@ -1,0 +1,18 @@
+<h2>食事内容</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>種類</th>
+      <th>内容</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @weight_log.menus.each do |menu| %>
+  	<tr>
+  		<td><%= display_menu_type(menu.type) %></td>
+  		<td><%= simple_format(menu.detail) %></td>
+  	</tr>
+  <% end %>
+  </tbody>
+</table>
