@@ -214,6 +214,25 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     show_form_action weight_log_menus_path(users(:eric).weight_logs[0])
   end
   
+  test "指定した食事内容を変更できる" do
+    https!
+    login_action users(:eric).mail_address, users(:eric).password
+    
+    show_form_action weight_log_menus_path(users(:eric).weight_logs[0])
+    show_form_action edit_weight_log_menu_path(
+      users(:eric).weight_logs[0],
+      users(:eric).weight_logs[0].menus[0].id)
+    
+    put_via_redirect weight_log_menus_path(
+      users(:eric).weight_logs[0],
+      users(:eric).weight_logs[0].menus[0].id),
+      :menu => {
+        :menu_type => 3,
+        :detail => "愛妻弁当"
+      }
+    assert_equal weight_log_menus_path(users(:eric).weight_logs[0]), path
+  end
+  
   private
   def assert_show_user_log
     assert_equal weight_logs_path, path

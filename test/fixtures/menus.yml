@@ -3,9 +3,9 @@
 one:
   menu_type: 1
   detail: MyText
-  weight_log: 
+  weight_log: one
 
 two:
   menu_type: 1
   detail: MyText
-  weight_log: 
+  weight_log: two
