@@ -225,6 +225,21 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       erics_weight_log.menus[0].id)
   end
   
+  test "食事内容を削除する" do
+    https!
+    login_action @eric.mail_address, @eric.password
+    
+    erics_weight_log = @eric.weight_logs[0]
+    
+    show_form_action weight_log_menus_path(erics_weight_log)
+    
+    delete_via_redirect weight_log_menu_path(
+      erics_weight_log,
+      erics_weight_log.menus[0].id)
+    
+    assert_equal weight_log_menus_path(erics_weight_log), path
+  end
+  
   private
   def assert_show_user_log
     assert_equal weight_logs_path, path

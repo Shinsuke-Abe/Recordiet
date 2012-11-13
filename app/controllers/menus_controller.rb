@@ -37,4 +37,12 @@ class MenusController < ApplicationController
       render :action => "edit"
     end
   end
+  
+  def destroy
+    @weight_log = WeightLog.find(params[:weight_log_id])
+    @menu = Menu.find(params[:id])
+    @menu.destroy
+    
+    redirect_to weight_log_menus_path
+  end
 end
