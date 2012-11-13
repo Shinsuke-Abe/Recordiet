@@ -1,5 +1,4 @@
 class MilestonesController < ApplicationController
-  include ApplicationHelper
   before_filter :required_login
   
   # GET /user/milestone/new

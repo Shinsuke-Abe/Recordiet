@@ -1,5 +1,4 @@
 class AchievedMilestoneLogsController < ApplicationController
-  include ApplicationHelper
   before_filter :required_login
   
   def index

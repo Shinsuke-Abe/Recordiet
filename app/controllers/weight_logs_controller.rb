@@ -1,6 +1,5 @@
 # encoding: utf-8
 class WeightLogsController < ApplicationController
-  include ApplicationHelper
   include WeightLogsHelper
   before_filter :required_login
   

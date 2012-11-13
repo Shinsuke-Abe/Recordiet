@@ -1,18 +1,16 @@
 class MenusController < ApplicationController
-  include ApplicationHelper
   before_filter :required_login
+  before_filter :get_weight_log
   
   def index
-    @weight_log = WeightLog.find(params[:weight_log_id])
+    
   end
   
   def new
-    @weight_log = WeightLog.find(params[:weight_log_id])
     @menu = @weight_log.menus.build
   end
   
   def create
-    @weight_log = WeightLog.find(params[:weight_log_id])
     @menu = @weight_log.menus.create(params[:menu])
     
     if @menu.errors.empty?
@@ -23,12 +21,10 @@ class MenusController < ApplicationController
   end
   
   def edit
-    @weight_log = WeightLog.find(params[:weight_log_id])
     @menu = Menu.find(params[:id])
   end
   
   def update
-    @weight_log = WeightLog.find(params[:weight_log_id])
     @menu = Menu.find(params[:id])
     
     if @menu.update_attributes(params[:menu])
@@ -39,10 +35,14 @@ class MenusController < ApplicationController
   end
   
   def destroy
-    @weight_log = WeightLog.find(params[:weight_log_id])
     @menu = Menu.find(params[:id])
     @menu.destroy
     
     redirect_to weight_log_menus_path
+  end
+  
+  private
+  def get_weight_log
+    @weight_log = WeightLog.find(params[:weight_log_id])
   end
 end
