@@ -53,4 +53,20 @@ class UserTest < ActiveSupport::TestCase
       :password => nil)
     assert new_user.invalid?
   end
+  
+  test "メールアドレスが一致するレコードがある場合はエラー" do
+    new_user = User.new(
+      :mail_address => users(:eric).mail_address,
+      :display_name => "anonymous",
+      :password => "newpass")
+    assert new_user.invalid?
+  end
+  
+  test "メールアドレスがemailの形式でない場合はエラー" do
+    new_user = User.new(
+      :mail_address => "mail",
+      :display_name => "anonymous",
+      :password => "newpass")
+    assert new_user.invalid?
+  end
 end

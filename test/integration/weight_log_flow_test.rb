@@ -30,6 +30,18 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_show_user_without_log
   end
   
+  test "登録済みのメールアドレスでの登録は失敗する" do
+    https!
+    show_form_action new_user_path
+    assert assigns(:user)
+    
+    post_via_redirect user_path, :user => {
+      :mail_address => @eric.mail_address,
+      :display_name => "jimmy page",
+      :password => "guitar"}
+    assert_equal user_path, path
+  end
+  
   test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
     https!
     login_action @eric.mail_address, @eric.password
