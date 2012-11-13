@@ -5,6 +5,7 @@
     <tr>
       <th>種類</th>
       <th>内容</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -12,6 +13,7 @@
   	<tr>
   		<td><%= display_menu_type(menu.menu_type) %></td>
   		<td><%= simple_format(menu.detail) %></td>
+        <td><%= link_to "変更", weight_log_menus_path(@weight_log), :class => "btn btn-mini" %></td>
   	</tr>
   <% end %>
   </tbody>

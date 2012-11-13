@@ -211,5 +211,5 @@ ja:
         achieved_date: "達成日"
         milestone_weight: "目標体重"
       menu:
-        type: "種類"
+        menu_type: "種類"
         detail: "食事内容"

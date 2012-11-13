@@ -14,7 +14,7 @@ class MilestoneTest < ActiveSupport::TestCase
   test "期限は未来(本日以降)のみ指定可能" do
     new_milestone = Milestone.new(
       :weight => 71.2,
-      :date => Date.yesterday,
+      :date => Date.today - 4.days,
       :reward => "デート")
     assert new_milestone.invalid?
   end

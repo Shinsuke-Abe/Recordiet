@@ -21,4 +21,20 @@ class MenusController < ApplicationController
       render :action => "new"
     end
   end
+  
+  def edit
+    @weight_log = WeightLog.find(params[:weight_log_id])
+    @menu = Menu.find(params[:id])
+  end
+  
+  def update
+    @weight_log = WeightLog.find(params[:weight_log_id])
+    @menu = Menu.find(params[:id])
+    
+    if @menu.update_attributes(params[:menu])
+      redirect_to weight_log_menus_path(@weight_log)
+    else
+      render :action => "edit"
+    end
+  end
 end
