@@ -42,6 +42,26 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_equal user_path, path
   end
   
+  test "ユーザ情報を変更する" do
+    https!
+    login_action @eric.mail_address, @eric.password
+    
+    show_form_action edit_user_path
+    
+    put_via_redirect user_path, :user => {
+      :mail_address => "new_eric@derek.com",
+      :display_name => "blind faith",
+      :password => "layla"
+    }
+    assert_show_user_log
+    
+    delete_via_redirect login_path
+    assert_equal login_path, path
+    
+    login_action "new_eric@derek.com", "layla"
+    assert_show_user_log
+  end
+  
   test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
     https!
     login_action @eric.mail_address, @eric.password
@@ -166,7 +186,8 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     # achieved_milestone_logs_controllerは全メソッド
     required_login_filtered achieved_milestone_logs_path
     
-    # TODO user_controllerは編集と削除が加わったときにアクセス制御を行う
+    # user_controllerはedit,update,destroyが対象
+    required_login_filtered edit_user_path
   end
   
   test "ログアウトする" do

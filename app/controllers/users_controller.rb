@@ -1,16 +1,7 @@
 # encoding: utf-8
 class UsersController < ApplicationController
-  # GET /users
-  # GET /users.json
-  def index
-    @users = User.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @users }
-    end
-  end
-
+  before_filter :required_login, :only => [:edit, :update]
+  
   # GET /user
   # GET /user
   # show user report
@@ -37,7 +28,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @user = User.find(params[:id])
+    @user = User.find(session[:id])
   end
 
   # POST /user
@@ -61,11 +52,11 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.json
   def update
-    @user = User.find(params[:id])
+    @user = User.find(session[:id])
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
+        format.html { redirect_to weight_logs_path }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

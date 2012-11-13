@@ -29,6 +29,7 @@
             <ul class="nav">
               <li><%= link_to "体重履歴", weight_logs_path  %></li>
               <li><%= link_to "目標達成履歴", achieved_milestone_logs_path  %></li>
+              <li><%= link_to "ユーザ情報変更", edit_user_path %></li>
               <li><%= link_to "ログアウト", login_path, method: :delete, data: { confirm: 'ログアウトします。よろしいですか？' } %></li>
             </ul>
           </div><!--/.nav-collapse -->
@@ -45,8 +46,17 @@
             <div class="well sidebar-nav">
               <% user_sidebar_display = User.find(session[:id]) %>
               <h3>
+              	<div class="btn-group">
+              	  <a class="btn dropdown-toggle" data-toggle="dropdown">
+              	  	<i class="icon-user"></i>
+              	  	<span class="caret"></span>
+              	  </a>
+              	  <ul class="dropdown-menu">
+              	    <li><%= link_to "ユーザ情報変更", edit_user_path %></li>
+              	    <li><%= link_to "ログアウト", login_path, method: :delete, data: { confirm: 'ログアウトします。よろしいですか？' }%></li>
+              	  </ul>
+              	</div>
               	<%= user_sidebar_display.display_name %>
-              	<%= link_to "ログアウト", login_path, method: :delete, data: { confirm: 'ログアウトします。よろしいですか？' }, :class => "btn"%>
               </h3>
               <% if user_sidebar_display.milestone %>
                 <h4>
