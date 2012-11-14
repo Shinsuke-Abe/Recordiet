@@ -164,6 +164,15 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert assigns(:user).achieved_milestone_logs
   end
   
+  test "目標を削除する" do
+    https!
+    login_action @eric.mail_address, @eric.password
+    
+    delete_via_redirect milestone_path
+    
+    assert_equal weight_logs_path, path
+  end
+  
   test "目標の達成履歴を表示する" do
     https!
     login_action @eric.mail_address, @eric.password

@@ -31,4 +31,15 @@ class MilestonesController < ApplicationController
       render :action => "edit" 
     end
   end
+  
+  def destroy
+    @milestone = @user.milestone
+    @milestone.destroy
+    
+    if request.referer
+      redirect_to :back
+    else
+      redirect_to weight_logs_path
+    end
+  end
 end

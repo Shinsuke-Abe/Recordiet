@@ -60,8 +60,17 @@
               </h3>
               <% if user_sidebar_display.milestone %>
                 <h4>
+                  <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown">
+                      <i class="icon-flag"></i>
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><%= link_to "目標変更", edit_milestone_path %></li>
+                      <li><%= link_to "目標削除", milestone_path, method: :delete, data: { confirm: '目標を削除します。よろしいですか？' } %></li>
+                    </ul>
+                  </div>
                   目標
-                  <%= link_to "変更", edit_milestone_path, :class => "btn" %>
                 </h4>
                 <div>
   	              <%
