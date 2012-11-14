@@ -62,6 +62,21 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_show_user_log
   end
   
+  test "退会する" do
+    https!
+    login_action @eric.mail_address, @eric.password
+    
+    delete_via_redirect user_path
+    
+    assert_equal login_path, path
+    
+    post_via_redirect login_path, :user => {
+      :mail_address => @eric.mail_address,
+      :password => @eric.password
+    }
+    assert_equal login_path, path
+  end
+  
   test "履歴登録済：ログインすると履歴ページに一覧を表示する" do
     https!
     login_action @eric.mail_address, @eric.password

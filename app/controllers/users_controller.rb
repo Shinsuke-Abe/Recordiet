@@ -1,10 +1,8 @@
 # encoding: utf-8
 class UsersController < ApplicationController
-  before_filter :required_login, :only => [:edit, :update]
+  before_filter :required_login, :only => [:edit, :update, :destroy]
   
   # GET /user
-  # GET /user
-  # show user report
   def show
     @user = User.find(session[:id])
 
@@ -15,8 +13,6 @@ class UsersController < ApplicationController
   end
 
   # GET /user/new
-  # GET /user/new.json
-  # show user register form
   def new
     @user = User.new
 
@@ -26,14 +22,13 @@ class UsersController < ApplicationController
     end
   end
 
-  # GET /users/1/edit
+  # GET /user/edit
   def edit
     @user = User.find(session[:id])
   end
 
   # POST /user
   # POST /user.json
-  # register new user
   def create
     @user = User.new(params[:user])
 
@@ -49,8 +44,8 @@ class UsersController < ApplicationController
     end
   end
 
-  # PUT /users/1
-  # PUT /users/1.json
+  # PUT /user
+  # PUT /user.json
   def update
     @user = User.find(session[:id])
 
@@ -65,15 +60,11 @@ class UsersController < ApplicationController
     end
   end
 
-  # DELETE /users/1
-  # DELETE /users/1.json
+  # DELETE /user
   def destroy
-    @user = User.find(params[:id])
+    @user = User.find(session[:id])
     @user.destroy
 
-    respond_to do |format|
-      format.html { redirect_to users_url }
-      format.json { head :no_content }
-    end
+    redirect_to login_path
   end
 end
