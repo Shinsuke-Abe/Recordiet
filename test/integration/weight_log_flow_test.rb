@@ -175,7 +175,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert_show_user_log
     assert_equal(
       achieve_message("ホルモン"),
-      flash[:notice])
+      flash[:success])
     assert assigns(:user).achieved_milestone_logs
   end
   

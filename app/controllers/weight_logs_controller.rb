@@ -19,10 +19,10 @@ class WeightLogsController < ApplicationController
         :achieved_date => @weight_log.measured_date,
         :milestone_weight => @user.milestone.weight)
         
-      flash[:notice] = achieve_message(@user.milestone.reward)
+      flash[:success] = achieve_message(@user.milestone.reward)
     end
     
-    render :action => "index"
+    redirect_to weight_logs_path
   end
   
   # show weight_log edit form

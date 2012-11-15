@@ -1,4 +1,9 @@
-<p id="alert"><%= alert %></p>
+<% if alert %>
+  <div class="alert alert-error"><%= alert %></div>
+<% end %>
+<% if notice %>
+  <div class="alert alert-block"><%= notice %></div>
+<% end %>
 
 <div class="hero-unit">
   <div class="row-fluid">

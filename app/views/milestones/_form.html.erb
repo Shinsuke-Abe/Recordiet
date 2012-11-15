@@ -1,7 +1,7 @@
 <%= form_for @milestone, :url => milestone_path, :html => {:class => "form-horizontal"} do |f| %>
   <% if @milestone.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@milestone.errors.count, "") %> 個のエラーが発生しました。:</h2>
+    <div class="alert alert-error">
+      <h4><%= pluralize(@milestone.errors.count, "") %> 個のエラーが発生しました。:</h4>
 
       <ul>
       <% @milestone.errors.full_messages.each do |msg| %>
