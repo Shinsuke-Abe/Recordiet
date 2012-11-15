@@ -7,8 +7,7 @@ class MilestonesControllerTest < ActionController::TestCase
   test "目標入力フォームを開く" do
     session[:id] = users(:john)
     get :new
-    assigns(:user)
-    assigns(:milestone)
+    assert_milestone_form_assings
   end
   
   test "目標を新規保存する" do
@@ -27,8 +26,7 @@ class MilestonesControllerTest < ActionController::TestCase
   test "編集フォームを開く" do
     session[:id] = users(:eric)
     get :edit
-    assigns(:user)
-    assigns(:milestone)
+    assert_milestone_form_assings
     
     assert_equal milestones(:one), assigns(:milestone)
   end
@@ -47,6 +45,11 @@ class MilestonesControllerTest < ActionController::TestCase
   end
   
   private
+  def assert_milestone_form_assings
+    assert assigns(:user)
+    assert assigns(:milestone)
+  end
+  
   def assert_milestone(expected, actual)
     assert_equal expected[:weight], actual.weight
     assert_equal expected[:date], actual.date

@@ -88,7 +88,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     login_action @john.mail_address, @john.password
     assert_show_user_without_log
     
-    create_weight_log_action(Date.today - 1, 73.8)
+    create_weight_log_action Date.today - 1, 73.8
     
     assert !assigns(:user).weight_logs.empty?
   end
@@ -126,7 +126,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action @john.mail_address, @john.password
     
-    create_milestone_action(67.0, Date.today + 30.days, "焼き肉食べ放題")
+    create_milestone_action 67.0, Date.today + 30.days, "焼き肉食べ放題"
     
     assert_show_user_log
     assert assigns(:user).milestone
@@ -136,7 +136,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action @john.mail_address, @john.password
     
-    create_milestone_action(nil, Date.today + 30.days, "後で交渉")
+    create_milestone_action nil, Date.today + 30.days, "後で交渉"
     
     assert_equal milestone_path, path
   end
@@ -145,7 +145,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action @eric.mail_address, @eric.password
     
-    edit_milestone_action(65.0, Date.today + 60.days, "ラーメン")
+    edit_milestone_action 65.0, Date.today + 60.days, "ラーメン"
     
     assert_show_user_log
     assert assigns(:user).milestone
@@ -155,7 +155,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action @eric.mail_address, @eric.password
     
-    edit_milestone_action(nil, Date.today + 60.days, "後で決める")
+    edit_milestone_action nil, Date.today + 60.days, "後で決める"
     
     assert_equal milestone_path, path
   end
@@ -164,13 +164,13 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action @john.mail_address, @john.password
     
-    create_milestone_action(67.5, Date.today + 40.days, "ホルモン")
+    create_milestone_action 67.5, Date.today + 40.days, "ホルモン"
     
     assert_show_user_log
     assert assigns(:user).milestone
     
     assert_show_user_without_log
-    create_weight_log_action(Date.today - 1, 67.4)
+    create_weight_log_action Date.today - 1, 67.4
     
     assert_show_user_log
     assert_equal(
@@ -246,7 +246,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     erics_weight_log = @eric.weight_logs[0]
     
-    create_menu_action(erics_weight_log, 1, nil)
+    create_menu_action erics_weight_log, 1, nil
     
     assert_equal weight_log_menus_path(erics_weight_log), path
   end
@@ -264,7 +264,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     erics_weight_log = @eric.weight_logs[0]
     
-    edit_menu_action(erics_weight_log, erics_weight_log.menus[0].id, 3, "愛妻弁当")
+    edit_menu_action erics_weight_log, erics_weight_log.menus[0].id, 3, "愛妻弁当"
     
     assert_equal weight_log_menus_path(erics_weight_log), path
   end
@@ -275,7 +275,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     
     erics_weight_log = @eric.weight_logs[0]
     
-    edit_menu_action(erics_weight_log, erics_weight_log.menus[0].id, 3, nil)
+    edit_menu_action erics_weight_log, erics_weight_log.menus[0].id, 3, nil
     
     show_form_action edit_weight_log_menu_path(
       erics_weight_log,
