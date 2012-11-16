@@ -4,8 +4,13 @@ require 'test_helper'
 class MilestonesControllerTest < ActionController::TestCase
   fixtures :users, :milestones
   
+  def setup
+    @john = users(:john)
+    @eric = users(:eric)
+  end
+  
   test "目標入力フォームを開く" do
-    session[:id] = users(:john)
+    session[:id] = @john
     get :new
     assert_milestone_form_assings
   end
@@ -16,15 +21,15 @@ class MilestonesControllerTest < ActionController::TestCase
       :date => Date.today + 60.days,
       :reward => "ケーキバイキング"}
       
-    session[:id] = users(:john)
+    session[:id] = @john
     post :create, :milestone => expected_data
     
-    johns_milestone = User.find(users(:john).id).milestone
+    johns_milestone = User.find(@john.id).milestone
     assert_milestone expected_data, johns_milestone
   end
   
   test "編集フォームを開く" do
-    session[:id] = users(:eric)
+    session[:id] = @eric
     get :edit
     assert_milestone_form_assings
     
@@ -37,10 +42,10 @@ class MilestonesControllerTest < ActionController::TestCase
       :date => Date.today + 90.days,
       :reward => "臨時小遣い"}
       
-    session[:id] = users(:eric)
+    session[:id] = @eric.id
     post :update, :milestone => expected_data
     
-    erics_milestone = User.find(users(:eric).id).milestone
+    erics_milestone = User.find(@eric.id).milestone
     assert_milestone expected_data, erics_milestone
   end
   

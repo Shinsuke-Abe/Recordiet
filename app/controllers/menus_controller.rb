@@ -3,7 +3,7 @@ class MenusController < ApplicationController
   before_filter :get_weight_log
   
   def index
-    
+    # do nothing
   end
   
   def new

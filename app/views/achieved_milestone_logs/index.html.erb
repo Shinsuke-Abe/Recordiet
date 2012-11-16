@@ -1,23 +1,19 @@
 <h2>目標達成履歴</h2>
 <% if notice %>
-  <div class="alert alert-info">
-    <button type="button" class="close" data-dismiss="alert">×</button>
-    <%= simple_format(notice) %>
-  </div>
+  <%= render :partial => "notice", :object => notice %>
 <% end %>
 
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>達成日</th>
-  	  <th>達成目標</th>
+      <th>達成日</th><th>達成目標</th>
     </tr>
   </thead>
   <tbody>
   <% @achieved_milestone_logs.each do |achieved_milestone_log| %>
   	<tr>
   	  <td><%= achieved_milestone_log.achieved_date %></td>
-  	  <td><%= achieved_milestone_log.milestone_weight %></td>
+  	  <td><%= achieved_milestone_log.milestone_weight %> kg</td>
   	</tr>
   <% end %>
   </tbody>

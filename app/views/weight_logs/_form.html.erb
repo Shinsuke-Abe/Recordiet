@@ -1,14 +1,6 @@
 <%= form_for @weight_log, :html => {:class => "form-horizontal"} do |f| %>
   <% if @weight_log.errors.any? %>
-    <div class="alert alert-error">
-      <h4><%= pluralize(@weight_log.errors.count, "") %> 個のエラーが発生しました。:</h4>
-
-      <ul>
-      <% @weight_log.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+    <%= render :partial => "formerror", :locals => {:form_errors => @weight_log.errors}%>
   <% end %>
   
   <div class="control-group">

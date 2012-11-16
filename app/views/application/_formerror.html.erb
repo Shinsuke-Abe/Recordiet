@@ -1,0 +1,9 @@
+<div class="alert alert-error">
+  <h4><%= pluralize(form_errors.count, "") %> 個のエラーが発生しました。:</h4>
+
+  <ul>
+  <% form_errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
+  <% end %>
+  </ul>
+</div>
