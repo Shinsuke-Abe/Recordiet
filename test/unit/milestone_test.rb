@@ -18,42 +18,4 @@ class MilestoneTest < ActiveSupport::TestCase
       :reward => "デート")
     assert new_milestone.invalid?
   end
-  
-  test "新規体重履歴が目標を達成したか判別する" do
-    target_milestone = Milestone.new(
-      :weight => 65.5,
-      :date => Date.tomorrow,
-      :reward => "寿司"
-    )
-    
-    over_weight_log = WeightLog.new(
-      :measured_date => Date.yesterday,
-      :weight => 65.6)
-    
-    equal_weight_log = WeightLog.new(
-      :measured_date => Date.today - 3.days,
-      :weight => 65.5)
-    
-    under_weight_log = WeightLog.new(
-      :measured_date => Date.today - 2.days,
-      :weight => 65.4)
-    
-    assert !target_milestone.achieve?(over_weight_log)
-    assert target_milestone.achieve?(equal_weight_log)
-    assert target_milestone.achieve?(under_weight_log)
-  end
-  
-  test "体重未登録の履歴は未達成として評価される" do
-    target_milestone = Milestone.new(
-      :weight => 65.5,
-      :date => Date.tomorrow,
-      :reward => "寿司"
-    )
-    
-    incorrect_weight_log = WeightLog.new(
-      :measured_date => Date.today - 2.days,
-      :weight => nil)
-    
-    assert !target_milestone.achieve?(incorrect_weight_log)
-  end
 end

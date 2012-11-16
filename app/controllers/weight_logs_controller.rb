@@ -14,7 +14,7 @@ class WeightLogsController < ApplicationController
   def create
     @weight_log = @user.weight_logs.create(params[:weight_log])
     
-    if @user.milestone and @user.milestone.achieve?(@weight_log)
+    if @weight_log.errors.empty? and @weight_log.achieve?(@user.milestone)
       @user.achieved_milestone_logs.create(
         :achieved_date => @weight_log.measured_date,
         :milestone_weight => @user.milestone.weight)

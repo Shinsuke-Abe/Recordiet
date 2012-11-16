@@ -8,4 +8,14 @@ class WeightLog < ActiveRecord::Base
   has_many :menus, :dependent => :destroy
   
   default_scope :order => "measured_date desc"
+  
+  def achieve?(milestone)
+    if milestone and
+      milestone.weight and
+      milestone.weight >= weight
+      true
+    else
+      false
+    end
+  end
 end

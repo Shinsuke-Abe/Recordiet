@@ -2,7 +2,7 @@
 require 'test_helper'
 
 class WeightLogTest < ActiveSupport::TestCase
-  fixtures :users, :weight_logs
+  fixtures :users, :weight_logs, :milestones
   
   test "日付の入力は必須" do
     new_weight_log = WeightLog.new(
@@ -39,5 +39,31 @@ class WeightLogTest < ActiveSupport::TestCase
     assert_equal weight_logs(:two).measured_date, log_added_eric.weight_logs[0].measured_date
     assert_equal weight_logs(:one).measured_date, log_added_eric.weight_logs[1].measured_date
     assert_equal Date.yesterday, log_added_eric.weight_logs[2].measured_date
+  end
+  
+  
+  
+  test "新規体重履歴が目標を達成したか判別する" do
+    target_milestone = Milestone.new(
+      :weight => 65.5,
+      :date => Date.tomorrow,
+      :reward => "寿司"
+    )
+    
+    over_weight_log = WeightLog.new(
+      :measured_date => Date.yesterday,
+      :weight => 65.6)
+    
+    equal_weight_log = WeightLog.new(
+      :measured_date => Date.today - 3.days,
+      :weight => 65.5)
+    
+    under_weight_log = WeightLog.new(
+      :measured_date => Date.today - 2.days,
+      :weight => 65.4)
+    
+    assert !over_weight_log.achieve?(target_milestone)
+    assert equal_weight_log.achieve?(target_milestone)
+    assert under_weight_log.achieve?(target_milestone)
   end
 end
