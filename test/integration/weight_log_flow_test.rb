@@ -15,7 +15,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     show_form_action login_path
     
     login_action @john.mail_address, @john.password
-    assert_show_user_without_log
+    assert_show_user_without_log_and_milestone
   end
   
   test "ユーザ登録が成功する" do
@@ -27,7 +27,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :mail_address => "jimmy@ledzeppelin.com",
       :display_name => "jimmy page",
       :password => "guitar"}
-    assert_show_user_without_log
+    assert_show_user_without_log_and_milestone
   end
   
   test "登録済みのメールアドレスでの登録は失敗する" do
@@ -86,7 +86,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
   test "体重履歴を登録する" do
     https!
     login_action @john.mail_address, @john.password
-    assert_show_user_without_log
+    assert_show_user_without_log_and_milestone
     
     create_weight_log_action Date.today - 1, 73.8
     
@@ -303,8 +303,17 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     assert assigns(:user)
   end
   
+  def assert_show_user_without_log_and_milestone
+    assert_equal(
+      WeightLogsHelper::WEIGHT_LOG_NOT_FOUND + "\n" +
+      WeightLogsHelper::MILESTONE_NOT_FOUND,
+      flash[:notice])
+  end
+  
   def assert_show_user_without_log
-    assert_equal WeightLogsHelper::WEIGHT_LOG_NOT_FOUND, flash[:notice]
+    assert_equal(
+      WeightLogsHelper::WEIGHT_LOG_NOT_FOUND,
+      flash[:notice])
   end
   
   def login_action(mail_address, password)

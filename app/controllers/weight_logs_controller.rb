@@ -8,6 +8,12 @@ class WeightLogsController < ApplicationController
     if @user.weight_logs.empty?
       flash[:notice] = WeightLogsHelper::WEIGHT_LOG_NOT_FOUND
     end
+    
+    unless @user.milestone
+      flash[:notice] = add_new_line(
+        flash[:notice],
+        WeightLogsHelper::MILESTONE_NOT_FOUND)
+    end
   end
   
   # add weight logs to login user

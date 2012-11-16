@@ -14,4 +14,8 @@ module ApplicationHelper
       @user = User.find(session[:id])
     end
   end
+  
+  def add_new_line(target, new_line)
+    target ? target + "\n" + new_line : new_line
+  end
 end
