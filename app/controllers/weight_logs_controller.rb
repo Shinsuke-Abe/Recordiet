@@ -20,15 +20,19 @@ class WeightLogsController < ApplicationController
   def create
     @weight_log = @user.weight_logs.create(params[:weight_log])
     
-    if @weight_log.errors.empty? and @weight_log.achieve?(@user.milestone)
-      @user.achieved_milestone_logs.create(
-        :achieved_date => @weight_log.measured_date,
-        :milestone_weight => @user.milestone.weight)
-        
-      flash[:success] = achieve_message(@user.milestone.reward)
+    unless @weight_log.errors.empty?
+      render :action => "index"
+    else
+      if @weight_log.achieve?(@user.milestone)
+        @user.achieved_milestone_logs.create(
+          :achieved_date => @weight_log.measured_date,
+          :milestone_weight => @user.milestone.weight)
+          
+        flash[:success] = achieve_message(@user.milestone.reward)
+      end
+      
+      redirect_to weight_logs_path
     end
-    
-    redirect_to weight_logs_path
   end
   
   # show weight_log edit form
