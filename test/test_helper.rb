@@ -31,4 +31,43 @@ class ActiveSupport::TestCase
       log.id != nil
     }
   end
+  
+  def login_action(args)
+    mail_address = args[:mail_address]
+    password = args[:password]
+    
+    post_via_redirect login_path, :user => {
+      :mail_address => mail_address,
+      :password => password
+    }
+    assert_show_user_log
+  end
+  
+  def assert_show_user_log
+    assert_equal weight_logs_path, path
+    assert assigns(:user)
+  end
+  
+  def show_form_action(uri)
+    get uri
+    assert_response :success
+  end
+  
+  def assert_show_user_without_log_and_milestone
+    assert_equal(
+      WeightLogsHelper::WEIGHT_LOG_NOT_FOUND + "\n" +
+      WeightLogsHelper::MILESTONE_NOT_FOUND,
+      flash[:notice])
+  end
+  
+  def create_weight_log_action(args)
+    measure_date = args[:measured_date]
+    weight = args[:weight]
+    
+    post_via_redirect weight_logs_path, :weight_log => {
+      :measured_date => measure_date,
+      :weight => weight
+    }
+    assert_show_user_log
+  end
 end
