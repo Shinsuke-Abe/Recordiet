@@ -55,3 +55,6 @@ gem 'validates_email_format_of', :git => 'git://github.com/alexdunae/validates_e
 
 # To use debugger
 # gem 'debugger'
+
+# To user haml
+gem 'haml'
