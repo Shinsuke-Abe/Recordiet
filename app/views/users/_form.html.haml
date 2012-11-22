@@ -1,0 +1,14 @@
+= form_for @user, :url => user_path do |f|
+  - if @user.errors.any?
+    = render :partial => "formerror", :locals => {:form_errors => @user.errors}
+  
+  .control-group
+    .control-label= f.label :mail_address
+    .controls= f.text_field :mail_address
+  .control-group
+    .control-label= f.label :display_name
+    .controls= f.text_field :display_name
+  .control-group
+    .control-label= f.label :password
+    .controls= f.password_field :password
+  .form-actions= f.submit nil, :class => "btn btn-success btn-large"
