@@ -1,0 +1,3 @@
+%li= link_to "ユーザ情報変更", edit_user_path
+%li= link_to "ログアウト", login_path, method: :delete, data: {confirm: 'ログアウトします。よろしいですか？'}
+%li= link_to "退会する", user_path, method: :delete, data: {confirm: '退会します。データは削除され、復帰できません。よろしいですか？'}
