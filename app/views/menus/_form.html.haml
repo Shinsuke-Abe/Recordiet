@@ -1,0 +1,11 @@
+= form_for [@weight_log, @menu] do |f|
+  - if @menu.errors.any?
+    = render :partial => "formerror", :locals => {:form_errors => @menu.errors}
+  
+  .control-group
+    .control-label 種類
+    .controls= f.select :menu_type, select_menu_array
+  .control-group
+    .control-label 食事内容
+    .controls= f.text_area :detail
+  .form-actions= f.submit nil, :class => "btn btn-success btn-large"
