@@ -10,13 +10,21 @@ class WeightLog < ActiveRecord::Base
   
   default_scope :order => "measured_date desc"
   
-  def achieve?(milestone)
-    if milestone and
-      milestone.weight and
-      milestone.weight >= weight
+  after_create :create_achieve_log, :if => :achieved?
+  
+  def achieved?
+    if user.milestone and
+      user.milestone.weight and
+      user.milestone.weight >= weight
       true
     else
       false
     end
+  end
+  
+  def create_achieve_log
+    user.achieved_milestone_logs.create(
+      :achieved_date => measured_date,
+      :milestone_weight => user.milestone.weight)
   end
 end

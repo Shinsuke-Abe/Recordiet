@@ -23,11 +23,7 @@ class WeightLogsController < ApplicationController
     unless @weight_log.errors.empty?
       render :action => "index"
     else
-      if @weight_log.achieve?(@user.milestone)
-        @user.achieved_milestone_logs.create(
-          :achieved_date => @weight_log.measured_date,
-          :milestone_weight => @user.milestone.weight)
-          
+      if @weight_log.achieved?
         flash[:success] = achieve_message(@user.milestone.reward)
       end
       
