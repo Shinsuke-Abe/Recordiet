@@ -19,7 +19,8 @@
         %td= weight_log.weight
         %td
           = render :partial => "iterate_item_buttons",
-                   :object => {:edit_path => edit_weight_log_path(weight_log.id), :delete_path => weight_log_path(weight_log.id)}
+                   :object => {:edit_path => edit_weight_log_path(weight_log.id),
+                               :delete_path => weight_log_path(weight_log.id)}
         %td
           - unless weight_log.menus.empty?
             = link_to "食事内容表示", weight_log_menus_path(weight_log), :class => "btn btn-mini"
