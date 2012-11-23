@@ -3,9 +3,9 @@
     = render :partial => "formerror", :locals => {:form_errors => @weight_log.errors}
   
   .control-group
-    .control-label 計測日
+    .control-label= f.label :measured_date
     .controls= f.date_select :measured_date
   .control-group
-    .control-label 体重
+    .control-label= f.label :weight
     .controls= f.number_field :weight , :step => 0.1, :class => "span1"
   .form-actions= f.submit nil, :class => "btn btn-primary"

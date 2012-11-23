@@ -3,12 +3,12 @@
     = render :partial => "formerror", :locals => {:form_errors => @milestone.errors}
   
   .control-group
-    .control-label 体重
+    .control-label= f.label :weight
     .controls= f.number_field :weight , :step => 0.1, :class => "span1"
   .control-group
-    .control-label 期限
+    .control-label= f.label :date
     .controls= f.date_select :date
   .control-group
-    .control-label ご褒美
+    .control-label= f.label :reward
     .controls= f.text_area :reward
   .form-actions= f.submit nil, :class => "btn btn-primary"
