@@ -4,7 +4,7 @@
   
   .control-group
     .control-label= f.label :menu_type
-    .controls= f.select :menu_type, select_menu_array
+    .controls= f.select :menu_type, Menu.select_menu_array
   .control-group
     .control-label= f.label :detail
     .controls= f.text_area :detail

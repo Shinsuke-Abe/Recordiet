@@ -6,7 +6,7 @@
   %tbody
     - @weight_log.menus.each do |menu|
       %tr
-        %td= display_menu_type(menu.menu_type)
+        %td= Menu.display_menu_type(menu.menu_type)
         %td= simple_format(menu.detail)
         %td
           = render :partial => "iterate_item_buttons",
