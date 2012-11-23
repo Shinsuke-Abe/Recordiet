@@ -1,3 +1,6 @@
+- if flash[:success]
+  = render :partial => "success", :object => flash[:success]
+
 %h3 履歴を追加
 - unless @weight_log
   - @weight_log = @user.weight_logs.build
