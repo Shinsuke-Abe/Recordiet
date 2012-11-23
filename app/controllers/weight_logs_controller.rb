@@ -1,6 +1,5 @@
 # encoding: utf-8
 class WeightLogsController < ApplicationController
-  include WeightLogsHelper
   before_filter :required_login
   after_filter :flash_clear, :only => [:index]
   
@@ -58,5 +57,10 @@ class WeightLogsController < ApplicationController
     @weight_log.destroy
     
     redirect_to weight_logs_path
+  end
+  
+  private
+  def achieve_message(reward)
+    sprintf(application_message(:achieve_milestone), reward)
   end
 end

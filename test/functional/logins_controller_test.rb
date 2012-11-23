@@ -21,7 +21,7 @@ class LoginsControllerTest < ActionController::TestCase
     login_action "nemo@mail.com", "noname1234"
     
     assert_response :success
-    assert_equal application_message_for_test(:login_incorrect), flash[:alert]
+    assert_template "show"
   end
   
   private
