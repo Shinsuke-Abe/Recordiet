@@ -2,7 +2,6 @@
 require 'test_helper'
 
 class MilestoneFlowTest < ActionDispatch::IntegrationTest
-  include WeightLogsHelper
   fixtures :all
   
   def setup
@@ -90,7 +89,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     
     assert_show_user_log
     assert_equal(
-      achieve_message(expected_data[:reward]),
+      sprintf(application_message_for_test(:achieve_milestone), expected_data[:reward]),
       flash[:success])
     assert assigns(:user).achieved_milestone_logs
   end
@@ -148,7 +147,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
   
   def assert_show_user_without_log
     assert_equal(
-      WeightLogsHelper::WEIGHT_LOG_NOT_FOUND,
+      application_message_for_test(:weight_log_not_found),
       flash[:notice])
   end
 end

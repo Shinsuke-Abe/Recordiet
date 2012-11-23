@@ -1,6 +1,5 @@
 # encoding: utf-8
 class AchievedMilestoneLogsController < ApplicationController
-  include AchievedMilestoneLogsHelper
   before_filter :required_login
   after_filter :flash_clear
   
@@ -8,7 +7,7 @@ class AchievedMilestoneLogsController < ApplicationController
     @achieved_milestone_logs = @user.achieved_milestone_logs
     
     if !@achieved_milestone_logs or @achieved_milestone_logs.empty?
-      flash[:notice] = AchievedMilestoneLogsHelper::ACHIEVED_MILESTONE_NOT_FOUND
+      flash[:notice] = application_message(:achieved_milestone_not_found)
     end
   end
   

@@ -226,3 +226,9 @@ ja:
       update: "変更"
   application_messages:
       confirm_delete: "本当に削除しますか？"
+      weight_log_not_found: "履歴が未登録です。"
+      achieved_milestone_not_found: "達成した目標がありません。"
+      milestone_not_found: "目標が未登録です。目標を立ててダイエットをしてみませんか？"
+      achieve_milestone: "目標を達成しました！おめでとうございます。\nご褒美は%sです、楽しんで下さい！"
+      login_incorrect: "メールアドレスかパスワードが間違っています。"
+      login_required: "Recordietの各機能を使うにはログインが必要です。"

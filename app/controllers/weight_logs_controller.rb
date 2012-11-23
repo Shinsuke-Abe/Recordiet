@@ -6,13 +6,13 @@ class WeightLogsController < ApplicationController
   # show weight logs list logged in user
   def index
     if @user.weight_logs.empty?
-      flash[:notice] = WeightLogsHelper::WEIGHT_LOG_NOT_FOUND
+      flash[:notice] = application_message(:weight_log_not_found)
     end
     
     unless @user.milestone
       flash[:notice] = add_new_line(
         flash[:notice],
-        WeightLogsHelper::MILESTONE_NOT_FOUND)
+        application_message(:milestone_not_found))
     end
   end
   

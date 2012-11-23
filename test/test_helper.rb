@@ -55,8 +55,8 @@ class ActiveSupport::TestCase
   
   def assert_show_user_without_log_and_milestone
     assert_equal(
-      WeightLogsHelper::WEIGHT_LOG_NOT_FOUND + "\n" +
-      WeightLogsHelper::MILESTONE_NOT_FOUND,
+      application_message_for_test(:weight_log_not_found) + "\n" +
+      application_message_for_test(:milestone_not_found),
       flash[:notice])
   end
   
@@ -69,5 +69,11 @@ class ActiveSupport::TestCase
       :weight => weight
     }
     assert_show_user_log
+  end
+  
+  # テストからだとI18nのショートカットメソッドにアクセスできないので、
+  # テスト用にヘルパメソッドを作成
+  def application_message_for_test(message_symbol)
+    I18n.t(message_symbol, :scope => :application_messages)
   end
 end

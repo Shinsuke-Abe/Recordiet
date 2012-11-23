@@ -8,7 +8,7 @@ module ApplicationHelper
   
   def required_login
     unless session[:id]
-      flash[:notice] = "Recordietの各機能を使うにはログインが必要です。"
+      flash[:notice] = application_message(:login_required)
       redirect_to login_path
     else
       @user = User.find(session[:id])

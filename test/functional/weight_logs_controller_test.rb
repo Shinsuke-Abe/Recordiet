@@ -58,8 +58,8 @@ class WeightLogsControllerTest < ActionController::TestCase
     
     assert take_off_form_data(assigned_john.weight_logs).empty?
     assert_equal(
-      WeightLogsHelper::WEIGHT_LOG_NOT_FOUND + "\n" +
-      WeightLogsHelper::MILESTONE_NOT_FOUND,
+      application_message_for_test(:weight_log_not_found) + "\n" +
+      application_message_for_test(:milestone_not_found),
       flash[:notice])
   end
   
