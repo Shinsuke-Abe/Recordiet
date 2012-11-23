@@ -10,9 +10,4 @@ class AchievedMilestoneLogsController < ApplicationController
       flash[:notice] = application_message(:achieved_milestone_not_found)
     end
   end
-  
-  private 
-  def flash_clear
-    flash[:notice] = nil
-  end
 end

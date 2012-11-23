@@ -1,6 +1,7 @@
 # encoding: utf-8
 class LoginsController < ApplicationController
   layout "nonavigation"
+  after_filter :flash_clear, :only => [:create]
   
   def show
     @user = User.new

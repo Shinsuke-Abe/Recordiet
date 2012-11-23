@@ -81,8 +81,8 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     
     assert_show_user_log
     assert assigns(:user).milestone
+    assert assigns(:user).achieved_milestone_logs.empty?
     
-    assert_show_user_without_log
     create_weight_log_action(
       :measured_date => Date.today - 1,
       :weight => expected_data[:weight] - 0.1)
@@ -143,11 +143,5 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
       :date => date,
       :reward => reward
     }
-  end
-  
-  def assert_show_user_without_log
-    assert_equal(
-      application_message_for_test(:weight_log_not_found),
-      flash[:notice])
   end
 end

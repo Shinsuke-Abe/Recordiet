@@ -22,7 +22,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     login_action(
       :mail_address => @john.mail_address,
       :password => @john.password)
-    assert_show_user_without_log_and_milestone
+    assert_show_user_without_log_and_milestone assigns(:user)
     
     create_weight_log_action(
       :measured_date => Date.today - 1,

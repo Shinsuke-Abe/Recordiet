@@ -2,6 +2,7 @@
 class WeightLogsController < ApplicationController
   include WeightLogsHelper
   before_filter :required_login
+  after_filter :flash_clear, :only => [:index]
   
   # show weight logs list logged in user
   def index

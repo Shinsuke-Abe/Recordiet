@@ -53,11 +53,9 @@ class ActiveSupport::TestCase
     assert_response :success
   end
   
-  def assert_show_user_without_log_and_milestone
-    assert_equal(
-      application_message_for_test(:weight_log_not_found) + "\n" +
-      application_message_for_test(:milestone_not_found),
-      flash[:notice])
+  def assert_show_user_without_log_and_milestone(user)
+    assert take_off_form_data(user.weight_logs).empty?
+    assert_nil user.milestone
   end
   
   def create_weight_log_action(args)

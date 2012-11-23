@@ -57,10 +57,7 @@ class WeightLogsControllerTest < ActionController::TestCase
     assigned_john = show_weight_logs_logged_in_user_action(@john)
     
     assert take_off_form_data(assigned_john.weight_logs).empty?
-    assert_equal(
-      application_message_for_test(:weight_log_not_found) + "\n" +
-      application_message_for_test(:milestone_not_found),
-      flash[:notice])
+    assert_show_user_without_log_and_milestone assigns(:user)
   end
   
   test "履歴を持つユーザを表示する" do
