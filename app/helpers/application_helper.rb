@@ -18,4 +18,13 @@ module ApplicationHelper
   def add_new_line(target, new_line)
     target ? target + "\n" + new_line : new_line
   end
+  
+  def application_message(symbol)
+    t symbol, :scope => :application_messages
+  end
+  
+  def page_title(controller)
+    t(controller.controller_name, :scope => :controllers) +
+    t(controller.action_name, :scope => :actions, :default => "")
+  end
 end

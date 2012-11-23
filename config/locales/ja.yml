@@ -213,3 +213,16 @@ ja:
       menu:
         menu_type: "種類"
         detail: "食事内容"
+  controllers:
+      users: "ユーザ情報"
+      weight_logs: "体重履歴"
+      milestones: "目標"
+      achieved_milestone_logs: "目標達成履歴"
+      menus: "食事内容"
+  actions:
+      create: "登録"
+      new: "登録"
+      edit: "変更"
+      update: "変更"
+  application_messages:
+      confirm_delete: "本当に削除しますか？"

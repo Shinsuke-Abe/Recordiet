@@ -1,5 +1,3 @@
-%h2 食事内容
-
 %table.table.table-striped
   %thead
     %tr
@@ -11,5 +9,6 @@
         %td= display_menu_type(menu.menu_type)
         %td= simple_format(menu.detail)
         %td
-          = link_to "変更", edit_weight_log_menu_path(@weight_log, menu.id), :class => "btn btn-mini"
-          = link_to "削除", weight_log_menu_path(@weight_log, menu.id), method: :delete, data: { confirm: '本当に削除しますか？' }, :class => "btn btn-mini btn-danger"
+          = render :partial => "iterate_item_buttons",
+                   :object => {:edit_path => edit_weight_log_menu_path(@weight_log, menu.id),
+                               :delete_path => weight_log_menu_path(@weight_log, menu.id)}

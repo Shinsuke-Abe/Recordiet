@@ -28,7 +28,13 @@
               = render "usermenu"
     .container
       .row
-        .span9= yield
+        .span9
+          %h2= page_title(controller)
+          - if notice
+            = render :partial => "notice", :object => notice
+          - if flash[:success]
+            = render :partial => "success", :object => flash[:success]
+          = yield
         .span3
           .well.sidebar-nav
             - user_sidebar_display = User.find(session[:id])
@@ -47,7 +53,7 @@
                     %span.caret
                   %ul.dropdown-menu
                     %li= link_to "目標変更", edit_milestone_path
-                    %li= link_to "目標削除", milestone_path, method: :delete, data: { confirm: '目標を削除します。よろしいですか？' }
+                    %li= link_to "目標削除", milestone_path, method: :delete, data: { confirm: application_message(:confirm_delete) }
                 目標
               %div
                 - unless user_sidebar_display.weight_logs.empty?
@@ -60,7 +66,7 @@
                 目標
                 = link_to "目標を設定する", new_milestone_path, :class => "btn"
       %footer
-        %p &copy; Company 2012
+        %p &copy; Shinsuke Abe 2012
       
       /
         Javascripts
