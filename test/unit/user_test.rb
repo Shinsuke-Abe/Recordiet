@@ -70,6 +70,16 @@ class UserTest < ActiveSupport::TestCase
     assert new_user.invalid?
   end
   
+  test "ユーザの登録に成功する" do
+    new_user = User.new(
+      :mail_address => "newuser@mail.com",
+      :display_name => "new user name",
+      :password => "hoge")
+    assert new_user.valid?
+    assert new_user.save
+    assert_equal "hoge", new_user.password_digest
+  end
+  
   test "削除時は関連レコードも削除される" do
     # ActiveRecordは遅延ロードのため、
     # 事前に値を取得しておかないと削除された状態で検査してしまう
