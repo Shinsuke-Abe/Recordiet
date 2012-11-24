@@ -14,8 +14,14 @@ class User < ActiveRecord::Base
   
   before_save :encrypt_password
   
-  def User.authenticate(mail_address, password)
-    User.find(:first, :conditions => {:mail_address => mail_address, :password_digest => password})
+  def self.authenticate(mail_address, password)
+    if user = User.find_by_mail_address(mail_address)
+      user_password = BCrypt::Password.new(user.password_digest)
+      
+      user_password == password ? user : nil
+    else
+      user
+    end
   end
   
   def encrypt_password
