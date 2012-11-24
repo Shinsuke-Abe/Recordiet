@@ -3,19 +3,19 @@
 one:
   mail_address: MyString
   display_name: MyString
-  password_digest: MyString
+  password_digest: <%= BCrypt::Password.create("MyString") %>
 
 two:
   mail_address: MyString2
   display_name: MyString2
-  password_digest: MyString2
+  password_digest: <%= BCrypt::Password.create("MyString2") %>
 
 john:
   mail_address: john@mail.com
   display_name: john denver
-  password_digest: pass1234
+  password_digest: <%= BCrypt::Password.create("pass1234") %>
 
 eric:
   mail_address: clapton@cream.com
   display_name: guitar god
-  password_digest: ocean461
+  password_digest: <%= BCrypt::Password.create("ocean461") %>

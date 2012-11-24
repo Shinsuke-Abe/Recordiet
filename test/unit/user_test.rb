@@ -77,7 +77,9 @@ class UserTest < ActiveSupport::TestCase
       :password => "hoge")
     assert new_user.valid?
     assert new_user.save
-    assert_equal "hoge", new_user.password_digest
+    
+    new_user_password = BCrypt::Password.new(new_user.password_digest)
+    assert new_user_password == "hoge"
   end
   
   test "削除時は関連レコードも削除される" do

@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 class User < ActiveRecord::Base
   attr_accessor :password
   attr_accessible :display_name, :mail_address, :password_digest, :password
@@ -18,7 +20,7 @@ class User < ActiveRecord::Base
   
   def encrypt_password
     if password.present?
-      self.password_digest = password
+      self.password_digest = BCrypt::Password.create(password)
     end
   end
 end
