@@ -15,7 +15,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     
     login_action(
       :mail_address => @john.mail_address,
-      :password => @john.password)
+      :password => "pass1234")
     assert_show_user_without_log_and_milestone assigns(:user)
   end
   
@@ -48,7 +48,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => @eric.password)
+      :password => "ocean461")
     
     show_form_action edit_user_path
     
@@ -72,7 +72,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => @eric.password)
+      :password => "ocean461")
     
     delete_via_redirect user_path
     
@@ -89,7 +89,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => @eric.password)
+      :password => "ocean461")
     
     delete_via_redirect login_path
     assert_equal login_path, path
