@@ -5,7 +5,7 @@ class UserTest < ActiveSupport::TestCase
   fixtures :users, :weight_logs, :menus, :milestones, :achieved_milestone_logs
   
   test "認証要求でメールアドレスとパスワードの両方が一致する場合はユーザ情報を返却する" do
-    auth_user = User.authenticate(users(:john).mail_address, users(:john).password)
+    auth_user = User.authenticate(users(:john).mail_address, users(:john).password_digest)
     assert_not_nil auth_user
     assert_equal users(:john), auth_user
   end
