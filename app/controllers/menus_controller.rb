@@ -11,9 +11,9 @@ class MenusController < ApplicationController
   end
   
   def create
-    @menu = @weight_log.menus.create(params[:menu])
+    @menu = @weight_log.menus.build(params[:menu])
     
-    if @menu.errors.empty?
+    if @menu.save
       redirect_to weight_logs_path
     else
       render :action => "new"

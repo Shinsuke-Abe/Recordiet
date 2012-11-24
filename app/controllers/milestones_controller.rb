@@ -8,8 +8,8 @@ class MilestonesController < ApplicationController
   
   # POST /user/milestone/
   def create
-    @milestone = @user.create_milestone(params[:milestone])
-    if @milestone.errors.empty?
+    @milestone = @user.build_milestone(params[:milestone])
+    if @milestone.save
       redirect_to weight_logs_path
     else
       render :action => "new"

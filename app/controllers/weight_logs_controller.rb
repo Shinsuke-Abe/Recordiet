@@ -18,9 +18,9 @@ class WeightLogsController < ApplicationController
   
   # add weight logs to login user
   def create
-    @weight_log = @user.weight_logs.create(params[:weight_log])
+    @weight_log = @user.weight_logs.build(params[:weight_log])
     
-    unless @weight_log.errors.empty?
+    unless @weight_log.save
       render :action => "index"
     else
       if @weight_log.achieved?
