@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121112154303) do
+ActiveRecord::Schema.define(:version => 20121124110600) do
 
   create_table "achieved_milestone_logs", :force => true do |t|
     t.date     "achieved_date"
@@ -47,9 +47,9 @@ ActiveRecord::Schema.define(:version => 20121112154303) do
   create_table "users", :force => true do |t|
     t.string   "mail_address"
     t.string   "display_name"
-    t.string   "password"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.string   "password_digest"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
   end
 
   create_table "weight_logs", :force => true do |t|
