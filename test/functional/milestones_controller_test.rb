@@ -51,7 +51,7 @@ class MilestonesControllerTest < ActionController::TestCase
   
   private
   def assert_milestone_form_assings
-    assert assigns(:user)
+    assert assigns(:current_user)
     assert assigns(:milestone)
   end
   

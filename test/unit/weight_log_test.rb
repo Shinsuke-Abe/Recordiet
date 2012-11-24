@@ -64,7 +64,7 @@ class WeightLogTest < ActiveSupport::TestCase
     assert_equal 1, User.find(@john.id).achieved_milestone_logs.size
     
     under_weight_log = @john.weight_logs.create(
-      :measured_date => Date.today - 2.days,
+      :measured_date => Date.today - 8.days,
       :weight => 65.4)
     assert under_weight_log.achieved?
     assert_equal 2, User.find(@john.id).achieved_milestone_logs.size

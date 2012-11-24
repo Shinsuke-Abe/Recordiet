@@ -45,7 +45,7 @@ class ActiveSupport::TestCase
   
   def assert_show_user_log
     assert_equal weight_logs_path, path
-    assert assigns(:user)
+    assert assigns(:current_user)
   end
   
   def show_form_action(uri)

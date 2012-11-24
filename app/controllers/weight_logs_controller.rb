@@ -1,15 +1,15 @@
 # encoding: utf-8
 class WeightLogsController < ApplicationController
-  before_filter :required_login
+  before_filter :authenticate_user!
   after_filter :flash_clear, :only => [:index]
   
   # show weight logs list logged in user
   def index
-    if @user.weight_logs.empty?
+    if current_user.weight_logs.empty?
       flash[:notice] = application_message(:weight_log_not_found)
     end
     
-    unless @user.milestone
+    unless current_user.milestone
       flash[:notice] = add_new_line(
         flash[:notice],
         application_message(:milestone_not_found))
@@ -18,13 +18,13 @@ class WeightLogsController < ApplicationController
   
   # add weight logs to login user
   def create
-    @weight_log = @user.weight_logs.build(params[:weight_log])
+    @weight_log = current_user.weight_logs.build(params[:weight_log])
     
     unless @weight_log.save
       render :action => "index"
     else
       if @weight_log.achieved?
-        flash[:success] = achieve_message(@user.milestone.reward)
+        flash[:success] = achieve_message(current_user.milestone.reward)
       end
       
       redirect_to weight_logs_path

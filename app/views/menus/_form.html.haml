@@ -1,4 +1,4 @@
-= form_for [@weight_log, @menu] do |f|
+= form_for [current_weight_log, @menu] do |f|
   - if @menu.errors.any?
     = render :partial => "formerror", :locals => {:form_errors => @menu.errors}
   

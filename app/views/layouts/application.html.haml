@@ -35,7 +35,7 @@
           = yield
         .span3
           .well.sidebar-nav
-            - user_sidebar_display = User.find(session[:id])
+            - user_sidebar_display = User.find(current_user.id)
             %h3
               .btn-group
                 %a.btn.dropdown-toggle{"data-toggle" => "dropdown"}

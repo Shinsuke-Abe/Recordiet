@@ -1,16 +1,6 @@
 # encoding: utf-8
 class UsersController < ApplicationController
-  before_filter :required_login, :only => [:edit, :update, :destroy]
-  
-  # GET /user
-  def show
-    @user = User.find(session[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @user }
-    end
-  end
+  before_filter :authenticate_user!, :only => [:edit, :update, :destroy]
 
   # GET /user/new
   def new

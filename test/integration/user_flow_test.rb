@@ -16,7 +16,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     login_action(
       :mail_address => @john.mail_address,
       :password => "pass1234")
-    assert_show_user_without_log_and_milestone assigns(:user)
+    assert_show_user_without_log_and_milestone assigns(:current_user)
   end
   
   test "ユーザ登録が成功する" do
@@ -29,7 +29,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       :display_name => "jimmy page",
       :password => "guitar"}
     
-    assert_show_user_without_log_and_milestone assigns(:user)
+    assert_show_user_without_log_and_milestone assigns(:current_user)
   end
   
   test "登録済みのメールアドレスでの登録は失敗する" do

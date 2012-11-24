@@ -57,7 +57,7 @@ class WeightLogsControllerTest < ActionController::TestCase
     assigned_john = show_weight_logs_logged_in_user_action(@john)
     
     assert take_off_form_data(assigned_john.weight_logs).empty?
-    assert_show_user_without_log_and_milestone assigns(:user)
+    assert_show_user_without_log_and_milestone assigns(:current_user)
   end
   
   test "履歴を持つユーザを表示する" do
@@ -74,7 +74,7 @@ class WeightLogsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     
-    assigned_user = assigns(:user)
+    assigned_user = assigns(:current_user)
     
     assert_not_nil assigned_user
     assert_equal show_user, assigned_user
@@ -86,7 +86,7 @@ class WeightLogsControllerTest < ActionController::TestCase
     session[:id] = log_added_user.id
     post :create, :weight_log => new_log
     
-    assigns(:user)
+    assigns(:current_user)
   end
   
   def update_weight_log_action(log_updated_user, update_log_index, updated_log)

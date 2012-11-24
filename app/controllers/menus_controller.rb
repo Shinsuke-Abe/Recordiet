@@ -1,17 +1,17 @@
 class MenusController < ApplicationController
-  before_filter :required_login
-  before_filter :get_weight_log
+  before_filter :authenticate_user!
+  include MenusHelper
   
   def index
     # do nothing
   end
   
   def new
-    @menu = @weight_log.menus.build
+    @menu = current_weight_log.menus.build
   end
   
   def create
-    @menu = @weight_log.menus.build(params[:menu])
+    @menu = current_weight_log.menus.build(params[:menu])
     
     if @menu.save
       redirect_to weight_logs_path
@@ -28,7 +28,7 @@ class MenusController < ApplicationController
     @menu = Menu.find(params[:id])
     
     if @menu.update_attributes(params[:menu])
-      redirect_to weight_log_menus_path(@weight_log)
+      redirect_to weight_log_menus_path(current_weight_log)
     else
       render :action => "edit"
     end
@@ -39,10 +39,5 @@ class MenusController < ApplicationController
     @menu.destroy
     
     redirect_to weight_log_menus_path
-  end
-  
-  private
-  def get_weight_log
-    @weight_log = WeightLog.find(params[:weight_log_id])
   end
 end

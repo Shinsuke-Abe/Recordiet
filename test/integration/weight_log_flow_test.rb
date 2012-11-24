@@ -14,7 +14,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     login_action(
       :mail_address => @eric.mail_address,
       :password => "ocean461")
-    assert assigns(:user).weight_logs
+    assert assigns(:current_user).weight_logs
   end
   
   test "体重履歴を登録する" do
@@ -22,13 +22,13 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     login_action(
       :mail_address => @john.mail_address,
       :password => "pass1234")
-    assert_show_user_without_log_and_milestone assigns(:user)
+    assert_show_user_without_log_and_milestone assigns(:current_user)
     
     create_weight_log_action(
       :measured_date => Date.today - 1,
       :weight => 73.8)
     
-    assert !assigns(:user).weight_logs.empty?
+    assert !assigns(:current_user).weight_logs.empty?
   end
   
   test "体重履歴を変更する" do
@@ -43,7 +43,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :weight => 69.0)
 
     assert_show_user_log
-    assert !assigns(:user).weight_logs.empty?
+    assert !assigns(:current_user).weight_logs.empty?
   end
   
   test "体重履歴を削除する" do

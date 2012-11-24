@@ -21,7 +21,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
       :reward => "焼き肉食べ放題")
     
     assert_show_user_log
-    assert assigns(:user).milestone
+    assert assigns(:current_user).milestone
   end
   
   test "目標の設定でエラーが発生した場合はフォームが再表示される" do
@@ -50,7 +50,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
       :reward => "ラーメン")
     
     assert_show_user_log
-    assert assigns(:user).milestone
+    assert assigns(:current_user).milestone
   end
   
   test "目標の修正でエラーが発生した場合はフォームが再表示される" do
@@ -80,8 +80,8 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     create_milestone_action expected_data
     
     assert_show_user_log
-    assert assigns(:user).milestone
-    assert assigns(:user).achieved_milestone_logs.empty?
+    assert assigns(:current_user).milestone
+    assert assigns(:current_user).achieved_milestone_logs.empty?
     
     create_weight_log_action(
       :measured_date => Date.today - 1,
@@ -91,7 +91,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     assert_equal(
       sprintf(application_message_for_test(:achieve_milestone), expected_data[:reward]),
       flash[:success])
-    assert assigns(:user).achieved_milestone_logs
+    assert assigns(:current_user).achieved_milestone_logs
   end
   
   test "目標を削除する" do
