@@ -14,7 +14,7 @@ class UsersController < ApplicationController
 
   # GET /user/edit
   def edit
-    @user = User.find(session[:id])
+    @user = current_user
   end
 
   # POST /user
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        session[:id] = @user.id
+        sign_in @user
         format.html { redirect_to weight_logs_path }
         format.json { render json: @user, status: :created, location: @user }
       else
@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   # PUT /user
   # PUT /user.json
   def update
-    @user = User.find(session[:id])
+    @user = current_user
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
@@ -52,8 +52,8 @@ class UsersController < ApplicationController
 
   # DELETE /user
   def destroy
-    @user = User.find(session[:id])
-    @user.destroy
+    current_user.destroy
+    sign_out
 
     redirect_to login_path
   end

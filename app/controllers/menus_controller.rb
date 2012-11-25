@@ -21,11 +21,11 @@ class MenusController < ApplicationController
   end
   
   def edit
-    @menu = Menu.find(params[:id])
+    @menu = current_menu
   end
   
   def update
-    @menu = Menu.find(params[:id])
+    @menu = current_menu
     
     if @menu.update_attributes(params[:menu])
       redirect_to weight_log_menus_path(current_weight_log)
@@ -35,9 +35,13 @@ class MenusController < ApplicationController
   end
   
   def destroy
-    @menu = Menu.find(params[:id])
-    @menu.destroy
+    current_menu.destroy
     
     redirect_to weight_log_menus_path
+  end
+  
+  private
+  def current_menu
+    Menu.find(params[:id])
   end
 end

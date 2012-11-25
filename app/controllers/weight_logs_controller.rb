@@ -33,12 +33,12 @@ class WeightLogsController < ApplicationController
   
   # show weight_log edit form
   def edit
-    @weight_log = WeightLog.find(params[:id])
+    @weight_log = current_weight_log
   end
   
   # update weight_log
   def update
-    @weight_log = WeightLog.find(params[:id])
+    @weight_log = current_weight_log
     
     if @weight_log.update_attributes(params[:weight_log])
       redirect_to weight_logs_path
@@ -49,8 +49,7 @@ class WeightLogsController < ApplicationController
   
   # delete weight_log
   def destroy
-    @weight_log = WeightLog.find(params[:id])
-    @weight_log.destroy
+    current_weight_log.destroy
     
     redirect_to weight_logs_path
   end
@@ -58,5 +57,9 @@ class WeightLogsController < ApplicationController
   private
   def achieve_message(reward)
     sprintf(application_message(:achieve_milestone), reward)
+  end
+  
+  def current_weight_log
+    WeightLog.find(params[:id])
   end
 end

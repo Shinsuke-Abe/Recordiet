@@ -9,10 +9,9 @@ class LoginsController < ApplicationController
   
   def create
     @user = User.new(params[:user])
-    authed_user = User.authenticate(@user.mail_address, @user.password)
     
-    if authed_user
-      session[:id] = authed_user.id
+    if authed_user = authenticable?(@user)
+      sign_in authed_user
       redirect_to weight_logs_path
     else
       flash[:alert] = application_message(:login_incorrect)
@@ -21,7 +20,7 @@ class LoginsController < ApplicationController
   end
   
   def destroy
-    session[:id] = nil
+    sign_out
     redirect_to login_path
   end
 end
