@@ -17,7 +17,6 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       :mail_address => @john.mail_address,
       :password => user_password(:john))
     assert_show_user_without_log_and_milestone assigns(:current_user)
-    assert_nil assigns(:weight_log_chart)
   end
   
   test "ユーザ登録が成功する" do
