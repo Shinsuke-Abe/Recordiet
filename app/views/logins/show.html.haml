@@ -7,7 +7,7 @@
       = link_to "新規ユーザ登録", new_user_path, :class => "btn btn-primary btn-large"
     .span3
       %h4 アカウントをお持ちの方
-      = form_for @user, :url => {:action => "create"} do |f|
-        .field= f.text_field :mail_address, :placeholder => "メールアドレス"
-        .field= f.password_field :password, :placeholder => "パスワード"
+      = simple_form_for @user, :url => {:action => "create"} do |f|
+        .field= f.input :mail_address, :placeholder => "メールアドレス", :label => false
+        .field= f.input :password, :placeholder => "パスワード", :label => false
         .actions= f.submit "ログイン", :class => "btn btn-success"

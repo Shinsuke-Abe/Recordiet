@@ -1,14 +1,8 @@
-= form_for @milestone, :url => milestone_path, :html => {:class => "form-horizontal"} do |f|
-  - if @milestone.errors.any?
-    = render :partial => "formerror", :locals => {:form_errors => @milestone.errors}
-  
+= simple_form_for @milestone, :url => milestone_path, :html => {:class => "form-horizontal"} do |f|
   .control-group
-    .control-label= f.label :weight
-    .controls= f.number_field :weight , :step => 0.1, :class => "span1"
+    = f.input :weight , :input_html => {:step => 0.1, :class => "span1"}
   .control-group
-    .control-label= f.label :date
-    .controls= f.date_select :date
+    = f.input :date
   .control-group
-    .control-label= f.label :reward
-    .controls= f.text_area :reward
+    = f.input :reward
   .form-actions= f.submit nil, :class => "btn btn-primary"

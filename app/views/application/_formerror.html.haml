@@ -1,6 +1,0 @@
-.alert.alert-error
-  %h4= pluralize(form_errors.count, "") + "個のエラーが発生しました。:"
-  
-  %ul
-    - form_errors.full_messages.each do |msg|
-      %li= msg

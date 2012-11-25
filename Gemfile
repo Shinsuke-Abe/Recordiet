@@ -56,5 +56,8 @@ gem 'bcrypt-ruby', '~> 3.0.0'
 # To use debugger
 # gem 'debugger'
 
-# To user haml
+# To use haml
 gem 'haml'
+
+# To use simple_form
+gem 'simple_form'
