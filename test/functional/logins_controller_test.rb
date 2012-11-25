@@ -11,7 +11,7 @@ class LoginsControllerTest < ActionController::TestCase
   
   test "正しいユーザ名とパスワードを入力すると履歴画面に遷移する" do
     one = users(:one)
-    login_action one.mail_address, "MyString"
+    login_action one.mail_address, user_password(:one)
     
     assert_redirected_to weight_logs_path
     assert_equal session[:id], one.id

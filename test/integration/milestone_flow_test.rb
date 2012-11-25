@@ -13,7 +13,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @john.mail_address,
-      :password => "pass1234")
+      :password => user_password(:john))
     
     create_milestone_action(
       :weight => 67.0,
@@ -28,7 +28,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @john.mail_address,
-      :password => "pass1234")
+      :password => user_password(:john))
     
     create_milestone_action(
       :weight => nil,
@@ -42,7 +42,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => "ocean461")
+      :password => user_password(:eric))
     
     edit_milestone_action(
       :weight => 65.0,
@@ -57,7 +57,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => "ocean461")
+      :password => user_password(:eric))
     
     edit_milestone_action(
       :weight => nil,
@@ -75,7 +75,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @john.mail_address,
-      :password => "pass1234")
+      :password => user_password(:john))
     
     create_milestone_action expected_data
     
@@ -98,7 +98,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => "ocean461")
+      :password => user_password(:eric))
     
     delete_via_redirect milestone_path
     
@@ -109,7 +109,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => "ocean461")
+      :password => user_password(:eric))
     
     show_form_action achieved_milestone_logs_path
     
