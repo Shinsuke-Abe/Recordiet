@@ -14,8 +14,10 @@ module SessionHelper
   end
   
   def sign_in(user)
-    session[:id] = user.id
-    current_user
+    if authed_user = authenticable?(user)
+      session[:id] = authed_user.id
+      current_user
+    end
   end
   
   def sign_out

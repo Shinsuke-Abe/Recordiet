@@ -10,8 +10,7 @@ class LoginsController < ApplicationController
   def create
     @user = User.new(params[:user])
     
-    if authed_user = authenticable?(@user)
-      sign_in authed_user
+    if sign_in @user
       redirect_to weight_logs_path
     else
       flash[:alert] = application_message(:login_incorrect)
