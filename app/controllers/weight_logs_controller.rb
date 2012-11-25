@@ -1,4 +1,6 @@
 # encoding: utf-8
+require 'gchart'
+
 class WeightLogsController < ApplicationController
   before_filter :authenticate_user!
   after_filter :flash_clear, :only => [:index]
@@ -7,6 +9,25 @@ class WeightLogsController < ApplicationController
   def index
     if current_user.weight_logs.empty?
       flash[:notice] = application_message(:weight_log_not_found)
+    else
+      data_arr = current_user.weight_logs.reverse.map!{|weight_log| weight_log.weight}
+      axis_arr = current_user.weight_logs.reverse.map!{|weight_log| weight_log.measured_date.strftime("%m/%d")}
+      if current_user.milestone
+        @weight_log_chart = Gchart.line(
+          :size => '800x300',
+          :data => [data_arr, Array.new(data_arr.size, current_user.milestone.weight)],
+          :bar_colors => '3300FF,FF99CC',
+          :legend => ["体重", "目標"],
+          :axis_with_labels => 'x',
+          :axis_labels => [axis_arr])
+      else
+        @weight_log_chart = Gchart.line(
+          :size => '800x300',
+          :data => [data_arr],
+          :bar_colors => '3300FF',
+          :axis_with_labels => 'x',
+          :axis_labels => [axis_arr])
+      end
     end
     
     unless current_user.milestone

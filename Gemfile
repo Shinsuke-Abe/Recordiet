@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+source 'http://gems.github.com/'
 
 gem 'rails', '3.2.8'
 
@@ -61,3 +62,6 @@ gem 'haml'
 
 # To use simple_form
 gem 'simple_form'
+
+# To use googlechart
+gem 'googlecharts'

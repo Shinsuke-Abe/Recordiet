@@ -15,6 +15,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
       :mail_address => @eric.mail_address,
       :password => user_password(:eric))
     assert assigns(:current_user).weight_logs
+    assert assigns(:weight_log_chart)
   end
   
   test "体重履歴を登録する" do
