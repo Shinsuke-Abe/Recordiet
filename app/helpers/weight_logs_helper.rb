@@ -5,6 +5,8 @@ module WeightLogsHelper
   def create_chart(weight_logs, milestone)
     unless weight_logs.empty?
       data_arr, axis_arr = chart_arrays weight_logs
+      p data_arr
+      p axis_arr
       
       chart_arg = chart_basic(data_arr, axis_arr)
       
@@ -13,6 +15,8 @@ module WeightLogsHelper
         chart_arg[:bar_colors] += ",FF99CC"
         chart_arg[:legend] = ["体重", "目標"]
       end
+      
+      p chart_arg
       
       Gchart.line(chart_arg)
     end
@@ -33,6 +37,7 @@ module WeightLogsHelper
     
     chart_arg[:data] = [data_arr]
     chart_arg[:axis_labels] = [axis_arr]
+    chart_arg[:encoding] = "text"
     
     chart_arg
   end
