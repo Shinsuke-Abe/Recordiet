@@ -33,11 +33,13 @@ module WeightLogsHelper
     
     chart_arg[:size] = "800x300"
     chart_arg[:bar_colors] = "3300FF"
-    chart_arg[:axis_with_labels] = "x"
     
     chart_arg[:data] = [data_arr]
-    chart_arg[:axis_labels] = [axis_arr]
     chart_arg[:encoding] = "text"
+    
+    chart_arg[:axis_labels] = [axis_arr]
+    chart_arg[:axis_with_labels] = ["x"]
+    chart_arg[:axis_range] = [nil]
     
     chart_arg
   end
