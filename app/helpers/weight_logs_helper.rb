@@ -5,8 +5,6 @@ module WeightLogsHelper
   def create_chart(weight_logs, milestone)
     unless weight_logs.empty?
       data_arr, axis_arr = chart_arrays weight_logs
-      p data_arr
-      p axis_arr
       
       chart_arg = chart_basic(data_arr, axis_arr)
       
@@ -38,8 +36,8 @@ module WeightLogsHelper
     chart_arg[:encoding] = "text"
     
     chart_arg[:axis_labels] = [axis_arr]
-    chart_arg[:axis_with_labels] = ["x"]
-    chart_arg[:axis_range] = [nil]
+    chart_arg[:axis_with_labels] = ["x", "y"]
+    chart_arg[:axis_range] = [nil, [0, data_arr.max, 5]]
     
     chart_arg
   end
