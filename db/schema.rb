@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121124110600) do
+ActiveRecord::Schema.define(:version => 20121127154258) do
 
   create_table "achieved_milestone_logs", :force => true do |t|
     t.date     "achieved_date"
@@ -56,8 +56,9 @@ ActiveRecord::Schema.define(:version => 20121124110600) do
     t.date     "measured_date"
     t.float    "weight"
     t.integer  "user_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.float    "fat_percentage"
   end
 
   add_index "weight_logs", ["user_id"], :name => "index_weight_logs_on_user_id"

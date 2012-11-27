@@ -1,10 +1,11 @@
 class WeightLog < ActiveRecord::Base
   belongs_to :user
-  attr_accessible :measured_date, :weight
+  attr_accessible :measured_date, :weight, :fat_percentage
   
   validates :measured_date, :weight, presence: true
   validates :weight, numericality: {greater_than_or_equal_to: 0.1}
   validates :measured_date, :uniqueness => {:scope => :user_id }
+  validates :fat_percentage, numericality: {greater_than_or_equal_to: 0.1}, :allow_blank => true
   
   has_many :menus, :dependent => :destroy
   

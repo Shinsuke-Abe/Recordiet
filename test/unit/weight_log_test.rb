@@ -82,8 +82,16 @@ class WeightLogTest < ActiveSupport::TestCase
     assert !error_new_weight_log.errors.empty?
     
     new_weight_log = @john.weight_logs.create(
-      :measured_date => Date.yesterday,
+      :measured_date => Date.today,
       :weight => 63.0)
     assert new_weight_log.errors.empty?
+  end
+  
+  test "体脂肪率を指定して履歴を登録することができる" do
+    created_log = @eric.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 70.1,
+      :fat_percentage => 23.0)
+    assert_equal 23.0, created_log.fat_percentage
   end
 end

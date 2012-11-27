@@ -14,8 +14,6 @@ module WeightLogsHelper
         chart_arg[:legend] = ["体重", "目標"]
       end
       
-      p chart_arg
-      
       Gchart.line(chart_arg)
     end
   end

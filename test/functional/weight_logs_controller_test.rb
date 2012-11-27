@@ -18,6 +18,14 @@ class WeightLogsControllerTest < ActionController::TestCase
     assert_weight_log expected_data, john_log_added.weight_logs[0]
   end
   
+  test "体脂肪率も合わせて履歴を登録することができる" do
+    expected_data = { :measured_date => Date.today - 1, :weight => 57.5, :fat_percentage => 26.2}
+    john_log_added = register_weight_log_action(@john, expected_data)
+
+    assert_equal 1, john_log_added.weight_logs.length
+    assert_weight_log expected_data, john_log_added.weight_logs[0]
+  end
+  
   test "計測日未指定の場合は履歴が追加されない" do
     eric_log_not_added = register_weight_log_action(@john, {
       :measured_date => nil,
@@ -99,6 +107,7 @@ class WeightLogsControllerTest < ActionController::TestCase
   def assert_weight_log(expected, actual)
     assert_equal expected[:measured_date], actual.measured_date
     assert_equal expected[:weight], actual.weight
+    assert_equal expected[:fat_percentage], actual.fat_percentage
   end
   
   def get_index_same_id(weight_logs_in_db, selected_weight_log)
