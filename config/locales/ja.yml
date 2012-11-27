@@ -203,6 +203,7 @@ ja:
       weight_log:
         measured_date: "計測日"
         weight: "体重"
+        fat_percentage: "体脂肪率"
       milestone:
         date: "期限"
         reward: "ご褒美"

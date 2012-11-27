@@ -21,6 +21,7 @@
           %tr
             %th 計測日
             %th 体重
+            %th 体脂肪率
             %th
             %th
         %tbody
@@ -28,6 +29,7 @@
             %tr
               %td= weight_log.measured_date
               %td= weight_log.weight
+              %td= weight_log.fat_percentage
               %td
                 = render :partial => "iterate_item_buttons",
                          :object => {:edit_path => edit_weight_log_path(weight_log.id),
