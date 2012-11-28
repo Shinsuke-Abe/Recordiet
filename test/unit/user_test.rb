@@ -4,16 +4,21 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   fixtures :users, :weight_logs, :menus, :milestones, :achieved_milestone_logs
   
+  def setup
+    @john = users(:john)
+    @eric = users(:eric)
+  end
+  
   test "認証要求でメールアドレスとパスワードの両方が一致する場合はユーザ情報を返却する" do
     auth_user = User.authenticate(
-      users(:john).mail_address,
+      @john.mail_address,
       self.class.user_password(:john))
     assert_not_nil auth_user
-    assert_equal users(:john), auth_user
+    assert_equal @john, auth_user
   end
   
   test "認証要求でパスワードが一致しない場合はnilを返す" do
-    assert_nil User.authenticate(users(:john), "pass9876")
+    assert_nil User.authenticate(@john.mail_address, "pass9876")
   end
   
   test "認証要求でメールアドレスが一致しない場合はnilを返す" do
@@ -23,55 +28,50 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test "履歴あり：ユーザの履歴の存在確認" do
-    eric = User.find(users(:eric).id)
+    eric = User.find(@eric.id)
     
-    assert_weight_logs users(:eric), eric
+    assert_weight_logs @eric, eric
   end
   
   test "履歴なし：ユーザの履歴の存在確認" do
-    john = User.find(users(:john))
+    john = User.find(@john.id)
     
     assert john.weight_logs.empty?
   end
   
   test "メールアドレスが未入力の場合はエラー" do
-    new_user = User.new(
+    assert_validates_invalid(
       :mail_address => nil,
       :display_name => "new user name",
       :password => "userpass")
-    assert new_user.invalid?
   end
   
   test "表示名が未入力の場合はエラー" do
-    new_user = User.new(
+    assert_validates_invalid(
       :mail_address => "newuser@mail.com",
       :display_name => nil,
       :password => "userpass")
-    assert new_user.invalid?
   end
   
   test "パスワードが未入力の場合はエラー" do
-    new_user = User.new(
+    assert_validates_invalid(
       :mail_address => "newuser@mail.com",
       :display_name => "new user name",
       :password => nil)
-    assert new_user.invalid?
   end
   
   test "メールアドレスが一致するレコードがある場合はエラー" do
-    new_user = User.new(
-      :mail_address => users(:eric).mail_address,
+    assert_validates_invalid(
+      :mail_address => @eric.mail_address,
       :display_name => "anonymous",
       :password => "newpass")
-    assert new_user.invalid?
   end
   
   test "メールアドレスがemailの形式でない場合はエラー" do
-    new_user = User.new(
+    assert_validates_invalid(
       :mail_address => "mail",
       :display_name => "anonymous",
       :password => "newpass")
-    assert new_user.invalid?
   end
   
   test "ユーザの登録に成功する" do
@@ -89,12 +89,12 @@ class UserTest < ActiveSupport::TestCase
   test "削除時は関連レコードも削除される" do
     # ActiveRecordは遅延ロードのため、
     # 事前に値を取得しておかないと削除された状態で検査してしまう
-    before_destroy = User.find(users(:eric).id)
+    before_destroy = User.find(@eric.id)
     before_destroy_weight_logs = before_destroy.weight_logs
     before_destroy_achieved_milestone_logs = before_destroy.achieved_milestone_logs
     before_destory_milestone = before_destroy.milestone
     
-    eric = User.find(users(:eric).id)
+    eric = User.find(@eric.id)
     eric.destroy
      
     assert_raise(ActiveRecord::RecordNotFound) {
@@ -120,5 +120,12 @@ class UserTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) {
       Milestone.find(before_destory_milestone.id)
     }
+   end
+   
+   private
+   def assert_validates_invalid(data)
+     new_user = User.new(data)
+     
+     assert new_user.invalid?
    end
 end
