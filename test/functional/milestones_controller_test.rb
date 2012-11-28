@@ -10,9 +10,7 @@ class MilestonesControllerTest < ActionController::TestCase
   end
   
   test "目標入力フォームを開く" do
-    session[:id] = @john
-    get :new
-    assert_milestone_form_assings
+    assert_open_form :new, @john
   end
   
   test "目標を新規保存する" do
@@ -20,18 +18,12 @@ class MilestonesControllerTest < ActionController::TestCase
       :weight => 64.0,
       :date => Date.today + 60.days,
       :reward => "ケーキバイキング"}
-      
-    session[:id] = @john
-    post :create, :milestone => expected_data
     
-    johns_milestone = User.find(@john.id).milestone
-    assert_milestone expected_data, johns_milestone
+    assert_milestone_posted :create, expected_data, @john
   end
   
   test "編集フォームを開く" do
-    session[:id] = @eric
-    get :edit
-    assert_milestone_form_assings
+    assert_open_form :edit, @eric
     
     assert_equal milestones(:one), assigns(:milestone)
   end
@@ -41,12 +33,8 @@ class MilestonesControllerTest < ActionController::TestCase
       :weight => 54.6,
       :date => Date.today + 90.days,
       :reward => "臨時小遣い"}
-      
-    session[:id] = @eric.id
-    post :update, :milestone => expected_data
     
-    erics_milestone = User.find(@eric.id).milestone
-    assert_milestone expected_data, erics_milestone
+    assert_milestone_posted :update, expected_data, @eric
   end
   
   private
@@ -59,5 +47,19 @@ class MilestonesControllerTest < ActionController::TestCase
     assert_equal expected[:weight], actual.weight
     assert_equal expected[:date], actual.date
     assert_equal expected[:reward], actual.reward
+  end
+  
+  def assert_milestone_posted(action, expected, actual_user)
+    session[:id] = actual_user.id
+    post action, :milestone => expected
+    
+    actual_user_milestone = User.find(actual_user.id).milestone
+    assert_milestone expected, actual_user_milestone
+  end
+  
+  def assert_open_form(action, user)
+    session[:id] = user.id
+    get action
+    assert_milestone_form_assings
   end
 end
