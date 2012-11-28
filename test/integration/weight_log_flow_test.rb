@@ -13,7 +13,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     assert assigns(:current_user).weight_logs
   end
   
@@ -21,7 +21,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @john.mail_address,
-      :password => user_password(:john))
+      :password => self.class.user_password(:john))
     assert_show_user_without_log_and_milestone assigns(:current_user)
     
     create_weight_log_action(
@@ -35,7 +35,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     edit_weight_log_action(
       :weight_log => @eric.weight_logs[1],
@@ -50,7 +50,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     delete_via_redirect weight_log_path(@eric.weight_logs[0].id)
     
@@ -62,7 +62,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     edit_weight_log_action(
       :weight_log => @eric.weight_logs[1],
@@ -76,7 +76,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     erics_weight_log = @eric.weight_logs[0]
     
@@ -92,7 +92,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     erics_weight_log = @eric.weight_logs[0]
     
@@ -108,7 +108,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     show_form_action weight_log_menus_path(@eric.weight_logs[0])
   end
@@ -117,7 +117,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     erics_weight_log = @eric.weight_logs[0]
     
@@ -134,7 +134,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     erics_weight_log = @eric.weight_logs[0]
     
@@ -153,7 +153,7 @@ class WeightLogFlowTest < ActionDispatch::IntegrationTest
     https!
     login_action(
       :mail_address => @eric.mail_address,
-      :password => user_password(:eric))
+      :password => self.class.user_password(:eric))
     
     erics_weight_log = @eric.weight_logs[0]
     

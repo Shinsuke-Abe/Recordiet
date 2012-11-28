@@ -75,19 +75,6 @@ class ActiveSupport::TestCase
     I18n.t(message_symbol, :scope => :application_messages)
   end
   
-  def user_password(user_symbol)
-    case user_symbol
-    when :one
-      "MyString"
-    when :two
-      "MyString2"
-    when :john
-      "pass1234"
-    when :eric
-      "ocean461"
-    end
-  end
-  
   def self.user_password(user_symbol)
     case user_symbol
     when :one
