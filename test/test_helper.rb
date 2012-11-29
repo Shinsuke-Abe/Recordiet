@@ -87,4 +87,9 @@ class ActiveSupport::TestCase
       "ocean461"
     end
   end
+  
+  def assert_validates_invalid(operation, arg)
+    new_model = operation.call(arg)
+    assert new_model.invalid?
+  end
 end

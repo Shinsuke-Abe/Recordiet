@@ -7,6 +7,7 @@ class UserTest < ActiveSupport::TestCase
   def setup
     @john = users(:john)
     @eric = users(:eric)
+    @create_user = lambda {|arg| User.new(arg)}
   end
   
   test "認証要求でメールアドレスとパスワードの両方が一致する場合はユーザ情報を返却する" do
@@ -41,37 +42,52 @@ class UserTest < ActiveSupport::TestCase
   
   test "メールアドレスが未入力の場合はエラー" do
     assert_validates_invalid(
-      :mail_address => nil,
-      :display_name => "new user name",
-      :password => "userpass")
+      @create_user,
+      {
+        :mail_address => nil,
+        :display_name => "new user name",
+        :password => "userpass" 
+      })
   end
   
   test "表示名が未入力の場合はエラー" do
     assert_validates_invalid(
-      :mail_address => "newuser@mail.com",
-      :display_name => nil,
-      :password => "userpass")
+      @create_user,
+      {
+        :mail_address => "newuser@mail.com",
+        :display_name => nil,
+        :password => "userpass"
+      })
   end
   
   test "パスワードが未入力の場合はエラー" do
     assert_validates_invalid(
-      :mail_address => "newuser@mail.com",
-      :display_name => "new user name",
-      :password => nil)
+      @create_user,
+      {
+        :mail_address => "newuser@mail.com",
+        :display_name => "new user name",
+        :password => nil
+      })
   end
   
   test "メールアドレスが一致するレコードがある場合はエラー" do
     assert_validates_invalid(
-      :mail_address => @eric.mail_address,
-      :display_name => "anonymous",
-      :password => "newpass")
+      @create_user,
+      {
+        :mail_address => @eric.mail_address,
+        :display_name => "anonymous",
+        :password => "newpass"
+      })
   end
   
   test "メールアドレスがemailの形式でない場合はエラー" do
     assert_validates_invalid(
-      :mail_address => "mail",
-      :display_name => "anonymous",
-      :password => "newpass")
+      @create_user,
+      {
+        :mail_address => "mail",
+        :display_name => "anonymous",
+        :password => "newpass"
+      })
   end
   
   test "ユーザの登録に成功する" do
@@ -120,12 +136,5 @@ class UserTest < ActiveSupport::TestCase
     assert_raise(ActiveRecord::RecordNotFound) {
       Milestone.find(before_destory_milestone.id)
     }
-   end
-   
-   private
-   def assert_validates_invalid(data)
-     new_user = User.new(data)
-     
-     assert new_user.invalid?
    end
 end

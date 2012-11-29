@@ -14,14 +14,14 @@ one:
 two:
   mail_address: MyString2
   display_name: MyString2
-  password_digest: <%= BCrypt::Password.create("MyString2") %>
+  password_digest: <%= encrypt_password(:two) %>
 
 john:
   mail_address: john@mail.com
   display_name: john denver
-  password_digest: <%= BCrypt::Password.create("pass1234") %>
+  password_digest: <%= encrypt_password(:john) %>
 
 eric:
   mail_address: clapton@cream.com
   display_name: guitar god
-  password_digest: <%= BCrypt::Password.create("ocean461") %>
+  password_digest: <%= encrypt_password(:eric) %>

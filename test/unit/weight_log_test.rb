@@ -7,20 +7,24 @@ class WeightLogTest < ActiveSupport::TestCase
   def setup
     @john = users(:john)
     @eric = users(:eric)
+    @create_weight_log = lambda {|arg| WeightLog.new(arg)}
   end
   
   test "日付の入力は必須" do
-    assert_validates_invalid :weight => 65.1
+    assert_validates_invalid @create_weight_log, :weight => 65.1
   end
   
   test "体重の入力は必須" do
-    assert_validates_invalid :measured_date => Date.yesterday
+    assert_validates_invalid @create_weight_log, :measured_date => Date.yesterday
   end
   
   test "体重は正の実数" do
     assert_validates_invalid(
-      :measured_date => Date.today,
-      :weight => -50.5)
+      @create_weight_log,
+      {
+        :measured_date => Date.today,
+        :weight => -50.5
+      })
   end
   
   test "体重履歴は日付の降順にソートされる" do
@@ -83,11 +87,5 @@ class WeightLogTest < ActiveSupport::TestCase
       :weight => 70.1,
       :fat_percentage => 23.0)
     assert_equal 23.0, created_log.fat_percentage
-  end
-  
-  private
-  def assert_validates_invalid(data)
-    new_weight_log = WeightLog.new(data)
-    assert new_weight_log.invalid?
   end
 end

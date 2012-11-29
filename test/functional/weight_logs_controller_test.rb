@@ -11,14 +11,6 @@ class WeightLogsControllerTest < ActionController::TestCase
   end
   
   test "ログイン済のユーザに履歴を登録することができる" do
-    expected_data = { :measured_date => Date.today - 1, :weight => 70.9}
-    john_log_added = register_weight_log_action(@john, expected_data)
-
-    assert_equal 1, john_log_added.weight_logs.length
-    assert_weight_log expected_data, john_log_added.weight_logs[0]
-  end
-  
-  test "体脂肪率も合わせて履歴を登録することができる" do
     expected_data = { :measured_date => Date.today - 1, :weight => 57.5, :fat_percentage => 26.2}
     john_log_added = register_weight_log_action(@john, expected_data)
 
