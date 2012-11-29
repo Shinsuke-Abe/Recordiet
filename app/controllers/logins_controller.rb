@@ -3,10 +3,12 @@ class LoginsController < ApplicationController
   layout "nonavigation"
   after_filter :flash_clear, :only => [:create]
   
+  # GET /login
   def show
     @user = User.new
   end
   
+  # POST /login
   def create
     @user = User.new(params[:user])
     
@@ -18,6 +20,7 @@ class LoginsController < ApplicationController
     end
   end
   
+  # DELETE /login
   def destroy
     sign_out
     redirect_to login_path

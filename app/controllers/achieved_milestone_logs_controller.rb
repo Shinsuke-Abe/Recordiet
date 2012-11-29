@@ -3,6 +3,7 @@ class AchievedMilestoneLogsController < ApplicationController
   before_filter :authenticate_user!
   after_filter :flash_clear
   
+  # GET /achieved_milestone_logs
   def index
     @achieved_milestone_logs = current_user.achieved_milestone_logs
     

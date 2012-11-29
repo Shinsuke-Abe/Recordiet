@@ -2,14 +2,17 @@ class MenusController < ApplicationController
   before_filter :authenticate_user!
   include MenusHelper
   
+  # GET /weight_logs/:id/menu
   def index
     # do nothing
   end
   
+  # GET /weight_logs/:id/menu/new
   def new
     @menu = current_weight_log.menus.build
   end
   
+  # POST /weight_logs/:id/menu
   def create
     @menu = current_weight_log.menus.build(params[:menu])
     
@@ -20,10 +23,12 @@ class MenusController < ApplicationController
     end
   end
   
+  # GET /weight_logs/:id/menu/edit/:id
   def edit
     @menu = current_menu
   end
   
+  # PUT /weight_logs/:id/menu
   def update
     @menu = current_menu
     
@@ -34,6 +39,7 @@ class MenusController < ApplicationController
     end
   end
   
+  # DELETE /weight_logs/:id/menu/:id
   def destroy
     current_menu.destroy
     

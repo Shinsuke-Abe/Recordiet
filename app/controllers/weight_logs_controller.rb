@@ -3,7 +3,7 @@ class WeightLogsController < ApplicationController
   before_filter :authenticate_user!
   after_filter :flash_clear, :only => [:index]
   
-  # show weight logs list logged in user
+  # GET /weight_logs
   def index
     if current_user.weight_logs.empty?
       flash[:notice] = application_message(:weight_log_not_found)
@@ -16,7 +16,7 @@ class WeightLogsController < ApplicationController
     end
   end
   
-  # add weight logs to login user
+  # POST /weight_logs
   def create
     @weight_log = current_user.weight_logs.build(params[:weight_log])
     
@@ -31,12 +31,12 @@ class WeightLogsController < ApplicationController
     end
   end
   
-  # show weight_log edit form
+  # GET /weight_logs/edit
   def edit
     @weight_log = current_weight_log
   end
   
-  # update weight_log
+  # PUT /weight_logs
   def update
     @weight_log = current_weight_log
     
@@ -47,7 +47,7 @@ class WeightLogsController < ApplicationController
     end
   end
   
-  # delete weight_log
+  # DELETE /weight_logs
   def destroy
     current_weight_log.destroy
     
