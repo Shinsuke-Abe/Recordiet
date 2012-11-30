@@ -2,9 +2,24 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'test/unit/ui/console/testrunner'
+require 'capybara/rails'
 class Test::Unit::UI::Console::TestRunner
   def guess_color_availability 
     true 
+  end
+end
+
+DatabaseCleaner.strategy = :trunsaction
+
+class ActionDispatch::IntegrationTest
+  include Capybara::DSL
+  
+  self.use_transactional_fixtures = false
+
+  teardown do
+    DatabaseCleaner.clean
+    Capybara.reset_sessions!
+    Capybara.use_default_driver
   end
 end
 

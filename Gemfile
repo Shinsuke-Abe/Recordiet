@@ -18,6 +18,10 @@ group :development, :test do
   gem 'autotest-rails'
 end
 
+group :test do
+  gem 'database_cleaner'
+end
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -65,3 +69,5 @@ gem 'simple_form'
 
 # To use googlechart
 gem 'googlecharts'
+
+gem 'capybara'
