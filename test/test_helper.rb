@@ -9,7 +9,7 @@ class Test::Unit::UI::Console::TestRunner
   end
 end
 
-DatabaseCleaner.strategy = :trunsaction
+DatabaseCleaner.strategy = :truncation
 
 class ActionDispatch::IntegrationTest
   include Capybara::DSL
