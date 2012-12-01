@@ -2,14 +2,14 @@
 require 'gchart'
 
 module WeightLogsHelper
-  def create_chart(weight_logs, milestone)
-    unless weight_logs.empty?
-      data_arr, axis_arr = chart_arrays weight_logs
+  def create_weight_chart
+    unless current_user.weight_logs.empty?
+      data_arr, axis_arr = chart_weight_arrays take_off_form_data(current_user.weight_logs)
       
       chart_arg = chart_basic(data_arr, axis_arr)
       
-      if milestone
-        chart_arg[:data] << Array.new(data_arr.size, milestone.weight)
+      if current_user.milestone
+        chart_arg[:data] << Array.new(data_arr.size, current_user.milestone.weight)
         chart_arg[:bar_colors] += ",FF99CC"
         chart_arg[:legend] = ["体重", "目標"]
       end
@@ -18,9 +18,24 @@ module WeightLogsHelper
     end
   end
   
+  def create_fat_percentage_chart
+    unless current_user.weight_logs.empty?
+      data_arr, axis_arr = chart_fat_percentage_arrays take_off_form_data(current_user.weight_logs)
+      
+      chart_arg = chart_basic(data_arr, axis_arr)
+      
+      Gchart.line(chart_arg)
+    end
+  end
+  
   private
-  def chart_arrays(weight_logs)
+  def chart_weight_arrays(weight_logs)
     return weight_logs.reverse.map!{|weight_log| weight_log.weight},
+           weight_logs.reverse.map!{|weight_log| weight_log.measured_date.strftime("%m/%d")}
+  end
+  
+  def chart_fat_percentage_arrays(weight_logs)
+    return weight_logs.reverse.map!{|weight_log| weight_log.fat_percentage},
            weight_logs.reverse.map!{|weight_log| weight_log.measured_date.strftime("%m/%d")}
   end
   
