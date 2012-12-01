@@ -11,7 +11,9 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   
   test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
     https!
-    show_form_action login_path
+    # show_form_action login_path
+    visit(login_path)
+    assert_equal current_path, login_path
     
     login_action(
       :mail_address => @john.mail_address,

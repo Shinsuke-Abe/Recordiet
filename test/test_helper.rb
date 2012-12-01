@@ -21,6 +21,17 @@ class ActionDispatch::IntegrationTest
     Capybara.reset_sessions!
     Capybara.use_default_driver
   end
+  
+  def login_action(args)
+    mail_address = args[:mail_address]
+    password = args[:password]
+    
+    post_via_redirect login_path, :user => {
+      :mail_address => mail_address,
+      :password => password
+    }
+    assert_show_user_log
+  end
 end
 
 class ActiveSupport::TestCase
@@ -45,17 +56,6 @@ class ActiveSupport::TestCase
     weight_logs.select { |log|
       log.id != nil
     }
-  end
-  
-  def login_action(args)
-    mail_address = args[:mail_address]
-    password = args[:password]
-    
-    post_via_redirect login_path, :user => {
-      :mail_address => mail_address,
-      :password => password
-    }
-    assert_show_user_log
   end
   
   def assert_show_user_log
