@@ -14,18 +14,42 @@ class WeightLog < ActiveRecord::Base
   after_create :create_achieve_log, :if => :achieved?
   
   def achieved?
+    weight_milestone_achieved? or fat_percentage_milestone_achieved?
+  end
+  
+  def weight_milestone_achieved?
     if user.milestone and
-      user.milestone.weight and
-      user.milestone.weight >= weight
+       user.milestone.weight and
+       user.milestone.weight >= weight
       true
     else
       false
     end
   end
   
+  def fat_percentage_milestone_achieved?
+    if fat_percentage
+      if user.milestone and
+         user.milestone.fat_percentage and
+         user.milestone.fat_percentage >= fat_percentage
+        true
+      else
+        false
+      end
+    end
+  end
+  
   def create_achieve_log
-    user.achieved_milestone_logs.create(
-      :achieved_date => measured_date,
-      :milestone_weight => user.milestone.weight)
+    achieved_log = { :achieved_date => measured_date }
+    
+    if weight_milestone_achieved?
+      achieved_log[:milestone_weight] = user.milestone.weight
+    end
+    
+    if fat_percentage_milestone_achieved?
+      achieved_log[:milestone_fat_percentage] = user.milestone.fat_percentage
+    end
+    
+    user.achieved_milestone_logs.create(achieved_log)
   end
 end

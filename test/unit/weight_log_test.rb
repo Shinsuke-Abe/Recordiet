@@ -8,6 +8,12 @@ class WeightLogTest < ActiveSupport::TestCase
     @john = users(:john)
     @eric = users(:eric)
     @create_weight_log = lambda {|arg| WeightLog.new(arg)}
+    @test_milestone = {
+      :weight => 65.5,
+      :fat_percentage => 20.0,
+      :date => Date.tomorrow,
+      :reward => "寿司"
+    }
   end
   
   test "日付の入力は必須" do
@@ -40,35 +46,107 @@ class WeightLogTest < ActiveSupport::TestCase
     assert_equal Date.yesterday, log_added_eric.weight_logs[2].measured_date
   end
   
-  # TODO 達成は、体重と合わせてテストケースを書き換える(粒度大きすぎるし、条件色々あるし)
-  # TODO 達成履歴に達成した方の数値が入るようにする
-  # 以下4ケースで作成
-  # 体重目標  × ○ × ○
-  # 体脂肪   × × ○ ○
-  # 結果    × ○ ○ ○
-  test "新規体重履歴の体重が目標を達成したか判別する" do
+  test "体重目標も体脂肪率目標も達成してない場合は達成履歴が作成されない" do
+    @john.create_milestone(@test_milestone)
+    
+    @john.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 66.0,
+      :fat_percentage => 21.0)
+    assert User.find(@john.id).achieved_milestone_logs.empty?
+  end
+  
+  test "体重目標を達成した場合は目標体重が記録された達成履歴が作成される" do
+    @john.create_milestone(@test_milestone)
+    
+    @john.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 64.9,
+      :fat_percentage => 21.0)
+    
+    achieved_log = User.find(@john.id).achieved_milestone_logs[0]
+    assert_equal Date.yesterday, achieved_log.achieved_date
+    assert_equal @test_milestone[:weight], achieved_log.milestone_weight
+    assert_nil achieved_log.milestone_fat_percentage
+  end
+  
+  test "体脂肪率目標を達成した場合は体脂肪率目標が記録された達成履歴が作成される" do
+    @john.create_milestone(@test_milestone)
+    
+    @john.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 70.0,
+      :fat_percentage => 19.5)
+    
+    achieved_log = User.find(@john.id).achieved_milestone_logs[0]
+    assert_equal Date.yesterday, achieved_log.achieved_date
+    assert_nil achieved_log.milestone_weight
+    assert_equal @test_milestone[:fat_percentage], achieved_log.milestone_fat_percentage
+  end
+  
+  test "体重目標と体脂肪率目標を達成した場合は両者が記録された達成履歴が作成される" do
+    @john.create_milestone(@test_milestone)
+    
+    @john.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 61.0,
+      :fat_percentage => 18.0)
+      
+    achieved_log = User.find(@john.id).achieved_milestone_logs[0]
+    assert_equal Date.yesterday, achieved_log.achieved_date
+    assert_equal @test_milestone[:weight], achieved_log.milestone_weight
+    assert_equal @test_milestone[:fat_percentage], achieved_log.milestone_fat_percentage
+  end
+  
+  test "目標未設定の場合は達成確認はfalseとなる" do
+    added_weight_log = @john.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 61.0,
+      :fat_percentage => 18.0)
+    assert !added_weight_log.achieved?
+  end
+  
+  test "目標設定はあるが体脂肪率目標未設定の場合は体重未達成でfalseとなる" do
     @john.create_milestone(
       :weight => 65.5,
       :date => Date.tomorrow,
       :reward => "寿司")
     
+    added_weight_log = @john.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 66.0,
+      :fat_percentage => 18.0)
+    assert !added_weight_log.achieved?
+  end
+  
+  test "体重目標達成の境界値テスト" do
+    @john.create_milestone(@test_milestone)
+    
     over_weight_log = @john.weight_logs.create(
       :measured_date => Date.yesterday,
       :weight => 65.6)
     assert !over_weight_log.achieved?
-    assert User.find(@john.id).achieved_milestone_logs.empty?
     
     equal_weight_log = @john.weight_logs.create(
       :measured_date => Date.today - 3.days,
       :weight => 65.5)
     assert equal_weight_log.achieved?
-    assert_equal 1, User.find(@john.id).achieved_milestone_logs.size
+  end
+  
+  test "体脂肪率目標達成の境界値テスト" do
+    @john.create_milestone(@test_milestone)
     
-    under_weight_log = @john.weight_logs.create(
-      :measured_date => Date.today - 8.days,
-      :weight => 65.4)
-    assert under_weight_log.achieved?
-    assert_equal 2, User.find(@john.id).achieved_milestone_logs.size
+    over_weight_log = @john.weight_logs.create(
+      :measured_date => Date.yesterday,
+      :weight => 66,
+      :fat_percentage => 20.1)
+    assert !over_weight_log.achieved?
+    
+    equal_weight_log = @john.weight_logs.create(
+      :measured_date => Date.today - 3.days,
+      :weight => 66,
+      :fat_percentage => 20.0)
+    assert equal_weight_log.achieved?
   end
   
   test "日付はユーザによってユニークになる" do

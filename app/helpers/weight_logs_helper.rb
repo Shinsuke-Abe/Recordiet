@@ -24,6 +24,13 @@ module WeightLogsHelper
       
       chart_arg = chart_basic(data_arr, axis_arr)
       
+      if current_user.milestone and
+         current_user.milestone.fat_percentage
+        chart_arg[:data] << Array.new(data_arr.size, current_user.milestone.fat_percentage)
+        chart_arg[:bar_colors] += ",FF99CC"
+        chart_arg[:legend] = ["体脂肪率", "目標"]
+      end
+      
       Gchart.line(chart_arg)
     end
   end

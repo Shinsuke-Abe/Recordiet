@@ -67,7 +67,6 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     assert_equal milestone_path, path
   end
   
-  # TODO 体重で達成するときと体脂肪率で達成するとき
   test "履歴登録時に目標を達成した場合はメッセージが表示される" do
     expected_data = {
       :weight => 67.5,

@@ -55,7 +55,12 @@
                 目標
               %div
                 - unless user_sidebar_display.weight_logs.empty?
-                  = format("あと %s kg", (user_sidebar_display.weight_logs[0].weight - user_sidebar_display.milestone.weight).round(2).to_s)
+                  = format("あと %s kg",
+                           (user_sidebar_display.weight_logs[0].weight - user_sidebar_display.milestone.weight).round(2).to_s)
+              %div
+                - if user_sidebar_display.milestone.fat_percentage and user_sidebar_display.weight_logs[0].fat_percentage
+                  = format("あと %s %",
+                           (user_sidebar_display.weight_logs[0].fat_percentage - user_sidebar_display.milestone.fat_percentage).round(2).to_s)
               %div
                 - if user_sidebar_display.milestone.date
                   = format("あと %d 日", (user_sidebar_display.milestone.date - Date.today).to_i)

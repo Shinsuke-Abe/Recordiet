@@ -1,6 +1,8 @@
 = simple_form_for @milestone, :url => milestone_path, :html => {:class => "form-horizontal"} do |f|
   .control-group
-    = f.input :weight , :input_html => {:step => 0.1, :class => "span1"}
+    = f.input :weight, :input_html => {:step => 0.1, :class => "span1"}
+  .control-group
+    = f.input :fat_percentage, :input_html => {:step => 0.1, :class => "span1"}
   .control-group
     = f.input :date
   .control-group

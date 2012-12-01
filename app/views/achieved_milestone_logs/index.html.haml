@@ -2,9 +2,15 @@
   %thead
     %tr
       %th 達成日
-      %th 達成目標
+      %th 目標体重
+      %th 目標体脂肪
   %tbody
     - @achieved_milestone_logs.each do |achieved_milestone_log|
       %tr
         %td= achieved_milestone_log.achieved_date
-        %td= achieved_milestone_log.milestone_weight.to_s + " kg"
+        %td
+          - if achieved_milestone_log.milestone_weight
+            = achieved_milestone_log.milestone_weight.to_s + " kg"
+        %td
+          - if achieved_milestone_log.milestone_fat_percentage
+            = achieved_milestone_log.milestone_fat_percentage + " %"
