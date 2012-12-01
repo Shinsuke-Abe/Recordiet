@@ -36,7 +36,7 @@
         .span3
           .well.sidebar-nav
             - user_sidebar_display = User.find(current_user.id)
-            %h3
+            %h3{:id => "user_information_area"}
               .btn-group
                 %a.btn.dropdown-toggle{"data-toggle" => "dropdown"}
                   %i.icon-user
@@ -44,7 +44,7 @@
                 %ul.dropdown-menu= render "usermenu"
               = user_sidebar_display.display_name
             - if user_sidebar_display.milestone
-              %h4
+              %h4{:id => "milestone_area"}
                 .btn-group
                   %a.btn.dropdown-toggle{"data-toggle" => "dropdown"}
                     %i.icon-flag
@@ -60,7 +60,7 @@
                 - if user_sidebar_display.milestone.date
                   = format("あと %d 日", (user_sidebar_display.milestone.date - Date.today).to_i)
             - else
-              %h4
+              %h4{:id => "milestone_area"}
                 目標
                 = link_to "目標を設定する", new_milestone_path, :class => "btn"
       %footer

@@ -10,7 +10,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   end
   
   test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
-    https!
+    #https!
     # show_form_action login_path
     visit login_path
     assert_equal login_path, current_path, "failures at show login form"
@@ -24,9 +24,9 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     click_button "ログイン"
     assert_equal weight_logs_path, current_path, "failures at assert path after login action"
     page.has_css? "div.alert.alert-info"
-    assert find("div.alert.alert-info").find("p")
-    # p find("div.alert.alert-info").find("p")
     find("div.alert.alert-info").find("p").has_content? "履歴が未登録です。\n目標が未登録です。目標を立ててダイエットをしてみませんか？"
+    find("#user_information_area").has_content? @john.display_name
+    find("#milestone_area").has_button? "目標を設定する"
   end
   
   test "ユーザ登録が成功する" do
