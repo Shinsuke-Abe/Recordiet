@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121127154258) do
+ActiveRecord::Schema.define(:version => 20121201122525) do
 
   create_table "achieved_milestone_logs", :force => true do |t|
     t.date     "achieved_date"
@@ -38,8 +38,9 @@ ActiveRecord::Schema.define(:version => 20121127154258) do
     t.date     "date"
     t.text     "reward"
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.float    "fat_percentage"
   end
 
   add_index "milestones", ["user_id"], :name => "index_milestones_on_user_id"

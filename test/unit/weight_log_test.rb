@@ -88,4 +88,6 @@ class WeightLogTest < ActiveSupport::TestCase
       :fat_percentage => 23.0)
     assert_equal 23.0, created_log.fat_percentage
   end
+  
+  # TODO 体脂肪率で目標を達成するとき
 end
