@@ -40,7 +40,9 @@ class WeightLogTest < ActiveSupport::TestCase
     assert_equal Date.yesterday, log_added_eric.weight_logs[2].measured_date
   end
   
-  test "新規体重履歴が目標を達成したか判別する" do
+  # TODO 達成は、体重と合わせてテストケースを書き換える(粒度大きすぎるし、条件色々あるし)
+  # TODO 達成履歴に達成した方の数値が入るようにする
+  test "新規体重履歴の体重が目標を達成したか判別する" do
     @john.create_milestone(
       :weight => 65.5,
       :date => Date.tomorrow,
@@ -88,6 +90,4 @@ class WeightLogTest < ActiveSupport::TestCase
       :fat_percentage => 23.0)
     assert_equal 23.0, created_log.fat_percentage
   end
-  
-  # TODO 体脂肪率で目標を達成するとき
 end
