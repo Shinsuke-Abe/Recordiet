@@ -42,6 +42,10 @@ class WeightLogTest < ActiveSupport::TestCase
   
   # TODO 達成は、体重と合わせてテストケースを書き換える(粒度大きすぎるし、条件色々あるし)
   # TODO 達成履歴に達成した方の数値が入るようにする
+  # 以下4ケースで作成
+  # 体重目標  × ○ × ○
+  # 体脂肪   × × ○ ○
+  # 結果    × ○ ○ ○
   test "新規体重履歴の体重が目標を達成したか判別する" do
     @john.create_milestone(
       :weight => 65.5,
