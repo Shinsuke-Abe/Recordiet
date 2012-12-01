@@ -32,6 +32,11 @@ class ActionDispatch::IntegrationTest
     }
     assert_show_user_log
   end
+  
+  def show_form_action(uri)
+    get uri
+    assert_response :success
+  end
 end
 
 class ActiveSupport::TestCase
@@ -61,11 +66,6 @@ class ActiveSupport::TestCase
   def assert_show_user_log
     assert_equal weight_logs_path, path
     assert assigns(:current_user)
-  end
-  
-  def show_form_action(uri)
-    get uri
-    assert_response :success
   end
   
   def assert_show_user_without_log_and_milestone(user)
