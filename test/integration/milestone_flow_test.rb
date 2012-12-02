@@ -10,18 +10,41 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
   end
   
   test "目標とご褒美を設定する" do
-    https!
-    login_action(
+    # https!
+    # login_action(
+      # :mail_address => @john.mail_address,
+      # :password => self.class.user_password(:john))
+    visit login_path
+    success_login_action(
       :mail_address => @john.mail_address,
-      :password => self.class.user_password(:john))
+      :password => self.class.user_password(:john),
+      :display_name => @john.display_name)
     
-    create_milestone_action(
-      :weight => 67.0,
-      :date => Date.today + 30.days,
-      :reward => "焼き肉食べ放題")
+    find(:link, "目標を設定する").click
     
-    assert_show_user_log
-    assert assigns(:current_user).milestone
+    assert_equal new_milestone_path, current_path, "failures at show create milestone form"
+    
+    fill_in "milestone_weight", :with => 67.0
+    fill_in "milestone_fat_percentage", :with => 24.0
+    milestone_date = Date.today + 30.days
+    select milestone_date.year.to_s, :from => "milestone_date_1i"
+    select milestone_date.month.to_s + "月", :from => "milestone_date_2i"
+    select milestone_date.day.to_s, :from => "milestone_date_3i"
+    fill_in "milestone_reward", :with => "焼き肉食べ放題"
+    
+    click_button "登録する"
+    
+    assert_equal weight_logs_path, current_path, "failures at create milestone"
+    
+    # TODO 目標ありの場合のサイドバー表示のアサーション
+    
+    # create_milestone_action(
+      # :weight => 67.0,
+      # :date => Date.today + 30.days,
+      # :reward => "焼き肉食べ放題")
+#     
+    # assert_show_user_log
+    # assert assigns(:current_user).milestone
   end
   
   test "目標の設定でエラーが発生した場合はフォームが再表示される" do

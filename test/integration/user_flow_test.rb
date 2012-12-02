@@ -129,15 +129,6 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   end
   
   private
-  def success_login_action(auth_user_data)
-    input_and_post_login_data auth_user_data
-    
-    assert_equal weight_logs_path, current_path,
-      sprintf("failures at login user action. user_name=%s, password=%s",
-              auth_user_data[:mail_address],
-              auth_user_data[:password])          
-    find("#user_information_area").has_content? auth_user_data[:display_name]
-  end
   
   def failed_login_action(auth_user_data)
     input_and_post_login_data auth_user_data
@@ -147,12 +138,6 @@ class UserFlowTest < ActionDispatch::IntegrationTest
               auth_user_data[:mail_address],
               auth_user_data[:password])
     find(".alert.alert-error").has_content? application_message_for_test(:login_incorrect)
-  end
-  
-  def input_and_post_login_data(auth_user_data)
-    fill_in "user_mail_address", :with => auth_user_data[:mail_address]
-    fill_in "user_password", :with => auth_user_data[:password]
-    click_button "ログイン"
   end
   
   def not_logined_access(uri)
