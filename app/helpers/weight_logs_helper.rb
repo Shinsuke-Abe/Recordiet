@@ -2,33 +2,20 @@
 require 'gchart'
 
 module WeightLogsHelper
-  def create_weight_chart
+  def create_chart(data_legend)
     unless current_user.weight_logs.empty?
-      data_arr, axis_arr = chart_weight_arrays take_off_form_data(current_user.weight_logs)
-      
-      chart_arg = chart_basic(data_arr, axis_arr)
-      
-      if current_user.milestone
-        chart_arg[:data] << Array.new(data_arr.size, current_user.milestone.weight)
-        chart_arg[:bar_colors] += ",FF99CC"
-        chart_arg[:legend] = ["体重", "目標"]
+      data_arr, axis_arr = chart_arrays current_user.weight_logs do |weight_log|
+        yield weight_log
       end
-      
-      Gchart.line(chart_arg)
-    end
-  end
-  
-  def create_fat_percentage_chart
-    unless current_user.weight_logs.empty?
-      data_arr, axis_arr = chart_fat_percentage_arrays take_off_form_data(current_user.weight_logs)
       
       chart_arg = chart_basic(data_arr, axis_arr)
       
       if current_user.milestone and
-         current_user.milestone.fat_percentage
-        chart_arg[:data] << Array.new(data_arr.size, current_user.milestone.fat_percentage)
+         yield current_user.milestone
+        milestone = yield current_user.milestone
+        chart_arg[:data] << Array.new(data_arr.size, milestone)
         chart_arg[:bar_colors] += ",FF99CC"
-        chart_arg[:legend] = ["体脂肪率", "目標"]
+        chart_arg[:legend] = [data_legend, "目標"]
       end
       
       Gchart.line(chart_arg)
@@ -36,14 +23,9 @@ module WeightLogsHelper
   end
   
   private
-  def chart_weight_arrays(weight_logs)
-    return weight_logs.reverse.map!{|weight_log| weight_log.weight},
-           weight_logs.reverse.map!{|weight_log| weight_log.measured_date.strftime("%m/%d")}
-  end
-  
-  def chart_fat_percentage_arrays(weight_logs)
-    return weight_logs.reverse.map!{|weight_log| weight_log.fat_percentage},
-           weight_logs.reverse.map!{|weight_log| weight_log.measured_date.strftime("%m/%d")}
+  def chart_arrays(weight_logs)
+    return take_off_form_data(weight_logs).reverse.map!{|weight_log| yield weight_log},
+           take_off_form_data(weight_logs).reverse.map!{|weight_log| weight_log.measured_date.strftime("%m/%d")}
   end
   
   def chart_basic(data_arr, axis_arr)

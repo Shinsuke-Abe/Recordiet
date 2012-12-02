@@ -41,8 +41,8 @@
                   = link_to "食事内容表示", weight_log_menus_path(weight_log), :class => "btn btn-mini"
                 = link_to "食事内容追加", new_weight_log_menu_path(weight_log), :class => "btn btn-mini"
     #weight_chart.tab-pane
-      = image_tag create_weight_chart
+      = image_tag create_chart("体重"){|data| data.weight}
     #fat_chart.tab-pane
-      = image_tag create_fat_percentage_chart
+      = image_tag create_chart("体脂肪率"){|data| data.fat_percentage}
       
 

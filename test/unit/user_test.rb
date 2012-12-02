@@ -7,7 +7,6 @@ class UserTest < ActiveSupport::TestCase
   def setup
     @john = users(:john)
     @eric = users(:eric)
-    @create_user = lambda {|arg| User.new(arg)}
   end
   
   test "認証要求でメールアドレスとパスワードの両方が一致する場合はユーザ情報を返却する" do
@@ -42,52 +41,47 @@ class UserTest < ActiveSupport::TestCase
   
   test "メールアドレスが未入力の場合はエラー" do
     assert_validates_invalid(
-      @create_user,
-      {
-        :mail_address => nil,
-        :display_name => "new user name",
-        :password => "userpass" 
-      })
+      :mail_address => nil,
+      :display_name => "new user name",
+      :password => "userpass") do |arg|
+      User.new(arg)
+    end
   end
   
   test "表示名が未入力の場合はエラー" do
     assert_validates_invalid(
-      @create_user,
-      {
-        :mail_address => "newuser@mail.com",
-        :display_name => nil,
-        :password => "userpass"
-      })
+      :mail_address => "newuser@mail.com",
+      :display_name => nil,
+      :password => "userpass") do |arg|
+      User.new(arg)
+    end
   end
   
   test "パスワードが未入力の場合はエラー" do
     assert_validates_invalid(
-      @create_user,
-      {
-        :mail_address => "newuser@mail.com",
-        :display_name => "new user name",
-        :password => nil
-      })
+      :mail_address => "newuser@mail.com",
+      :display_name => "new user name",
+      :password => nil) do |arg|
+      User.new(arg)
+    end
   end
   
   test "メールアドレスが一致するレコードがある場合はエラー" do
     assert_validates_invalid(
-      @create_user,
-      {
-        :mail_address => @eric.mail_address,
-        :display_name => "anonymous",
-        :password => "newpass"
-      })
+      :mail_address => @eric.mail_address,
+      :display_name => "anonymous",
+      :password => "newpass") do |arg|
+      User.new(arg)
+    end
   end
   
   test "メールアドレスがemailの形式でない場合はエラー" do
     assert_validates_invalid(
-      @create_user,
-      {
-        :mail_address => "mail",
-        :display_name => "anonymous",
-        :password => "newpass"
-      })
+      :mail_address => "mail",
+      :display_name => "anonymous",
+      :password => "newpass") do |arg|
+      User.new(arg)
+    end
   end
   
   test "ユーザの登録に成功する" do

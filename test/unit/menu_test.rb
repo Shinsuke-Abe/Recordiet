@@ -2,35 +2,29 @@
 require 'test_helper'
 
 class MenuTest < ActiveSupport::TestCase
-  def setup
-    @create_menu = lambda{|arg| Menu.new(arg)}
-  end
   
   test "食事種類が未入力の場合はエラーとなる" do
     assert_validates_invalid(
-      @create_menu,
-      {
-        :menu_type => nil,
-        :detail => "シリアル"
-      })
+      :menu_type => nil,
+      :detail => "シリアル") do |arg|
+      Menu.new(arg)
+    end
   end
   
   test "食事内容が未入力の場合はエラーとなる" do
     assert_validates_invalid(
-      @create_menu,
-      {
-        :menu_type => 1,
-        :detail => nil
-      })
+      :menu_type => 1,
+      :detail => nil) do |arg|
+      Menu.new(arg)
+    end
   end
   
   test "食事種類が1〜5のいずれかでない場合はエラーとなる" do
     assert_validates_invalid(
-      @create_menu,
-      {
-        :menu_type => 0,
-        :detail => "シリアル"
-      })
+      :menu_type => 0,
+      :detail => "シリアル") do |arg|
+      Menu.new(arg)
+    end
   end
   
   test "食事内容が1〜5の場合はエラーとならない" do

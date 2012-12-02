@@ -103,8 +103,8 @@ class ActiveSupport::TestCase
     end
   end
   
-  def assert_validates_invalid(operation, arg)
-    new_model = operation.call(arg)
+  def assert_validates_invalid(arg)
+    new_model = yield arg
     assert new_model.invalid?
   end
 end
