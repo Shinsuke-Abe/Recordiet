@@ -5,18 +5,15 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   fixtures :all
   
   def setup
-    @eric = users(:eric)
-    @john = users(:john)
+    @eric = user_login_data(:eric)
+    @john = user_login_data(:john)
   end
   
   test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
     visit login_path
     assert_equal login_path, current_path, "failures at show login form"
     
-    success_login_action(
-      :mail_address => @john.mail_address,
-      :password => self.class.user_password(:john),
-      :display_name => @john.display_name)
+    success_login_action @john
     
     assert_weight_logs_page_without_logs_and_milestone
   end
@@ -40,7 +37,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     assert_equal new_user_path, current_path, "failures at show create user form"
     
     create_user_action(
-      :mail_address => @eric.mail_address,
+      :mail_address => @eric[:mail_address],
       :display_name => "jimmy page",
       :password => "guitar")
     
@@ -52,17 +49,14 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     visit login_path
     assert_equal login_path, current_path, "failures at show login form"
     
-    success_login_action(
-      :mail_address => @eric.mail_address,
-      :password => self.class.user_password(:eric),
-      :display_name => @eric.display_name)
+    success_login_action @eric
     
     first(:link, "ユーザ情報変更").click
     
     assert_equal edit_user_path, current_path, "failures at click user edit link"
     
-    assert_equal @eric.mail_address, find_field("user_mail_address").value
-    assert_equal @eric.display_name, find_field("user_display_name").value
+    assert_equal @eric[:mail_address], find_field("user_mail_address").value
+    assert_equal @eric[:display_name], find_field("user_display_name").value
     assert_nil find_field("user_password").value
     
     new_eric_data = {
@@ -70,7 +64,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       :display_name => "blind faith",
       :password => "layla"
     }
-    update_user_action(new_eric_data)
+    update_user_action new_eric_data
     
     assert_equal weight_logs_path, current_path, "failures at update user"
     
@@ -78,36 +72,27 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     
     assert_equal login_path, current_path, "failures at logout"
     
-    success_login_action(new_eric_data)
+    success_login_action new_eric_data
   end
   
   test "退会する" do
     visit login_path
     assert_equal login_path, current_path, "failures at show login form"
     
-    eric_auth_data = {
-      :mail_address => @eric.mail_address,
-      :password => self.class.user_password(:eric),
-      :display_name => @eric.display_name
-    }
-    
-    success_login_action(eric_auth_data)
+    success_login_action @eric
     
     first(:link, "退会する").click
     
     assert_equal login_path, current_path, "failures at delete user"
     
-    failed_login_action(eric_auth_data)
+    failed_login_action @eric
   end
   
   test "ログアウトする" do
     visit login_path
     assert_equal login_path, current_path, "failures at show login form"
     
-    success_login_action(
-      :mail_address => @eric.mail_address,
-      :password => self.class.user_password(:eric),
-      :display_name => @eric.display_name)
+    success_login_action @eric
     
     first(:link, "ログアウト").click
     
@@ -118,7 +103,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   
   test "未ログインユーザにアクセス制御をかける" do
     not_logined_access weight_logs_path
-    not_logined_access edit_weight_log_path(@john.id)
+    not_logined_access edit_weight_log_path(users(:john).id)
     
     not_logined_access new_milestone_path
     not_logined_access edit_milestone_path

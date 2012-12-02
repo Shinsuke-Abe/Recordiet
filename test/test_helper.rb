@@ -56,6 +56,15 @@ class ActionDispatch::IntegrationTest
     fill_in "user_password", :with => auth_user_data[:password]
     click_button "ログイン"
   end
+  
+  def user_login_data(user_symbol)
+    user = users(user_symbol)
+    {
+      :mail_address => user.mail_address,
+      :password => self.class.user_password(user_symbol),
+      :display_name => user.display_name
+    }
+  end
 end
 
 class ActiveSupport::TestCase

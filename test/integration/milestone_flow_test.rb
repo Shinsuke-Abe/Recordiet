@@ -10,10 +10,6 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
   end
   
   test "目標とご褒美を設定する" do
-    # https!
-    # login_action(
-      # :mail_address => @john.mail_address,
-      # :password => self.class.user_password(:john))
     visit login_path
     success_login_action(
       :mail_address => @john.mail_address,
@@ -24,56 +20,66 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     
     assert_equal new_milestone_path, current_path, "failures at show create milestone form"
     
-    fill_in "milestone_weight", :with => 67.0
-    fill_in "milestone_fat_percentage", :with => 24.0
-    milestone_date = Date.today + 30.days
-    select milestone_date.year.to_s, :from => "milestone_date_1i"
-    select milestone_date.month.to_s + "月", :from => "milestone_date_2i"
-    select milestone_date.day.to_s, :from => "milestone_date_3i"
-    fill_in "milestone_reward", :with => "焼き肉食べ放題"
-    
-    click_button "登録する"
+    input_and_post_milestone_action({
+      :weight => 67.0,
+      :fat_percentage => 24.0,
+      :date => Date.today + 30.days,
+      :reward => "焼き肉食べ放題"
+    }, "登録する")
     
     assert_equal weight_logs_path, current_path, "failures at create milestone"
     
-    # TODO 目標ありの場合のサイドバー表示のアサーション
-    
-    # create_milestone_action(
-      # :weight => 67.0,
-      # :date => Date.today + 30.days,
-      # :reward => "焼き肉食べ放題")
-#     
-    # assert_show_user_log
-    # assert assigns(:current_user).milestone
+    find("#milestone_area").has_link? "目標変更"
   end
   
   test "目標の設定でエラーが発生した場合はフォームが再表示される" do
-    https!
-    login_action(
+    visit login_path
+    success_login_action(
       :mail_address => @john.mail_address,
-      :password => self.class.user_password(:john))
+      :password => self.class.user_password(:john),
+      :display => @john.display_name)
     
-    create_milestone_action(
-      :weight => nil,
+    first(:link, "目標を設定する").click
+    
+    assert_equal new_milestone_path, current_path, "failures at show create milestone form"
+    
+    input_and_post_milestone_action({
+      :fat_percentage => 24.0,
       :date => Date.today + 30.days,
-      :reward => "後で交渉")
+      :reward => "焼き肉食べ放題"
+    }, "登録する")
     
-    assert_equal milestone_path, path
+    assert_equal milestone_path, current_path, "not failures at create milestone"
+    
+    page.has_css? "help_inline"
   end
   
   test "目標を修正する" do
-    https!
-    login_action(
+    visit login_path
+    success_login_action(
       :mail_address => @eric.mail_address,
-      :password => self.class.user_password(:eric))
+      :password => self.class.user_password(:eric),
+      :display_name => @eric.display_name)
     
-    edit_milestone_action(
+    first(:link, "目標変更").click
+    
+    assert_equal edit_milestone_path, current_path, "failures at show edit milestone form"
+    
+    assert_equal @eric.milestone.weight.to_s, find_field("milestone_weight").value
+    assert_nil find_field("milestone_fat_percentage").value
+    assert_equal @eric.milestone.date.year.to_s, find_field("milestone_date_1i").value
+    assert_equal @eric.milestone.date.month.to_s, find_field("milestone_date_2i").value
+    assert_equal @eric.milestone.date.day.to_s, find_field("milestone_date_3i").value
+    assert_equal @eric.milestone.reward, find_field("milestone_reward").value
+    
+    input_and_post_milestone_action({
       :weight => 65.0,
+      :fat_percentage => 24.0,
       :date => Date.today + 60.days,
-      :reward => "ラーメン")
+      :reward => "ラーメン"
+    }, "更新する")
     
-    assert_show_user_log
-    assert assigns(:current_user).milestone
+    assert_equal weight_logs_path, current_path, "failures at update milestone"
   end
   
   test "目標の修正でエラーが発生した場合はフォームが再表示される" do
@@ -140,6 +146,20 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
   end
   
   private
+  def input_and_post_milestone_action(input_milestone_data, button_name)
+    fill_in "milestone_weight", :with => input_milestone_data[:weight]
+    fill_in "milestone_fat_percentage", :with => input_milestone_data[:fat_percentage]
+    if input_milestone_data[:date]
+      select input_milestone_data[:date].year.to_s, :from => "milestone_date_1i"
+      select input_milestone_data[:date].month.to_s + "月", :from => "milestone_date_2i"
+      select input_milestone_data[:date].day.to_s, :from => "milestone_date_3i"
+    end
+    fill_in "milestone_reward", :with => input_milestone_data[:reward]
+    
+    click_button button_name
+  end
+  
+  # for test::unit
   def create_milestone_action(args)
     weight = args[:weight]
     date = args[:date]
