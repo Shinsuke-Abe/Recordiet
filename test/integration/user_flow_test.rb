@@ -104,29 +104,26 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     delete_via_redirect login_path
     assert_equal login_path, path
     
-    required_login_filtered weight_logs_path
+    get_via_redirect weight_logs_path
+    assert_equal login_path, path
   end
   
   test "未ログインユーザにアクセス制御をかける" do
-    https!
-    # weight_logs_controllerは全メソッド
-    required_login_filtered weight_logs_path
-    required_login_filtered edit_weight_log_path(@john.id)
+    not_logined_access weight_logs_path
+    not_logined_access edit_weight_log_path(@john.id)
     
-    # milestones_controllerは全メソッド
-    required_login_filtered new_milestone_path
-    required_login_filtered edit_milestone_path
+    not_logined_access new_milestone_path
+    not_logined_access edit_milestone_path
     
-    # achieved_milestone_logs_controllerは全メソッド
-    required_login_filtered achieved_milestone_logs_path
+    not_logined_access achieved_milestone_logs_path
     
-    # user_controllerはedit,update,destroyが対象
-    required_login_filtered edit_user_path
+    not_logined_access edit_user_path
   end
   
   private
-  def required_login_filtered(uri)
-    get uri
-    assert login_path, path
+  def not_logined_access(uri)
+    visit uri
+    assert_equal login_path, current_path
+    find("div.alert.alert-block").has_content? "Recordietの各機能を使うにはログインが必要です。"
   end
 end
