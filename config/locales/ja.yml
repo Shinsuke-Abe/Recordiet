@@ -208,9 +208,11 @@ ja:
         date: "期限"
         reward: "ご褒美"
         weight: "目標体重"
+        fat_percentage: "目標体脂肪率"
       achieved_mileston:
         achieved_date: "達成日"
         milestone_weight: "目標体重"
+        milestone_fat_percentage: "目標体脂肪率"
       menu:
         menu_type: "種類"
         detail: "食事内容"
