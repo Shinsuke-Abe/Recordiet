@@ -39,8 +39,23 @@ module WeightLogsHelper
     
     chart_arg[:axis_labels] = [axis_arr]
     chart_arg[:axis_with_labels] = ["x", "y"]
-    chart_arg[:axis_range] = [nil, [0, data_arr.max, 5]]
+    chart_arg[:axis_range] = [nil, [0, data_arr.max{|a,b| compare_chart_data(a,b)}, 5]]
     
     chart_arg
+  end
+  
+  # データに抜けがある場合のmax値取得のための対処
+  def compare_chart_data(a, b)
+    if !a and !b
+      0
+    else
+      if !a
+        -1
+      elsif !b
+        1
+      else
+        a <=> b
+      end
+    end
   end
 end
