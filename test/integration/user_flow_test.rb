@@ -10,102 +10,110 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   end
   
   test "履歴未登録：ログインすると履歴ページに未登録メッセージを表示する" do
-    #https!
-    # show_form_action login_path
     visit login_path
     assert_equal login_path, current_path, "failures at show login form"
     
-    # login_action(
-      # :mail_address => @john.mail_address,
-      # :password => self.class.user_password(:john))
-    # assert_show_user_without_log_and_milestone assigns(:current_user)
-    fill_in "user_mail_address", :with => @john.mail_address
-    fill_in "user_password", :with => self.class.user_password(:john)
-    click_button "ログイン"
-    assert_equal weight_logs_path, current_path, "failures at assert path after login action"
-    page.has_css? "div.alert.alert-info"
-    find("div.alert.alert-info").find("p").has_content? "履歴が未登録です。\n目標が未登録です。目標を立ててダイエットをしてみませんか？"
-    find("#user_information_area").has_content? @john.display_name
-    find("#milestone_area").has_button? "目標を設定する"
+    success_login_action(
+      :mail_address => @john.mail_address,
+      :password => self.class.user_password(:john),
+      :display_name => @john.display_name)
+    
+    assert_weight_logs_page_without_logs_and_milestone
   end
   
   test "ユーザ登録が成功する" do
-    https!
-    show_form_action new_user_path
-    assert assigns(:user)
+    visit new_user_path
+    assert_equal new_user_path, current_path, "failures at show create user form"
     
-    post_via_redirect user_path, :user => {
+    create_user_action(
       :mail_address => "jimmy@ledzeppelin.com",
       :display_name => "jimmy page",
-      :password => "guitar"}
+      :password => "guitar")
     
-    assert_show_user_without_log_and_milestone assigns(:current_user)
+    assert_equal weight_logs_path, current_path, "failures at create user"
+    
+    assert_weight_logs_page_without_logs_and_milestone
   end
   
   test "登録済みのメールアドレスでの登録は失敗する" do
-    https!
-    show_form_action new_user_path
-    assert assigns(:user)
+    visit new_user_path
+    assert_equal new_user_path, current_path, "failures at show create user form"
     
-    post_via_redirect user_path, :user => {
+    create_user_action(
       :mail_address => @eric.mail_address,
       :display_name => "jimmy page",
-      :password => "guitar"}
-    assert_equal user_path, path
+      :password => "guitar")
+    
+    assert_equal user_path, current_path, "not failures at create user"
+    page.has_css? "help_inline"
   end
   
   test "ユーザ情報を変更する" do
-    https!
-    login_action(
+    visit login_path
+    assert_equal login_path, current_path, "failures at show login form"
+    
+    success_login_action(
       :mail_address => @eric.mail_address,
-      :password => self.class.user_password(:eric))
+      :password => self.class.user_password(:eric),
+      :display_name => @eric.display_name)
     
-    show_form_action edit_user_path
+    first(:link, "ユーザ情報変更").click
     
-    put_via_redirect user_path, :user => {
+    assert_equal edit_user_path, current_path, "failures at click user edit link"
+    
+    assert_equal @eric.mail_address, find_field("user_mail_address").value
+    assert_equal @eric.display_name, find_field("user_display_name").value
+    assert_nil find_field("user_password").value
+    
+    new_eric_data = {
       :mail_address => "new_eric@derek.com",
       :display_name => "blind faith",
       :password => "layla"
     }
-    assert_show_user_log
+    update_user_action(new_eric_data)
     
-    delete_via_redirect login_path
-    assert_equal login_path, path
+    assert_equal weight_logs_path, current_path, "failures at update user"
     
-    login_action(
-      :mail_address => "new_eric@derek.com",
-      :password => "layla")
-    assert_show_user_log
+    first(:link, "ログアウト").click
+    
+    assert_equal login_path, current_path, "failures at logout"
+    
+    success_login_action(new_eric_data)
   end
   
   test "退会する" do
-    https!
-    login_action(
+    visit login_path
+    assert_equal login_path, current_path, "failures at show login form"
+    
+    eric_auth_data = {
       :mail_address => @eric.mail_address,
-      :password => self.class.user_password(:eric))
-    
-    delete_via_redirect user_path
-    
-    assert_equal login_path, path
-    
-    post_via_redirect login_path, :user => {
-      :mail_address => @eric.mail_address,
-      :password => @eric.password
+      :password => self.class.user_password(:eric),
+      :display_name => @eric.display_name
     }
-    assert_equal login_path, path
+    
+    success_login_action(eric_auth_data)
+    
+    first(:link, "退会する").click
+    
+    assert_equal login_path, current_path, "failures at delete user"
+    
+    failed_login_action(eric_auth_data)
   end
   
   test "ログアウトする" do
-    https!
-    login_action(
+    visit login_path
+    assert_equal login_path, current_path, "failures at show login form"
+    
+    success_login_action(
       :mail_address => @eric.mail_address,
-      :password => self.class.user_password(:eric))
+      :password => self.class.user_password(:eric),
+      :display_name => @eric.display_name)
     
-    delete_via_redirect login_path
-    assert_equal login_path, path
+    first(:link, "ログアウト").click
     
-    get_via_redirect weight_logs_path
-    assert_equal login_path, path
+    assert_equal login_path, current_path, "failures at logout"
+    
+    not_logined_access weight_logs_path
   end
   
   test "未ログインユーザにアクセス制御をかける" do
@@ -121,9 +129,61 @@ class UserFlowTest < ActionDispatch::IntegrationTest
   end
   
   private
+  def success_login_action(auth_user_data)
+    input_and_post_login_data auth_user_data
+    
+    assert_equal weight_logs_path, current_path,
+      sprintf("failures at login user action. user_name=%s, password=%s",
+              auth_user_data[:mail_address],
+              auth_user_data[:password])          
+    find("#user_information_area").has_content? auth_user_data[:display_name]
+  end
+  
+  def failed_login_action(auth_user_data)
+    input_and_post_login_data auth_user_data
+    
+    assert_equal login_path, current_path,
+      sprintf("failures at login on not found user action. user_name=%s, password=%s",
+              auth_user_data[:mail_address],
+              auth_user_data[:password])
+    find(".alert.alert-error").has_content? application_message_for_test(:login_incorrect)
+  end
+  
+  def input_and_post_login_data(auth_user_data)
+    fill_in "user_mail_address", :with => auth_user_data[:mail_address]
+    fill_in "user_password", :with => auth_user_data[:password]
+    click_button "ログイン"
+  end
+  
   def not_logined_access(uri)
     visit uri
-    assert_equal login_path, current_path
-    find("div.alert.alert-block").has_content? "Recordietの各機能を使うにはログインが必要です。"
+    
+    assert_equal login_path, current_path, sprintf("not-logined access failures when visit %s", uri)
+    find("div.alert.alert-block").has_content? application_message_for_test(:login_required)
+  end
+  
+  def create_user_action(input_user_data)
+    input_and_post_user_action(input_user_data, "登録する")
+  end
+  
+  def update_user_action(input_user_data)
+    input_and_post_user_action(input_user_data, "更新する")
+  end
+  
+  def input_and_post_user_action(input_user_data, button_name)
+    fill_in "user_mail_address", :with => input_user_data[:mail_address]
+    fill_in "user_display_name", :with => input_user_data[:display_name]
+    fill_in "user_password", :with => input_user_data[:password]
+    
+    click_button button_name
+  end
+  
+  def assert_weight_logs_page_without_logs_and_milestone
+    page.has_css? "div.alert.alert-info"
+    
+    find("div.alert.alert-info").find("p").has_content?(
+      application_message_for_test(:weight_log_not_found) + "\n" + 
+      application_message_for_test(:milestone_not_found))
+    find("#milestone_area").has_button? "目標を設定する"
   end
 end
