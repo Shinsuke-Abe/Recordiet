@@ -35,15 +35,14 @@
           = yield
         .span3
           .well.sidebar-nav
-            - user_sidebar_display = User.find(current_user.id)
             %h3{:id => "user_information_area"}
               .btn-group
                 %a.btn.dropdown-toggle{"data-toggle" => "dropdown"}
                   %i.icon-user
                   %span.caret
                 %ul.dropdown-menu= render "usermenu"
-              = user_sidebar_display.display_name
-            - if user_sidebar_display.milestone
+              = current_user.display_name
+            - if current_user.milestone
               %h4{:id => "milestone_area"}
                 .btn-group
                   %a.btn.dropdown-toggle{"data-toggle" => "dropdown"}
@@ -54,17 +53,17 @@
                     %li= link_to "目標削除", milestone_path, method: :delete, data: { confirm: application_message(:confirm_delete) }
                 目標
               %div
-                - unless user_sidebar_display.weight_logs.empty?
+                - unless take_off_form_data(current_user.weight_logs).empty?
                   = format("あと %s kg",
-                           (user_sidebar_display.weight_logs[0].weight - user_sidebar_display.milestone.weight).round(2).to_s)
+                           (take_off_form_data(current_user.weight_logs)[0].weight - current_user.milestone.weight).round(2).to_s)
               %div
-                - unless user_sidebar_display.weight_logs.empty?
-                  - if user_sidebar_display.milestone.fat_percentage and user_sidebar_display.weight_logs[0].fat_percentage
+                - unless take_off_form_data(current_user.weight_logs).empty?
+                  - if current_user.milestone.fat_percentage and current_user.weight_logs[0].fat_percentage
                     = format("あと %s %",
-                             (user_sidebar_display.weight_logs[0].fat_percentage - user_sidebar_display.milestone.fat_percentage).round(2).to_s)
+                             (take_off_form_data(current_user.weight_logs)[0].fat_percentage - current_user.milestone.fat_percentage).round(2).to_s)
               %div
-                - if user_sidebar_display.milestone.date
-                  = format("あと %d 日", (user_sidebar_display.milestone.date - Date.today).to_i)
+                - if current_user.milestone.date
+                  = format("あと %d 日", (current_user.milestone.date - Date.today).to_i)
             - else
               %h4{:id => "milestone_area"}
                 目標

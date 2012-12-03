@@ -8,7 +8,7 @@ class MilestonesController < ApplicationController
   
   # POST /milestone/
   def create
-    @milestone = current_user.build_milestone(params[:milestone])
+    @milestone = User.find(current_user.id).build_milestone(params[:milestone])
     
     if @milestone.save
       redirect_to weight_logs_path
@@ -24,7 +24,7 @@ class MilestonesController < ApplicationController
   
   # PUT /milestone/
   def update
-    @milestone = current_user.milestone
+    @milestone = User.find(current_user.id).milestone
     
     if @milestone.update_attributes(params[:milestone])
       redirect_to weight_logs_path

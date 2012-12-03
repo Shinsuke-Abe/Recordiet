@@ -75,6 +75,31 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     success_login_action new_eric_data
   end
   
+  test "ユーザ情報の変更に失敗する" do
+    visit login_path
+    assert_equal login_path, current_path, "failures at show login form"
+    
+    success_login_action @eric
+    
+    first(:link, "ユーザ情報変更").click
+    
+    assert_equal edit_user_path, current_path, "failures at click user edit link"
+    
+    assert_equal @eric[:mail_address], find_field("user_mail_address").value
+    assert_equal @eric[:display_name], find_field("user_display_name").value
+    assert_nil find_field("user_password").value
+    
+    new_eric_data = {
+      :mail_address => "new_eric@derek.com",
+      :display_name => "blind faith",
+      :password => nil
+    }
+    update_user_action new_eric_data
+    
+    assert_equal user_path, current_path, "failures at update user"
+    page.has_css? "help_inline"
+  end
+  
   test "退会する" do
     visit login_path
     assert_equal login_path, current_path, "failures at show login form"
