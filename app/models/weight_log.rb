@@ -18,25 +18,16 @@ class WeightLog < ActiveRecord::Base
   end
   
   def weight_milestone_achieved?
-    if user.milestone and
-       user.milestone.weight and
-       user.milestone.weight >= weight
-      true
-    else
-      false
-    end
+    user.milestone and
+    user.milestone.weight and
+    user.milestone.weight >= weight
   end
   
   def fat_percentage_milestone_achieved?
-    if fat_percentage
-      if user.milestone and
-         user.milestone.fat_percentage and
-         user.milestone.fat_percentage >= fat_percentage
-        true
-      else
-        false
-      end
-    end
+    fat_percentage and
+    user.milestone and
+    user.milestone.fat_percentage and
+    user.milestone.fat_percentage >= fat_percentage
   end
   
   def create_achieve_log

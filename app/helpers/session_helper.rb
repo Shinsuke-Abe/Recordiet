@@ -29,10 +29,6 @@ module SessionHelper
   end
   
   def signed_in?
-    if session[:id]
-      true
-    else
-      false
-    end
+    session[:id]
   end
 end
