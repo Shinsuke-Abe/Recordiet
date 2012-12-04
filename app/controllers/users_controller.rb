@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   # PUT /user
   # PUT /user.json
   def update
-    @user = current_user
+    @user = User.find(current_user.id)
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
