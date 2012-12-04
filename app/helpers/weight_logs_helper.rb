@@ -4,7 +4,7 @@ require 'gchart'
 module WeightLogsHelper
   def create_chart(user, data_legend)
     unless user.weight_logs.empty?
-      data_arr, axis_arr = chart_arrays user.weight_logs do |weight_log|
+      data_arr, axis_arr = chart_arrays user do |weight_log|
         yield weight_log
       end
       
@@ -23,9 +23,9 @@ module WeightLogsHelper
   end
   
   private
-  def chart_arrays(weight_logs)
-    return take_off_form_data(weight_logs).reverse.map!{|weight_log| yield weight_log},
-           take_off_form_data(weight_logs).reverse.map!{|weight_log| weight_log.measured_date.strftime("%m/%d")}
+  def chart_arrays(user)
+    return user.fixed_weight_logs.reverse.map{|weight_log| yield weight_log},
+           user.fixed_weight_logs.reverse.map{|weight_log| weight_log.measured_date.strftime("%m/%d")}
   end
   
   def chart_basic(data_arr, axis_arr)

@@ -28,4 +28,39 @@ class User < ActiveRecord::Base
       self.password_digest = BCrypt::Password.create(password)
     end
   end
+  
+  def fixed_weight_logs
+    weight_logs.select{|weight_log| weight_log.id}
+  end
+  
+  def latest_weight_log
+    latest_log(fixed_weight_logs)
+  end
+  
+  def latest_weight_log_has_fat_percentage
+    latest_log(fixed_weight_logs.select{|weight_log| weight_log.fat_percentage})
+  end
+  
+  def weight_to_milestone
+    if milestone and milestone.weight and latest_weight_log
+      (latest_weight_log.weight - milestone.weight).round(2)
+    end
+  end
+  
+  def days_to_milestone
+    if milestone and milestone.weight
+      (milestone.date - Date.today).to_i
+    end
+  end
+  
+  def fat_percentage_to_milestone
+    if milestone and milestone.fat_percentage and latest_weight_log_has_fat_percentage
+      (latest_weight_log_has_fat_percentage.fat_percentage - milestone.fat_percentage).round(2)
+    end
+  end
+  
+  private
+  def latest_log(weight_logs)
+    weight_logs.max{|a, b| a.measured_date <=> b.measured_date}
+  end
 end

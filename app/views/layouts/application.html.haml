@@ -53,17 +53,14 @@
                     %li= link_to "目標削除", milestone_path, method: :delete, data: { confirm: application_message(:confirm_delete) }
                 目標
               %div
-                - unless take_off_form_data(current_user.weight_logs).empty?
-                  = format("あと %s kg",
-                           (take_off_form_data(current_user.weight_logs)[0].weight - current_user.milestone.weight).round(2).to_s)
+                - if current_user.weight_to_milestone
+                  = format("あと %s kg", current_user.weight_to_milestone.to_s)
               %div
-                - unless take_off_form_data(current_user.weight_logs).empty?
-                  - if current_user.milestone.fat_percentage and current_user.weight_logs[0].fat_percentage
-                    = format("あと %s %",
-                             (take_off_form_data(current_user.weight_logs)[0].fat_percentage - current_user.milestone.fat_percentage).round(2).to_s)
+                - if current_user.fat_percentage_to_milestone
+                  = format("あと %s %", current_user.fat_percentage_to_milestone)
               %div
-                - if current_user.milestone.date
-                  = format("あと %d 日", (current_user.milestone.date - Date.today).to_i)
+                - if current_user.days_to_milestone
+                  = format("あと %d 日", current_user.days_to_milestone)
             - else
               %h4{:id => "milestone_area"}
                 目標

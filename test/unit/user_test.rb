@@ -131,4 +131,96 @@ class UserTest < ActiveSupport::TestCase
       Milestone.find(before_destory_milestone.id)
     }
    end
+   
+   test "最新の日付の体重履歴を取得できる" do
+     eric = users(:eric)
+     expect_weight_log = weight_logs(:two)
+     
+     assert_equal expect_weight_log, eric.latest_weight_log
+   end
+   
+   test "目標が設定されている場合は目標までの体重を取得できる" do
+     eric = users(:eric)
+     expect_weight = (eric.latest_weight_log.weight - eric.milestone.weight).round(2)
+     
+     assert_equal expect_weight, eric.weight_to_milestone
+   end
+   
+   test "目標が設定されていない場合、目標までの体重はnilが返る" do
+     john = users(:john)
+     john.weight_logs.build(
+       :measured_date => Date.today,
+       :weight => 65.0).save
+     
+     assert_nil john.weight_to_milestone
+   end
+   
+   test "体重履歴が存在しない場合、目標までの体重はnilが返る" do
+     john = users(:john)
+     john.create_milestone(
+       :weight => 50.0,
+       :date => Date.today + 60.days).save
+     
+     assert_nil john.weight_to_milestone
+   end
+   
+   test "目標が設定されている場合は目標までの日数を取得できる" do
+     eric = users(:eric)
+     expect_days = (eric.milestone.date - Date.today).to_i
+     
+     assert_equal expect_days, eric.days_to_milestone
+   end
+   
+   test "目標が設定されていない場合、目標までの日数はnilが返る" do
+     john = users(:john)
+     
+     assert_nil john.days_to_milestone
+   end
+   
+   test "目標が設定されている場合は目標までの体脂肪率を取得できる" do
+     john = users(:john)
+     john.weight_logs.build(
+       :measured_date => Date.today,
+       :weight => 65.0,
+       :fat_percentage => 23.0).save
+     john.create_milestone(
+       :weight => 50.0,
+       :fat_percentage => 22.0,
+       :date => Date.today + 60.days).save
+     
+     expect_fat_percentage = (john.latest_weight_log_has_fat_percentage.fat_percentage - john.milestone.fat_percentage).round(2)
+     assert_equal expect_fat_percentage, john.fat_percentage_to_milestone
+   end
+   
+   test "目標が設定されていない場合、目標までの体脂肪率はnilが返る" do
+     eric = users(:eric)
+     eric.weight_logs.build(
+       :measured_date => Date.today,
+       :weight => 65.0,
+       :fat_percentage => 23.0).save
+     
+     assert_nil eric.fat_percentage_to_milestone
+   end
+   
+   test "体脂肪率を記録した体重履歴が存在しない場合、目標までの体脂肪率はnilが返る" do
+     eric = users(:eric)
+     eric.create_milestone(
+       :weight => 50.0,
+       :fat_percentage => 22.0,
+       :date => Date.today + 60.days).save
+     
+     assert_nil eric.fat_percentage_to_milestone
+   end
+   
+   test "データベースにフィックスしている体重履歴のリストを取得することができる" do
+     eric = users(:eric)
+     eric.weight_logs.build(
+       :measured_date => Date.today,
+       :weight => 65.0,
+       :fat_percentage => 23.0)
+     
+     assert_equal 2, eric.fixed_weight_logs.length
+     assert_equal weight_logs(:two), eric.fixed_weight_logs[0]
+     assert_equal weight_logs(:one), eric.fixed_weight_logs[1]
+   end
 end
