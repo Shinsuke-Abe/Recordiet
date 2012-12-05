@@ -13,6 +13,10 @@ class WeightLog < ActiveRecord::Base
   
   after_create :create_achieve_log, :if => :achieved?
   
+  def self.find_latest_log_has_fat_precentage(user)
+    where("user_id = ? and fat_percentage is not null", user.id).first
+  end
+  
   def achieved?
     weight_milestone_achieved? or fat_percentage_milestone_achieved?
   end

@@ -2,9 +2,6 @@
   = render :partial => "success", :object => flash[:success]
 
 %h3 履歴を追加
-- unless @weight_log
-  - @weight_log = current_user.weight_logs.build
-
 = render "form"
 
 %h3 履歴
@@ -27,7 +24,7 @@
             %th
             %th
         %tbody
-          - current_user.fixed_weight_logs.each do |weight_log|
+          - current_user.weight_logs.each do |weight_log|
             %tr
               %td= weight_log.measured_date
               %td= weight_log.weight

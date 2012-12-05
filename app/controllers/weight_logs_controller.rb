@@ -1,6 +1,8 @@
 # encoding: utf-8
 class WeightLogsController < ApplicationController
   before_filter :authenticate_user!
+  before_filter :current_weight_log, :only => [:edit, :update, :destroy]
+  before_filter :build_weight_log, :only => [:index, :create]
   after_filter :flash_clear, :only => [:index]
   
   # GET /weight_logs
@@ -18,8 +20,6 @@ class WeightLogsController < ApplicationController
   
   # POST /weight_logs
   def create
-    @weight_log = current_user.weight_logs.build(params[:weight_log])
-    
     unless @weight_log.save
       render :action => "index"
     else
@@ -33,13 +33,11 @@ class WeightLogsController < ApplicationController
   
   # GET /weight_logs/edit
   def edit
-    @weight_log = current_weight_log
+    # do nothing
   end
   
   # PUT /weight_logs
   def update
-    @weight_log = current_weight_log
-    
     if @weight_log.update_attributes(params[:weight_log])
       redirect_to weight_logs_path
     else
@@ -49,7 +47,7 @@ class WeightLogsController < ApplicationController
   
   # DELETE /weight_logs
   def destroy
-    current_weight_log.destroy
+    @weight_log.destroy
     
     redirect_to weight_logs_path
   end
@@ -60,6 +58,10 @@ class WeightLogsController < ApplicationController
   end
   
   def current_weight_log
-    WeightLog.find(params[:id])
+    @weight_log = WeightLog.find(params[:id])
+  end
+  
+  def build_weight_log
+    @weight_log = User.find(current_user.id).weight_logs.build(params[:weight_log])
   end
 end

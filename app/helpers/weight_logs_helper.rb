@@ -24,8 +24,8 @@ module WeightLogsHelper
   
   private
   def chart_arrays(user)
-    return user.fixed_weight_logs.reverse.map{|weight_log| yield weight_log},
-           user.fixed_weight_logs.reverse.map{|weight_log| weight_log.measured_date.strftime("%m/%d")}
+    return user.weight_logs.reverse.map{|weight_log| yield weight_log},
+           user.weight_logs.reverse.map{|weight_log| weight_log.measured_date.strftime("%m/%d")}
   end
   
   def chart_basic(data_arr, axis_arr)

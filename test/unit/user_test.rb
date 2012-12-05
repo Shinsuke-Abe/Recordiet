@@ -211,16 +211,4 @@ class UserTest < ActiveSupport::TestCase
      
      assert_nil eric.fat_percentage_to_milestone
    end
-   
-   test "データベースにフィックスしている体重履歴のリストを取得することができる" do
-     eric = users(:eric)
-     eric.weight_logs.build(
-       :measured_date => Date.today,
-       :weight => 65.0,
-       :fat_percentage => 23.0)
-     
-     assert_equal 2, eric.fixed_weight_logs.length
-     assert_equal weight_logs(:two), eric.fixed_weight_logs[0]
-     assert_equal weight_logs(:one), eric.fixed_weight_logs[1]
-   end
 end

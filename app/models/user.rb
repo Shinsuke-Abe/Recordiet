@@ -29,16 +29,12 @@ class User < ActiveRecord::Base
     end
   end
   
-  def fixed_weight_logs
-    weight_logs.select{|weight_log| weight_log.id}
-  end
-  
   def latest_weight_log
-    latest_log(fixed_weight_logs)
+    weight_logs.first
   end
   
   def latest_weight_log_has_fat_percentage
-    latest_log(fixed_weight_logs.select{|weight_log| weight_log.fat_percentage})
+    WeightLog.find_latest_log_has_fat_precentage(self)
   end
   
   def weight_to_milestone
@@ -57,10 +53,5 @@ class User < ActiveRecord::Base
     if milestone and milestone.fat_percentage and latest_weight_log_has_fat_percentage
       (latest_weight_log_has_fat_percentage.fat_percentage - milestone.fat_percentage).round(2)
     end
-  end
-  
-  private
-  def latest_log(weight_logs)
-    weight_logs.max{|a, b| a.measured_date <=> b.measured_date}
   end
 end
