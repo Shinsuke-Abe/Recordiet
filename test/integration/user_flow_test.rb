@@ -55,9 +55,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     
     assert_equal edit_user_path, current_path, "failures at click user edit link"
     
-    assert_equal @eric[:mail_address], find_field("user_mail_address").value
-    assert_equal @eric[:display_name], find_field("user_display_name").value
-    assert_nil find_field("user_password").value
+    assert_user_edit_form @eric
     
     new_eric_data = {
       :mail_address => "new_eric@derek.com",
@@ -85,9 +83,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     
     assert_equal edit_user_path, current_path, "failures at click user edit link"
     
-    assert_equal @eric[:mail_address], find_field("user_mail_address").value
-    assert_equal @eric[:display_name], find_field("user_display_name").value
-    assert_nil find_field("user_password").value
+    assert_user_edit_form @eric
     
     new_eric_data = {
       :mail_address => "new_eric@derek.com",
@@ -180,5 +176,11 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       application_message_for_test(:weight_log_not_found) + "\n" + 
       application_message_for_test(:milestone_not_found))
     find("#milestone_area").has_button? "目標を設定する"
+  end
+  
+  def assert_user_edit_form(user)
+    assert_equal user[:mail_address], find_field("user_mail_address").value
+    assert_equal user[:display_name], find_field("user_display_name").value
+    assert_nil find_field("user_password").value
   end
 end
