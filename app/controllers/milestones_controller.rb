@@ -1,15 +1,16 @@
 class MilestonesController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :current_milestone, :only => [:edit, :update, :destroy]
-  before_filter :build_milestone, :only => [:new, :create]
+  before_filter :load_milestone, :only => [:edit, :update, :destroy]
   
   # GET /milestone/new
   def new
-    # do nothing
+    @milestone = User.find(current_user.id).build_milestone
   end
   
   # POST /milestone/
   def create
+    @milestone = User.find(current_user.id).build_milestone(params[:milestone])
+    
     if @milestone.save
       redirect_to weight_logs_path
     else
@@ -43,11 +44,7 @@ class MilestonesController < ApplicationController
   end
   
   private 
-  def current_milestone
+  def load_milestone
     @milestone = User.find(current_user.id).milestone
-  end
-  
-  def build_milestone
-    @milestone = User.find(current_user.id).build_milestone(params[:milestone])
   end
 end

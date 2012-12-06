@@ -1,11 +1,12 @@
 # encoding: utf-8
 class UsersController < ApplicationController
   before_filter :authenticate_user!, :only => [:edit, :update, :destroy]
-  before_filter :update_user_form, :only => [:edit, :update, :destroy]
-  before_filter :build_user, :only => [:new, :create]
+  before_filter :load_user, :only => [:edit, :update, :destroy]
 
   # GET /user/new
   def new
+    @user = User.new
+    
     respond_to do |format|
       format.html { render layout: "nonavigation"}
       format.json { render json: @user }
@@ -20,6 +21,8 @@ class UsersController < ApplicationController
   # POST /user
   # POST /user.json
   def create
+    @user = User.new(params[:user])
+    
     respond_to do |format|
       if @user.save
         sign_in @user
@@ -55,11 +58,7 @@ class UsersController < ApplicationController
   end
   
   private
-  def update_user_form
+  def load_user
     @user = User.find(current_user.id)
-  end
-  
-  def build_user
-    @user = User.new(params[:user])
   end
 end

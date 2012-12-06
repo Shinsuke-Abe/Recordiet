@@ -1,12 +1,13 @@
 # encoding: utf-8
 class WeightLogsController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :current_weight_log, :only => [:edit, :update, :destroy]
-  before_filter :build_weight_log, :only => [:index, :create]
+  before_filter :load_weight_log, :only => [:edit, :update, :destroy]
   after_filter :flash_clear, :only => [:index]
   
   # GET /weight_logs
   def index
+    @weight_log = User.find(current_user.id).weight_logs.build
+    
     if current_user.weight_logs.empty?
       flash[:notice] = application_message(:weight_log_not_found)
     end
@@ -20,6 +21,8 @@ class WeightLogsController < ApplicationController
   
   # POST /weight_logs
   def create
+    @weight_log = User.find(current_user.id).weight_logs.build(params[:weight_log])
+    
     unless @weight_log.save
       render :action => "index"
     else
@@ -57,11 +60,7 @@ class WeightLogsController < ApplicationController
     sprintf(application_message(:achieve_milestone), reward)
   end
   
-  def current_weight_log
+  def load_weight_log
     @weight_log = WeightLog.find(params[:id])
-  end
-  
-  def build_weight_log
-    @weight_log = User.find(current_user.id).weight_logs.build(params[:weight_log])
   end
 end

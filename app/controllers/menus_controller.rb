@@ -1,7 +1,6 @@
 class MenusController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :current_menu, :only => [:edit, :update, :destroy]
-  before_filter :build_menu, :only => [:new, :create]
+  before_filter :load_menu, :only => [:edit, :update, :destroy]
   include MenusHelper
   
   # GET /weight_logs/:id/menu
@@ -11,11 +10,13 @@ class MenusController < ApplicationController
   
   # GET /weight_logs/:id/menu/new
   def new
-    # do nothing
+    @menu = current_weight_log.menus.build
   end
   
   # POST /weight_logs/:id/menu
   def create
+    @menu = current_weight_log.menus.build(params[:menu])
+    
     if @menu.save
       redirect_to weight_logs_path
     else
@@ -45,11 +46,7 @@ class MenusController < ApplicationController
   end
   
   private
-  def current_menu
+  def load_menu
     @menu = Menu.find(params[:id])
-  end
-  
-  def build_menu
-    @menu = current_weight_log.menus.build(params[:menu])
   end
 end
