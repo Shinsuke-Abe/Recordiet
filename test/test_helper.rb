@@ -24,23 +24,6 @@ class ActionDispatch::IntegrationTest
     Capybara.use_default_driver
   end
   
-  def login_action(args)
-    mail_address = args[:mail_address]
-    password = args[:password]
-    
-    post_via_redirect login_path, :user => {
-      :mail_address => mail_address,
-      :password => password
-    }
-    assert_show_user_log
-  end
-  
-  def show_form_action(uri)
-    get uri
-    assert_response :success
-  end
-  
-  # helper method for capybara
   def create_weight_log_action(new_weight_log)
     input_and_post_weight_log_data new_weight_log, "登録する"
   end
