@@ -42,7 +42,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
       :password => "guitar")
     
     assert_equal user_path, current_path, "not failures at create user"
-    page.has_css? "help_inline"
+    has_form_error?
   end
   
   test "ユーザ情報を変更する" do
@@ -93,7 +93,7 @@ class UserFlowTest < ActionDispatch::IntegrationTest
     update_user_action new_eric_data
     
     assert_equal user_path, current_path, "failures at update user"
-    page.has_css? "help_inline"
+    has_form_error?
   end
   
   test "退会する" do

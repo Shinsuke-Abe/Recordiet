@@ -41,6 +41,20 @@ class ActionDispatch::IntegrationTest
   end
   
   # helper method for capybara
+  def create_weight_log_action(new_weight_log)
+    input_and_post_weight_log_data new_weight_log, "登録する"
+  end
+  
+  def input_and_post_weight_log_data(weight_log, button_name)
+    fill_in "weight_log_weight", :with => weight_log[:weight]
+    select weight_log[:measured_date].year.to_s, :from => "weight_log_measured_date_1i"
+    select weight_log[:measured_date].month.to_s + "月", :from => "weight_log_measured_date_2i"
+    select weight_log[:measured_date].day.to_s, :from => "weight_log_measured_date_3i"
+    fill_in "weight_log_fat_percentage", :with => weight_log[:fat_percentage]
+    
+    click_button button_name
+  end
+  
   def success_login_action(auth_user_data)
     input_and_post_login_data auth_user_data
     
@@ -64,6 +78,15 @@ class ActionDispatch::IntegrationTest
       :password => self.class.user_password(user_symbol),
       :display_name => user.display_name
     }
+  end
+  
+  def has_form_error?
+    assert page.has_css? "span.help-inline"
+  end
+  
+  def table_has_records?(record_number)
+    assert page.has_selector? "table tr"
+    assert_equal record_number + 1, all("tr").length
   end
 end
 
@@ -99,17 +122,6 @@ class ActiveSupport::TestCase
   def assert_show_user_without_log_and_milestone(user)
     assert take_off_form_data(user.weight_logs).empty?
     assert_nil user.milestone
-  end
-  
-  def create_weight_log_action(args)
-    measure_date = args[:measured_date]
-    weight = args[:weight]
-    
-    post_via_redirect weight_logs_path, :weight_log => {
-      :measured_date => measure_date,
-      :weight => weight
-    }
-    assert_show_user_log
   end
   
   # テストからだとI18nのショートカットメソッドにアクセスできないので、

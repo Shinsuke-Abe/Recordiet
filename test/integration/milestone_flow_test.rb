@@ -25,7 +25,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     
     assert_equal weight_logs_path, current_path, "failures at create milestone"
     
-    find("#milestone_area").has_link? "目標変更"
+    assert find("#milestone_area").has_link? "目標変更"
   end
   
   test "目標の設定でエラーが発生した場合はフォームが再表示される" do
@@ -43,7 +43,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     
     assert_equal milestone_path, current_path, "not failures at create milestone"
     
-    page.has_css? "help_inline"
+    has_form_error?
   end
   
   test "目標を修正する" do
@@ -82,7 +82,7 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
       :reward => "ラーメン")
     
     assert_equal milestone_path, current_path, "not failures at edit milestone"
-    page.has_css? "help_inline"
+    has_form_error?
   end
   
   test "履歴登録時に目標を達成した場合はメッセージが表示される" do
@@ -106,16 +106,13 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     assert @john.milestone
     assert @john.achieved_milestone_logs.empty?
     
-    select Date.yesterday.year.to_s, :from => "weight_log_measured_date_1i"
-    select Date.yesterday.month.to_s + "月", :from => "weight_log_measured_date_2i"
-    select Date.yesterday.day.to_s, :from => "weight_log_measured_date_3i"
-    fill_in "weight_log_weight", :with => expected_data[:weight] - 0.1
-    
-    click_button "登録する"
+    create_weight_log_action(
+      :measured_date => Date.yesterday,
+      :weight => expected_data[:weight] - 0.1)
     
     assert_equal weight_logs_path, current_path, "failures at create weight_log"
     
-    find("div.alert.alert-success").has_content? sprintf(application_message_for_test(:achieve_milestone), expected_data[:reward])
+    assert find("div.alert.alert-success").has_content? sprintf(application_message_for_test(:achieve_milestone), expected_data[:reward])
     
     assert @john.achieved_milestone_logs
   end
@@ -128,9 +125,9 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     
     assert_equal weight_logs_path, current_path
     
-    find("div.alert.alert-info").find("p").has_content?(
+    assert find("div.alert.alert-info").find("p").has_content?(
       application_message_for_test(:milestone_not_found))
-    find("#milestone_area").has_button? "目標を設定する"
+    assert find("#milestone_area").has_link? "目標を設定する"
   end
   
   test "目標の達成履歴を表示する" do
@@ -140,6 +137,8 @@ class MilestoneFlowTest < ActionDispatch::IntegrationTest
     first(:link, "目標達成履歴").click
     
     assert_equal achieved_milestone_logs_path, current_path
+    
+    table_has_records? @eric.achieved_milestone_logs.length
   end
   
   private
