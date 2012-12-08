@@ -16,6 +16,7 @@ group :development, :test do
   gem "turn", "~> 0.8.3"
   gem 'test-unit', '~> 2.0.0'
   gem 'autotest-rails'
+  gem 'rspec-rails'
 end
 
 group :test do
