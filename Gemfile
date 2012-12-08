@@ -17,6 +17,7 @@ group :development, :test do
   gem 'test-unit', '~> 2.0.0'
   gem 'autotest-rails'
   gem 'rspec-rails'
+  gem 'factory_girl'
 end
 
 group :test do
