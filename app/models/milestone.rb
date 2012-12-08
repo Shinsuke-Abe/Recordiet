@@ -3,6 +3,6 @@ class Milestone < ActiveRecord::Base
   attr_accessible :date, :reward, :weight, :fat_percentage
   
   validates :weight, :presence => true, :numericality => {greater_than_or_equal_to: 0.1}
-  validates :date, :date => {:after_or_equal_to => Date.today}
+  validates :date, :date => {:after_or_equal_to => Date.today}, :allow_blank => true
   validates :fat_percentage, :numericality => {greater_than_or_equal_to: 0.1}, :allow_blank => true
 end

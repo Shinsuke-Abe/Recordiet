@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+<%
+require 'test_helper'
+
+def encrypt_password(user_symbol)
+  BCrypt::Password.create(ActiveSupport::TestCase.user_password(user_symbol))
+end
+%>
+one:
+  mail_address: MyString
+  display_name: MyString
+  password_digest: <%= encrypt_password(:one) %>
+
+two:
+  mail_address: MyString2
+  display_name: MyString2
+  password_digest: <%= encrypt_password(:two) %>
+
+john:
+  mail_address: john@mail.com
+  display_name: john denver
+  password_digest: <%= encrypt_password(:john) %>
+
+eric:
+  mail_address: clapton@cream.com
+  display_name: guitar god
+  password_digest: <%= encrypt_password(:eric) %>
