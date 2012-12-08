@@ -61,5 +61,21 @@ describe User do
       
       expect(new_user.invalid?).to be_true
     end
+    
+    it "既に一致するメールアドレスがある場合はtrueが返る" do
+      john = FactoryGirl.create(:john)
+      
+      @new_user_data[:mail_address] = john.mail_address
+      new_user = User.new(@new_user_data)
+      
+      expect(new_user.invalid?).to be_true
+    end
+    
+    it "メールアドレスがemail形式でない場合はtrueが返る" do
+      @new_user_data[:mail_address] = "mail"
+      new_user = User.new(@new_user_data)
+      
+      expect(new_user.invalid?).to be_true
+    end
   end
 end

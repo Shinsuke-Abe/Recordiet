@@ -6,6 +6,7 @@ require 'rspec/autorun'
 require 'capybara/rspec'
 require 'factory_girl'
 
+# To user factory_girl
 FactoryGirl.find_definitions
 
 # Requires supporting ruby files with custom matchers and macros, etc,
