@@ -48,4 +48,13 @@ describe UsersController do
       response.should render_template "edit"
     end
   end
+
+  describe "DELETE user" do
+    it "ユーザ情報の削除に成功した場合はログインページにリダイレクトされる" do
+      delete :destroy
+
+      response.should redirect_to login_path
+      session[:id].should be_nil
+    end
+  end
 end
