@@ -5,6 +5,7 @@ FactoryGirl.define do
   factory :menu do
     menu_type 1
     detail "テスト食事"
+    association :weight_log
   end
 
   factory :weight_log do
@@ -18,7 +19,7 @@ FactoryGirl.define do
         menus_count 3
       end
 
-      after(:create) do |weight_log, ecaluator|
+      after(:create) do |weight_log, evaluator|
         FactoryGirl.create_list(:menu, evaluator.menus_count, weight_log: weight_log)
       end
     end
@@ -56,6 +57,16 @@ FactoryGirl.define do
 
       after(:create) do |eric, evaluator|
         FactoryGirl.create_list(:weight_log, evaluator.weight_logs_count, user: eric)
+      end
+    end
+
+    factory :eric_with_weight_logs_with_menu do
+      ignore do
+        weight_logs_count 3
+      end
+
+      after(:create) do |eric, evaluator|
+        FactoryGirl.create_list(:weight_log_with_menus, evaluator.weight_logs_count, user: eric)
       end
     end
   end
