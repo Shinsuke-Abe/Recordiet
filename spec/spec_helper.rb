@@ -41,3 +41,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
+
+def application_message_for_test(symbol)
+  I18n.t(symbol, :scope => :application_messages)
+end

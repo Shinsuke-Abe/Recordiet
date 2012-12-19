@@ -33,6 +33,12 @@ FactoryGirl.define do
     association :user, :john
   end
 
+  factory :jimmy, class: User do
+    mail_address "page@zeppelin.com"
+    display_name "jimmy page"
+    password "lespaulno1"
+  end
+
   factory :john, class: User do
     mail_address "john@mail.com"
     display_name "john denver"
