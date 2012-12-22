@@ -9,9 +9,21 @@ FactoryGirl.define do
   end
 
   factory :weight_log do
-    sequence(:weight) {|n| 75.4 - n}
+    sequence(:weight) {|n|
+      if n < 75.4
+        75.4 - n
+      else
+        0.1
+      end
+    }
     sequence(:measured_date) {|n| Date.yesterday - n.days}
-    sequence(:fat_percentage) {|n| 24.0 - n}
+    sequence(:fat_percentage) {|n|
+      if n < 24.0
+        24.0 - n
+      else
+        0.1
+      end
+    }
     association :user, factory: :eric
 
     factory :weight_log_with_menus do
