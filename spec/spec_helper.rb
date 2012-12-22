@@ -1,3 +1,4 @@
+# encoding: utf-8
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
@@ -40,6 +41,57 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+end
+
+def success_login_action(login_user_data)
+  if login_user_data.is_a? Hash
+    input_and_post_login_data login_user_data
+
+    current_path.should == weight_logs_path
+    expect(find("#user_information_area")).to have_content login_user_data[:display_name]
+  elsif login_user_data.is_a? User
+    input_and_post_login_data(
+      :mail_address => login_user_data.mail_address,
+      :display_name => login_user_data.display_name,
+      :password => login_user_data.password)
+
+    current_path.should == weight_logs_path
+    expect(find("#user_information_area")).to have_content login_user_data.display_name
+  end
+end
+
+def input_and_post_login_data(auth_user_data)
+  fill_in "user_mail_address", :with => auth_user_data[:mail_address]
+  fill_in "user_password", :with => auth_user_data[:password]
+  click_button "ログイン"
+end
+
+def create_weight_log_action(new_weight_log)
+  input_and_post_weight_log_action(new_weight_log, "登録する")
+end
+
+def input_and_post_weight_log_action(input_weight_log_data, button_name)
+  fill_in "weight_log_weight", :with => input_weight_log_data[:weight]
+  select input_weight_log_data[:measured_date].year.to_s, :from => "weight_log_measured_date_1i"
+  select input_weight_log_data[:measured_date].month.to_s + "月", :from => "weight_log_measured_date_2i"
+  select input_weight_log_data[:measured_date].day.to_s, :from => "weight_log_measured_date_3i"
+  fill_in "weight_log_fat_percentage", :with => input_weight_log_data[:fat_percentage]
+
+  click_button button_name
+end
+
+def expect_to_click_link(button_name, expect_path)
+  first(:link, button_name).click
+  current_path.should == expect_path
+end
+
+def table_has_records?(record_count)
+  expect(page).to have_selector "table tr"
+  all("tr").length.should == (record_count + 1)
+end
+
+def has_form_error?
+  expect(page).to have_css "span.help-inline"
 end
 
 def application_message_for_test(symbol)

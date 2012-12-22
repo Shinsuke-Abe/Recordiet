@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'spec_helper'
 
-describe "ログインページ" do
+describe "ユーザ機能" do
 	before do
 		@eric = FactoryGirl.create(:eric)
 	end
@@ -11,134 +11,103 @@ describe "ログインページ" do
 		visit login_path
 		current_path.should == login_path
 
-		success_login_action(
-			:mail_address => jimmy.mail_address,
-			:display_name => jimmy.display_name,
-			:password => jimmy.password)
+		success_login_action jimmy
 
 		assert_weight_logs_page_without_logs_and_milestone
 	end
 
-	it "ユーザ登録が成功する" do
-		visit new_user_path
-		current_path.should == new_user_path
+	describe "ユーザ新規登録" do
+		before do
+			visit new_user_path
+			current_path.should == new_user_path
+		end
 
-		new_user_action(
-			:mail_address => "newuser@mail.com",
-			:display_name => "new user name",
-			:password => "userpass1234")
+		it "成功する" do
+			new_user_action(
+				:mail_address => "newuser@mail.com",
+				:display_name => "new user name",
+				:password => "userpass1234")
 
-		current_path.should == weight_logs_path
+			current_path.should == weight_logs_path
 
-		assert_weight_logs_page_without_logs_and_milestone
+			assert_weight_logs_page_without_logs_and_milestone
+		end
+
+		it "登録済のメールアドレスでの新規登録は失敗する" do
+			new_user_action(
+				:mail_address => @eric.mail_address,
+				:display_name => "duplicate user",
+				:password => "dup9876")
+
+			current_path.should == user_path
+			has_form_error?
+		end
 	end
 
-	it "登録済のメールアドレスでの新規登録は失敗する" do
-		visit new_user_path
-		current_path.should == new_user_path
+	describe "登録済のユーザ情報の操作" do
+		before do
+			visit login_path
+			current_path.should == login_path
 
-		new_user_action(
-			:mail_address => @eric.mail_address,
-			:display_name => "duplicate user",
-			:password => "dup9876")
+			success_login_action @eric
+		end
 
-		current_path.should == user_path
-		has_form_error?
-	end
+		describe "変更" do
+			before do
+				expect_to_click_link("ユーザ情報変更", edit_user_path)
 
-	it "ユーザ情報を変更する" do
-		visit login_path
-		current_path.should == login_path
+				asser_user_edit_form(
+					:mail_address => @eric.mail_address,
+					:display_name => @eric.display_name)
+			end
 
-		success_login_action(
-			:mail_address => @eric.mail_address,
-			:display_name => @eric.display_name,
-			:password => @eric.password)
+			it "成功する" do
+				new_eric_data = {
+					:mail_address => "new_eric@derek.com",
+					:display_name => "blind faith",
+					:password => "layla"
+				}
 
-		first(:link, "ユーザ情報変更").click
+				edit_user_action new_eric_data
 
-		current_path.should == edit_user_path
+				current_path.should == weight_logs_path
 
-		asser_user_edit_form(
-			:mail_address => @eric.mail_address,
-			:display_name => @eric.display_name)
+				expect_to_click_link("ログアウト", login_path)
 
-		new_eric_data = {
-			:mail_address => "new_eric@derek.com",
-			:display_name => "blind faith",
-			:password => "layla"
-		}
+				success_login_action new_eric_data
+			end
 
-		edit_user_action new_eric_data
+			it "ユーザ情報の変更に失敗する" do
+				new_eric_data = {
+					:mail_address => "new_eric@derek.com",
+					:display_name => "blind faith",
+					:password => nil
+				}
 
-		current_path.should == weight_logs_path
+				edit_user_action new_eric_data
 
-		first(:link, "ログアウト").click
+				current_path.should == user_path
+				has_form_error?
+			end
+		end
 
-		current_path.should == login_path
+		it "退会する" do
+		  expect_to_click_link("退会する", login_path)
 
-		success_login_action new_eric_data
-	end
-
-	it "ユーザ情報の変更に失敗する" do
-		visit login_path
-		current_path.should == login_path
-
-		success_login_action(
-			:mail_address => @eric.mail_address,
-			:display_name => @eric.display_name,
-			:password => @eric.password)
-
-		first(:link, "ユーザ情報変更").click
-
-		current_path.should == edit_user_path
-
-		asser_user_edit_form(
-			:mail_address => @eric.mail_address,
-			:display_name => @eric.display_name)
-
-		new_eric_data = {
-			:mail_address => "new_eric@derek.com",
-			:display_name => "blind faith",
-			:password => nil
-		}
-
-		edit_user_action new_eric_data
-
-		current_path.should == user_path
-		has_form_error?
-	end
-
-	it "退会する" do
-	  visit login_path
-	  current_path.should == login_path
-
-	  success_login_action(
-	  	:mail_address => @eric.mail_address,
-	  	:display_name => @eric.display_name,
-	  	:password => @eric.password)
-
-	  first(:link, "退会する").click
-
-	  current_path.should == login_path
-
-	  failed_login_action(
-	  	:mail_address => @eric.mail_address,
-	  	:password => @eric.password)
+		  failed_login_action(
+		  	:mail_address => @eric.mail_address,
+		  	:password => @eric.password)
+		end
 	end
 
 	it "ログアウトする" do
 	  visit login_path
 	  current_path.should == login_path
 
-	  success_login_action(
-	  	:mail_address => @eric.mail_address,
-	  	:display_name => @eric.display_name,
-	  	:password => @eric.password)
+	  success_login_action @eric
 
-	  first(:link, "ログアウト").click
+	  expect_to_click_link("ログアウト", login_path)
 
-	  current_path.should == login_path
 	  not_login_access weight_logs_path
 	end
 
@@ -158,19 +127,6 @@ describe "ログインページ" do
 		visit url
 	  current_path.should == login_path
 	  expect(find("div.alert.alert-block")).to have_content application_message_for_test(:login_required)
-	end
-
-	def input_and_post_login_data(auth_user_data)
-		fill_in "user_mail_address", :with => auth_user_data[:mail_address]
-	  fill_in "user_password", :with => auth_user_data[:password]
-	  click_button "ログイン"
-	end
-
-	def success_login_action(login_user_data)
-		input_and_post_login_data login_user_data
-
-		current_path.should == weight_logs_path
-		expect(find("#user_information_area")).to have_content(login_user_data[:display_name])
 	end
 
 	def failed_login_action(login_user_data)
@@ -209,9 +165,5 @@ describe "ログインページ" do
 		find_field("user_display_name").value.should == user_data[:display_name]
 		find_field("user_password").value.should be_nil
 
-	end
-
-	def has_form_error?
-		expect(page).to have_css "span.help-inline"
 	end
 end
