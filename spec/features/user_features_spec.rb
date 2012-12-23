@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe "ユーザ機能" do
 	before do
-		@eric = FactoryGirl.create(:eric)
+		@eric = FactoryGirl.create(:eric_with_weight_logs)
 	end
 
 	it "履歴未登録でログインすると履歴ページに未登録メッセージを表示する" do
@@ -27,6 +27,18 @@ describe "ユーザ機能" do
 				:mail_address => "newuser@mail.com",
 				:display_name => "new user name",
 				:password => "userpass1234")
+
+			current_path.should == weight_logs_path
+
+			assert_weight_logs_page_without_logs_and_milestone
+		end
+
+		it "身長も入力して成功する" do
+		  new_user_action(
+				:mail_address => "newuser@mail.com",
+				:display_name => "new user name",
+				:password => "userpass1234",
+				:height => 180.9)
 
 			current_path.should == weight_logs_path
 
@@ -66,6 +78,23 @@ describe "ユーザ機能" do
 					:mail_address => "new_eric@derek.com",
 					:display_name => "blind faith",
 					:password => "layla"
+				}
+
+				edit_user_action new_eric_data
+
+				current_path.should == weight_logs_path
+
+				expect_to_click_link("ログアウト", login_path)
+
+				success_login_action new_eric_data
+			end
+
+			it "身長も入力して成功する" do
+			  new_eric_data = {
+					:mail_address => "new_eric@derek.com",
+					:display_name => "blind faith",
+					:password => "layla",
+					:height => 170.2
 				}
 
 				edit_user_action new_eric_data
@@ -123,6 +152,17 @@ describe "ユーザ機能" do
     not_login_access edit_user_path
 	end
 
+	it "身長を入力するとBMI値エリアが表示される" do
+		@eric.update_attributes(:height => 170.1)
+
+		visit login_path
+		current_path.should == login_path
+
+		success_login_action @eric
+
+		find("#bmi_area").should_not be_nil
+	end
+
 	after do
 		FactoryGirl.reload
 	end
@@ -160,6 +200,7 @@ describe "ユーザ機能" do
 		fill_in "user_mail_address", :with => input_user_data[:mail_address]
 		fill_in "user_display_name", :with => input_user_data[:display_name]
 		fill_in "user_password", :with => input_user_data[:password]
+		fill_in "user_height", :with => input_user_data[:height]
 
 		click_button button_name
 	end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121201133513) do
+ActiveRecord::Schema.define(:version => 20121223081521) do
 
   create_table "achieved_milestone_logs", :force => true do |t|
     t.date     "achieved_date"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(:version => 20121201133513) do
     t.string   "password_digest"
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
+    t.float    "height"
   end
 
   create_table "weight_logs", :force => true do |t|

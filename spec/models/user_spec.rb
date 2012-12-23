@@ -157,6 +157,94 @@ describe User do
     end
   end
 
+  describe "身長の追加" do
+    before do
+      @new_user_data = {
+        :mail_address => "newuser@mail.com",
+        :display_name => "new user name",
+        :password => "password",
+        :height => 160.5
+      }
+    end
+
+    it "身長を追加可能" do
+      new_user = User.new(@new_user_data)
+
+      new_user.valid?.should be_true
+    end
+
+    it "身長を登録可能" do
+      new_user = User.create(@new_user_data)
+
+      new_user.height.should == 160.5
+    end
+  end
+
+  describe ".bmi,ponderal_index" do
+    it "体重履歴がない場合はnilが返る" do
+      eric = FactoryGirl.create(:eric)
+      eric.update_attributes(:height => 178.2)
+
+      eric.bmi.should be_nil
+      eric.ponderal_index.should be_nil
+    end
+
+    it "体重履歴があっても身長の設定がない場合はnilが返る" do
+      eric = FactoryGirl.create(:eric_with_weight_logs)
+
+      eric.bmi.should be_nil
+      eric.ponderal_index.should be_nil
+    end
+
+    it "体重履歴があって身長の設定がある場合はbmiが計算される" do
+      eric = FactoryGirl.create(:eric_with_weight_logs)
+      eric.update_attributes(:height => 178.2)
+
+      expected_bmi = (eric.latest_weight_log.weight / ((eric.height/100)**2)).round(2)
+      eric.bmi.should == expected_bmi
+    end
+
+    # 正確な境界値が求めづらいので以下で範囲を取る(体重は75.4kg)
+    # 2.1m やせ => 1
+    # 1.8m 標準 => 2
+    # 1.6m 肥満度1 => 3
+    # 1.5m 肥満度2 => 4
+    # 1.4m 肥満度3 => 5
+    # 1.3m 肥満度4 => 6
+
+    it "bmiが18.5未満の場合は肥満度が1となる" do
+      assert_ponderal_index(210.0, 1, "やせ型")
+    end
+
+    it "bmiが18.5以上25未満の場合は肥満度が2となる" do
+      assert_ponderal_index(180.0, 2, "標準")
+    end
+
+    it "bmiが25以上30未満の場合は肥満度が3となる" do
+      assert_ponderal_index(160.0, 3, "肥満(肥満度1)")
+    end
+
+    it "bmiが30以上35未満の場合は肥満度が4となる" do
+      assert_ponderal_index(150.0, 4, "肥満(肥満度2)")
+    end
+
+    it "bmiが35以上40未満の場合は肥満度が5となる" do
+      assert_ponderal_index(140.0, 5, "肥満(肥満度3)")
+    end
+
+    it "bmiが40以上の場合は肥満度が6となる" do
+      assert_ponderal_index(130.0, 6, "肥満(肥満度4)")
+    end
+
+    def assert_ponderal_index(height, expected_index, expected_display)
+      eric = FactoryGirl.create(:eric_with_weight_logs)
+      eric.update_attributes(:height => height)
+
+      eric.ponderal_index.should == expected_index
+      eric.display_ponderal_index == expected_display
+    end
+  end
+
   after do
     FactoryGirl.reload
   end

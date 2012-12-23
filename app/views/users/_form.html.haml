@@ -5,4 +5,6 @@
     = f.input :display_name
   .control-group
     = f.input :password
+  .control_group
+    = f.input :height, :input_html => {:step => 0.1, :class => "span1"}
   .form-actions= f.submit nil, :class => "btn btn-success btn-large"
