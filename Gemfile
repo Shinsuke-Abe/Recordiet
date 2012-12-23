@@ -73,3 +73,6 @@ gem 'simple_form'
 gem 'googlecharts'
 
 gem 'capybara'
+
+# To use kaminari to weight_log paging
+gem 'kaminari'
