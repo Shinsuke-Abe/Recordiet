@@ -135,6 +135,10 @@ describe "体重履歴機能" do
 		end
 	end
 
+	after do
+		FactoryGirl.reload
+	end
+
 	def expect_to_click_table_link(record_index, button_name, expect_path)
 		table_record(record_index).first(:link, button_name).click
 		current_path.should == expect_path

@@ -57,4 +57,8 @@ describe WeightLogsController do
 			response.should redirect_to weight_logs_path
 		end
 	end
+
+	after do
+		FactoryGirl.reload
+	end
 end
