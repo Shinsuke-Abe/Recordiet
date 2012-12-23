@@ -108,6 +108,10 @@ describe "目標管理機能" do
 	  expect_to_click_link("目標達成履歴", achieved_milestone_logs_path)
 	end
 
+	after do
+		FactoryGirl.reload
+	end
+
 	def create_milestone_action(new_milestone_data)
 		input_and_post_milestone_action(new_milestone_data, "登録する")
 	end

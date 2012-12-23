@@ -23,6 +23,10 @@ describe WeightLogsHelper do
 		expect(chart_url.include? chart_datas(@eric.weight_logs, @eric.milestone.weight)).to be_true
 	end
 
+	after do
+		FactoryGirl.reload
+	end
+
 	def chart_date_axis_label(weight_logs)
 		axis_label_arr = weight_logs.reverse.map do |weight_log|
 			weight_log.measured_date.month.to_s + "%2F" +

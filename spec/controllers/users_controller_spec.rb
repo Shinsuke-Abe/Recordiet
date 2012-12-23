@@ -57,4 +57,8 @@ describe UsersController do
       session[:id].should be_nil
     end
   end
+
+  after do
+    FactoryGirl.reload
+  end
 end

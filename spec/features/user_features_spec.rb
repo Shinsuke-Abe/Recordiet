@@ -123,6 +123,10 @@ describe "ユーザ機能" do
     not_login_access edit_user_path
 	end
 
+	after do
+		FactoryGirl.reload
+	end
+
 	def not_login_access(url)
 		visit url
 	  current_path.should == login_path

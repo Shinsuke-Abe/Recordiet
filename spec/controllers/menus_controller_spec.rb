@@ -63,4 +63,8 @@ describe MenusController do
 			response.should redirect_to weight_log_menus_path
 		end
 	end
+
+	after do
+		FactoryGirl.reload
+	end
 end
