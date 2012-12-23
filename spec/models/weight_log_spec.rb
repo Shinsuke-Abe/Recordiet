@@ -177,6 +177,25 @@ describe WeightLog do
     end
   end
 
+  describe "ページング設定" do
+    before do
+      @eric = FactoryGirl.create(:eric_with_weight_logs, weight_logs_count: 17)
+    end
+
+    it "1ページあたり15ページとする" do
+      @eric.weight_logs.page(1).length.should == 15
+      @eric.weight_logs.page(2).length.should == 2
+
+      @eric.weight_logs.page(1)[0].id.should == @eric.latest_weight_log.id
+    end
+
+    it "ページ番号未指定の場合は最初のページを表示する" do
+      @eric.weight_logs.page(nil).length.should == 15
+
+      @eric.weight_logs.page(nil)[0].id.should == @eric.latest_weight_log.id
+    end
+  end
+
   after do
     FactoryGirl.reload
   end
