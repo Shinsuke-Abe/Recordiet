@@ -16,6 +16,18 @@ describe "体重履歴機能" do
 	  table_has_records? @eric.weight_logs.length
 	end
 
+	it "登録済の履歴が16件以上の場合は履歴がページングされる" do
+		FactoryGirl.create_list(:weight_log, 15, user: @eric)
+		visit weight_logs_path
+
+		current_path.should == weight_logs_path
+
+		table_has_records? 15
+		# TODO ページネーションの追加、navタグの確認
+	end
+
+	# TODO ページング2ページ目の確認
+
 	it "体重履歴を登録する" do
 		expected_logs_length = @eric.weight_logs.length + 1
 

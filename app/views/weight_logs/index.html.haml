@@ -24,7 +24,7 @@
             %th
             %th
         %tbody
-          - current_user.weight_logs.each do |weight_log|
+          - current_user.weight_logs.page(params[:page]).each do |weight_log|
             %tr
               %td= weight_log.measured_date
               %td= weight_log.weight
@@ -41,5 +41,5 @@
       = image_tag create_chart(current_user, "体重"){|data| data.weight}
     #fat_chart.tab-pane
       = image_tag create_chart(current_user, "体脂肪率"){|data| data.fat_percentage}
-      
+
 
