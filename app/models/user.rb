@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
 
   def bmi
     if latest_weight_log and height
-      (latest_weight_log.weight / ((height / 100) ** 2)).round(2)
+      (latest_weight_log.weight / ((height / 100) ** 2)).round(1)
     end
   end
 

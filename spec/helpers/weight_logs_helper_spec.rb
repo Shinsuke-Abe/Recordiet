@@ -11,16 +11,29 @@ describe WeightLogsHelper do
 	end
 
 	it "目標のある体重履歴でグラフを作成する" do
-		chart_url = create_chart(@eric, "体重") do |data|
+		chart_url = create_chart(@eric, "体重", nil) do |data|
 			data.weight
 		end
 
 		expect(chart_url.include? "chco=3300FF,FF99CC").to be_true
-		expect(chart_url.include? chart_date_axis_label(@eric.weight_logs)).to be_true
-		expect(chart_url.include? chart_data_scale(@eric.weight_logs)).to be_true
+		expect(chart_url.include? chart_date_axis_label(@eric.weight_logs.page(nil))).to be_true
 		expect(chart_url.include? chart_legend(true)).to be_true
-		expect(chart_url.include? chart_range(@eric.weight_logs)).to be_true
-		expect(chart_url.include? chart_datas(@eric.weight_logs, @eric.milestone.weight)).to be_true
+		expect(chart_url.include? chart_range(@eric.weight_logs.page(nil))).to be_true
+		expect(chart_url.include? chart_datas(@eric.weight_logs.page(nil), @eric.milestone.weight)).to be_true
+	end
+
+	it "ページを指定してグラフを作成する" do
+	  FactoryGirl.create_list(:weight_log, 17, user: @eric)
+
+	  chart_url = create_chart(@eric, "体重", 2) do |data|
+	  	data.weight
+	  end
+
+	  expect(chart_url.include? "chco=3300FF,FF99CC").to be_true
+	  expect(chart_url.include? chart_date_axis_label(@eric.weight_logs.page(2))).to be_true
+	  expect(chart_url.include? chart_legend(true)).to be_true
+	  expect(chart_url.include? chart_range(@eric.weight_logs.page(2))).to be_true
+	  expect(chart_url.include? chart_datas(@eric.weight_logs.page(2), @eric.milestone.weight)).to be_true
 	end
 
 	after do
@@ -29,15 +42,11 @@ describe WeightLogsHelper do
 
 	def chart_date_axis_label(weight_logs)
 		axis_label_arr = weight_logs.reverse.map do |weight_log|
-			weight_log.measured_date.month.to_s + "%2F" +
-			weight_log.measured_date.day.to_s
+			weight_log.measured_date.strftime("%m") + "%2F" +
+			weight_log.measured_date.strftime("%d")
 		end
 
 		sprintf("chxl=0:|%s", axis_label_arr.join("|"))
-	end
-
-	def chart_data_scale(weight_logs)
-		sprintf("chds=0,%s", max_data(weight_logs))
 	end
 
 	def chart_legend(has_milestone)

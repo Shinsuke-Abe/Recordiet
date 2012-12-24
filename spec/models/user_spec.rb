@@ -200,7 +200,7 @@ describe User do
       eric = FactoryGirl.create(:eric_with_weight_logs)
       eric.update_attributes(:height => 178.2)
 
-      expected_bmi = (eric.latest_weight_log.weight / ((eric.height/100)**2)).round(2)
+      expected_bmi = (eric.latest_weight_log.weight / ((eric.height/100)**2)).round(1)
       eric.bmi.should == expected_bmi
     end
 

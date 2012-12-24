@@ -68,7 +68,7 @@
             - if current_user.bmi
               %h4{:id => "bmi_area"}
                 %div
-                  = format("BMI値：%d", current_user.bmi)
+                  = format("BMI値：%s", current_user.bmi.to_s)
                 %div
                   = format("あなたの肥満度は %s", current_user.display_ponderal_index)
       %footer

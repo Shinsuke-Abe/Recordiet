@@ -23,10 +23,8 @@ describe "体重履歴機能" do
 		current_path.should == weight_logs_path
 
 		table_has_records? 15
-		# TODO ページネーションの追加、navタグの確認
+		find("nav.pagination").should_not be_nil
 	end
-
-	# TODO ページング2ページ目の確認
 
 	it "体重履歴を登録する" do
 		expected_logs_length = @eric.weight_logs.length + 1
