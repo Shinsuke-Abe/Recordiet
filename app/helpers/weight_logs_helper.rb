@@ -8,21 +8,23 @@ module WeightLogsHelper
         yield weight_log
       end
 
-      trim_value = trim_range(data_arr, user) do |milestone|
-        yield milestone
+      unless data_arr.select{|data| data}.empty?
+        trim_value = trim_range(data_arr, user) do |milestone|
+          yield milestone
+        end
+
+        chart_arg = chart_basic(data_arr, axis_arr, trim_value)
+
+        if user.milestone and
+           yield user.milestone
+          milestone = yield user.milestone
+          chart_arg[:data] << Array.new(data_arr.size, milestone - trim_value)
+          chart_arg[:bar_colors] += ",FF99CC"
+          chart_arg[:legend] = [data_legend, "目標"]
+        end
+
+        Gchart.line(chart_arg)
       end
-
-      chart_arg = chart_basic(data_arr, axis_arr, trim_value)
-
-      if user.milestone and
-         yield user.milestone
-        milestone = yield user.milestone
-        chart_arg[:data] << Array.new(data_arr.size, milestone - trim_value)
-        chart_arg[:bar_colors] += ",FF99CC"
-        chart_arg[:legend] = [data_legend, "目標"]
-      end
-
-      Gchart.line(chart_arg)
     end
   end
 
