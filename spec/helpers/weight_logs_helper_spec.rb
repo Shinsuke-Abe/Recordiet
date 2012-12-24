@@ -15,11 +15,13 @@ describe WeightLogsHelper do
 			data.weight
 		end
 
+		trim_range_num = expected_trim_range(@eric.weight_logs.page(nil), @eric.milestone.weight)
+
 		expect(chart_url.include? "chco=3300FF,FF99CC").to be_true
 		expect(chart_url.include? chart_date_axis_label(@eric.weight_logs.page(nil))).to be_true
 		expect(chart_url.include? chart_legend(true)).to be_true
-		expect(chart_url.include? chart_range(@eric.weight_logs.page(nil))).to be_true
-		expect(chart_url.include? chart_datas(@eric.weight_logs.page(nil), @eric.milestone.weight)).to be_true
+		expect(chart_url.include? chart_range(trim_range_num, @eric.weight_logs.page(nil))).to be_true
+		expect(chart_url.include? chart_datas(@eric.weight_logs.page(nil), @eric.milestone.weight, trim_range_num)).to be_true
 	end
 
 	it "ページを指定してグラフを作成する" do
@@ -29,11 +31,13 @@ describe WeightLogsHelper do
 	  	data.weight
 	  end
 
+	  trim_range_num = expected_trim_range(@eric.weight_logs.page(2), @eric.milestone.weight)
+
 	  expect(chart_url.include? "chco=3300FF,FF99CC").to be_true
 	  expect(chart_url.include? chart_date_axis_label(@eric.weight_logs.page(2))).to be_true
 	  expect(chart_url.include? chart_legend(true)).to be_true
-	  expect(chart_url.include? chart_range(@eric.weight_logs.page(2))).to be_true
-	  expect(chart_url.include? chart_datas(@eric.weight_logs.page(2), @eric.milestone.weight)).to be_true
+	  expect(chart_url.include? chart_range(trim_range_num, @eric.weight_logs.page(2))).to be_true
+	  expect(chart_url.include? chart_datas(@eric.weight_logs.page(2), @eric.milestone.weight, trim_range_num)).to be_true
 	end
 
 	after do
@@ -57,18 +61,23 @@ describe WeightLogsHelper do
 		end
 	end
 
-	def chart_range(weight_logs)
-		sprintf("chxr=1,0,%s,5", max_data(weight_logs))
+	def chart_range(trim_range, weight_logs)
+		sprintf("chxr=1,%s,%s,5", trim_range, max_data(weight_logs))
 	end
 
-	def chart_datas(weight_logs, milestone_weight)
-		data_arr = weight_logs.reverse.map{ |weight_log| weight_log.weight }
-		milestone_arr = Array.new(data_arr.length, milestone_weight)
+	def chart_datas(weight_logs, milestone_weight, trim_range)
+		data_arr = weight_logs.reverse.map{ |weight_log| weight_log.weight - trim_range }
+		milestone_arr = Array.new(data_arr.length, milestone_weight - trim_range)
 
 		sprintf("chd=t:%s|%s", data_arr.join(","), milestone_arr.join(","))
 	end
 
 	def max_data(weight_logs)
 		weight_logs.map{ |weight_log| weight_log.weight}.max
+	end
+
+	def expected_trim_range(weight_logs, milestone_weight)
+		min_value = (weight_logs.map{|weight_log| weight_log.weight} << milestone_weight).min
+		((min_value - 10) / 5).truncate * 5
 	end
 end
