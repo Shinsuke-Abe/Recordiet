@@ -4,21 +4,15 @@ require 'gchart'
 module WeightLogsHelper
   def create_chart(user, data_legend, page_no)
     unless user.weight_logs.empty?
-      p "チャート生成開始"
       data_arr, axis_arr = chart_arrays(user, page_no) do |weight_log|
         yield weight_log
       end
 
-      p "データ取得完了"
-      p data_arr
       unless data_arr.select{|data| data}.empty?
-        p "チャート描画開始"
         trim_value = trim_range(data_arr, user) do |milestone|
           yield milestone
         end
 
-        p "トリム"
-        p trim_value
         chart_arg = chart_basic(data_arr, axis_arr, trim_value)
 
         if user.milestone and

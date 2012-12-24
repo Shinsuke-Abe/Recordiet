@@ -39,8 +39,10 @@
                 = link_to "食事内容追加", new_weight_log_menu_path(weight_log), :class => "btn btn-mini"
       = paginate current_user.weight_logs.page(params[:page])
     #weight_chart.tab-pane
-      = image_tag create_chart(current_user, "体重", params[:page]){|data| data.weight}
+      - if weight_chart_url = create_chart(current_user, "体重", params[:page]){|data| data.weight}
+        = image_tag weight_chart_url
     #fat_chart.tab-pane
-      = image_tag create_chart(current_user, "体脂肪率", params[:page]){|data| data.fat_percentage}
+      - if fat_percentage_chart_url = create_chart(current_user, "体脂肪率", params[:page]){|data| data.fat_percentage}
+        = image_tag fat_percentage_chart_url
 
 
