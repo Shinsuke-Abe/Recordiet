@@ -164,11 +164,13 @@ describe "ユーザ機能" do
 	end
 
 	describe "管理者権限の確認" do
-		it "管理者権限がある場合は管理者メニューを表示" do
-			admin = FactoryGirl.create(:admin)
+		before do
+			@admin = FactoryGirl.create(:admin)
+		end
 
+		it "管理者権限がある場合は管理者メニューを表示" do
 			visit login_path
-			success_login_action admin
+			success_login_action @admin
 
 			page.should have_link "管理者メニュー"
 		end
@@ -181,19 +183,36 @@ describe "ユーザ機能" do
 		end
 
 		it "管理者メニューをクリックした場合は再度パスワードを要求する" do
-		  admin = FactoryGirl.create(:admin)
-
 		  visit login_path
-		  success_login_action admin
+		  success_login_action @admin
 
 		  expect_to_click_link("管理者メニュー", admin_confirm_path)
 
-		  find_field("user_password").value.should be_nil
+		  find_field("confirm_password").value.should be_nil
+		end
+
+		it "管理者ログイン認証に失敗した場合は管理者ログインフォームが再表示される" do
+			visit login_path
+			success_login_action @admin
+
+			expect_to_click_link("管理者メニュー", admin_confirm_path)
+
+			find_field("confirm_password").value.should be_nil
+
+			input_admin_confirm_password_and_post("invalid_password", false)
+			# TODO エラー表示
+		end
+
+		it "管理者ログイン認証に成功した場合は管理者メニューが表示される" do
+		  visit login_path
+		  success_login_action @admin
+
+		  expect_to_click_link("管理者メニュー", admin_confirm_path)
+
+		  input_admin_confirm_password_and_post(@admin.password, true)
 		end
 	end
 
-	# TODO 管理者メニューをクリックした場合は再度パスワードを要求する
-	# TODO 管理者ログイン認証に失敗した場合は管理者ログインフォームが再表示される
 	# TODO 管理者ログイン認証に成功した場合は管理者メニューが表示される
 	# TODO 管理者ログイン認証成功後に管理者メニューをクリックすると管理者メニューが表示される
 	# 以下は新しいfeature_specを切る
@@ -251,6 +270,16 @@ describe "ユーザ機能" do
 		find_field("user_mail_address").value.should == user_data[:mail_address]
 		find_field("user_display_name").value.should == user_data[:display_name]
 		find_field("user_password").value.should be_nil
+	end
 
+	def input_admin_confirm_password_and_post(password, valid_password)
+		fill_in "confirm_password", :with => password
+		click_button "確認"
+
+		if valid_password
+			current_path.should == admin_menu_path
+		else
+			current_path.should == admin_confirm_path
+		end
 	end
 end

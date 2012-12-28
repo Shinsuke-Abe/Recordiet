@@ -10,6 +10,7 @@ Recordiet::Application.routes.draw do
 
   namespace :admin do
     resource :confirm
+    resource :menu
   end
 
   # The priority is based upon order of creation:
