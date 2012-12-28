@@ -170,12 +170,32 @@ describe "ユーザ機能" do
 			visit login_path
 			success_login_action admin
 
-			expect(page).to have_link "管理者メニュー"
+			page.should have_link "管理者メニュー"
+		end
+
+		it "管理者権限がない場合は管理者メニューを表示しない" do
+		  visit login_path
+		  success_login_action @eric
+
+		  page.should_not have_link "管理者メニュー"
+		end
+
+		it "管理者メニューをクリックした場合は再度パスワードを要求する" do
+		  admin = FactoryGirl.create(:admin)
+
+		  visit login_path
+		  success_login_action admin
+
+		  expect_to_click_link("管理者メニュー", admin_confirm_path)
+
+		  find_field("user_password").value.should be_nil
 		end
 	end
 
-	# TODO 管理者権限がない場合は管理者メニューを表示しない
 	# TODO 管理者メニューをクリックした場合は再度パスワードを要求する
+	# TODO 管理者ログイン認証に失敗した場合は管理者ログインフォームが再表示される
+	# TODO 管理者ログイン認証に成功した場合は管理者メニューが表示される
+	# TODO 管理者ログイン認証成功後に管理者メニューをクリックすると管理者メニューが表示される
 	# 以下は新しいfeature_specを切る
 	# TODO 管理者メニューにはお知らせ管理リンクが表示されている
 	# TODO お知らせ管理メニューでは今の有効な一覧を表示する

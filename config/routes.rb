@@ -1,12 +1,16 @@
 Recordiet::Application.routes.draw do
   resource :login
   resource :user
-  
+
   resources :weight_logs do
     resources :menus
   end
   resource :milestone
   resources :achieved_milestone_logs
+
+  namespace :admin do
+    resource :confirm
+  end
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

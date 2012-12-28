@@ -1,0 +1,6 @@
+ここから先は管理者メニューです。
+本人確認のため、再度パスワードを入力して下さい。
+
+= simple_form_for @user, :url => {:action => "create"} do |f|
+  .field= f.input :password
+  .actions= f.submit "確認", :class => "btn btn-success"
