@@ -163,6 +163,28 @@ describe "ユーザ機能" do
 		find("#bmi_area").should_not be_nil
 	end
 
+	describe "管理者権限の確認" do
+		it "管理者権限がある場合は管理者メニューを表示" do
+			admin = FactoryGirl.create(:admin)
+
+			visit login_path
+			success_login_action admin
+
+			expect(page).to have_link "管理者メニュー"
+		end
+	end
+
+	# TODO 管理者権限がない場合は管理者メニューを表示しない
+	# TODO 管理者メニューをクリックした場合は再度パスワードを要求する
+	# 以下は新しいfeature_specを切る
+	# TODO 管理者メニューにはお知らせ管理リンクが表示されている
+	# TODO お知らせ管理メニューでは今の有効な一覧を表示する
+	# TODO お知らせの新規追加可能
+	# TODO お知らせの変更可能
+	# TODO お知らせの削除
+	# 以下はweight_logs_features_spec
+	# TODO 表示される
+
 	after do
 		FactoryGirl.reload
 	end

@@ -76,4 +76,11 @@ FactoryGirl.define do
       end
     end
   end
+
+  factory :admin, class: User do
+    mail_address "admin@mail.com"
+    display_name "管理者"
+    password "adminidtrator"
+    is_administrator true
+  end
 end

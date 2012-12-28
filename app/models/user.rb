@@ -3,7 +3,7 @@ require 'bcrypt'
 
 class User < ActiveRecord::Base
   attr_accessor :password
-  attr_accessible :display_name, :mail_address, :height, :password_digest, :password
+  attr_accessible :display_name, :mail_address, :height, :password_digest, :password, :is_administrator
 
   validates :mail_address, :display_name, :password, :presence => true
   validates :mail_address, :uniqueness => true, :email_format => true

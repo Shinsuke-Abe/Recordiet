@@ -180,6 +180,31 @@ describe User do
     end
   end
 
+  describe "管理者フラグを追加" do
+    before do
+      @new_user_data = {
+        :mail_address => "newuser@mail.com",
+        :display_name => "new user name",
+        :password => "password",
+        :height => 160.5,
+        :is_administrator => true
+      }
+    end
+
+    it "管理者フラグを追加可能" do
+      new_user = User.new(@new_user_data)
+
+      expect(new_user.valid?).to be_true
+      expect(new_user.is_administrator).to be_true
+    end
+
+    it "管理者フラグを登録可能" do
+      new_user = User.create(@new_user_data)
+
+      expect(new_user.is_administrator).to be_true
+    end
+  end
+
   describe ".bmi,ponderal_index" do
     it "体重履歴がない場合はnilが返る" do
       eric = FactoryGirl.create(:eric)
