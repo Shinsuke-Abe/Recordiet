@@ -22,4 +22,21 @@ describe "管理者メニュー機能" do
 
 	  page.should have_link "お知らせ管理"
 	end
+
+	describe "お知らせ管理メニュー" do
+		it "お知らせ一覧の表示" do
+		  admin = FactoryGirl.create(:admin)
+
+		  visit login_path
+		  success_login_action admin
+
+		  expect_to_click_link("管理者メニュー", admin_confirm_path)
+
+		  input_admin_confirm_password_and_post(admin.password, true)
+
+		  current_path.should == admin_menu_path
+
+		  expect_to_click_link("お知らせ管理", admin_notification_path)
+		end
+	end
 end
