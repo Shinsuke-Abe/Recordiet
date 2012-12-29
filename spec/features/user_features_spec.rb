@@ -211,10 +211,21 @@ describe "ユーザ機能" do
 
 		  input_admin_confirm_password_and_post(@admin.password, true)
 		end
+
+		it "管理者ログイン認証成功後に管理者メニューをクリックすると管理者メニューが即時表示される" do
+		  visit login_path
+		  success_login_action @admin
+
+		  expect_to_click_link("管理者メニュー", admin_confirm_path)
+
+		  input_admin_confirm_password_and_post(@admin.password, true)
+
+		  expect_to_click_link("体重履歴", weight_logs_path)
+
+		  expect_to_click_link("管理者メニュー", admin_menu_path)
+		end
 	end
 
-	# TODO 管理者ログイン認証に成功した場合は管理者メニューが表示される
-	# TODO 管理者ログイン認証成功後に管理者メニューをクリックすると管理者メニューが表示される
 	# 以下は新しいfeature_specを切る
 	# TODO 管理者メニューにはお知らせ管理リンクが表示されている
 	# TODO お知らせ管理メニューでは今の有効な一覧を表示する

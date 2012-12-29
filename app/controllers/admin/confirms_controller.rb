@@ -9,7 +9,7 @@ class Admin::ConfirmsController < ApplicationController
 	def create
 		password = params[:confirm][:password]
 
-		if User.authenticate(current_user.mail_address, password)
+		if sign_in_as_admin(current_user.mail_address, password)
 			redirect_to admin_menu_path
 		else
 			render "show"
