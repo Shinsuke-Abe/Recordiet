@@ -80,6 +80,17 @@ def input_and_post_weight_log_action(input_weight_log_data, button_name)
   click_button button_name
 end
 
+def input_admin_confirm_password_and_post(password, valid_password)
+  fill_in "confirm_password", :with => password
+  click_button "確認"
+
+  if valid_password
+    current_path.should == admin_menu_path
+  else
+    current_path.should == admin_confirm_path
+  end
+end
+
 def expect_to_click_link(button_name, expect_path)
   first(:link, button_name).click
   current_path.should == expect_path

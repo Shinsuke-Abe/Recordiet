@@ -226,15 +226,6 @@ describe "ユーザ機能" do
 		end
 	end
 
-	# 以下は新しいfeature_specを切る
-	# TODO 管理者メニューにはお知らせ管理リンクが表示されている
-	# TODO お知らせ管理メニューでは今の有効な一覧を表示する
-	# TODO お知らせの新規追加可能
-	# TODO お知らせの変更可能
-	# TODO お知らせの削除
-	# 以下はweight_logs_features_spec
-	# TODO 表示される
-
 	after do
 		FactoryGirl.reload
 	end
@@ -281,16 +272,5 @@ describe "ユーザ機能" do
 		find_field("user_mail_address").value.should == user_data[:mail_address]
 		find_field("user_display_name").value.should == user_data[:display_name]
 		find_field("user_password").value.should be_nil
-	end
-
-	def input_admin_confirm_password_and_post(password, valid_password)
-		fill_in "confirm_password", :with => password
-		click_button "確認"
-
-		if valid_password
-			current_path.should == admin_menu_path
-		else
-			current_path.should == admin_confirm_path
-		end
 	end
 end
