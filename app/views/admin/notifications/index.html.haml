@@ -1,0 +1,25 @@
+=link_to "新規作成", new_admin_notification_path
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th 表示開始日
+      %th 表示終了日
+      %th 重要
+      %th 内容
+      %th 期限切れ
+      %th
+  %tbody
+    - @notifications.each do |notification|
+      %tr
+        %td= notification.start_date.to_s
+        %td= notification.end_date.to_s
+        %td
+          - if notification.is_important
+            = "○"
+        %td= simple_format(notification.content)
+        %td
+        %td
+          = render :partial => "iterate_item_buttons",
+                   :object => {:edit_path => edit_admin_notification_path(notification.id),
+                               :delete_path => admin_notification_path(notification.id)}

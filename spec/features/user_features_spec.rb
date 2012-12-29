@@ -150,6 +150,12 @@ describe "ユーザ機能" do
     not_login_access achieved_milestone_logs_path
 
     not_login_access edit_user_path
+
+    not_login_access admin_confirm_path
+
+    not_login_access admin_menu_path
+
+    not_login_access admin_notifications_path
 	end
 
 	it "身長を入力するとBMI値エリアが表示される" do

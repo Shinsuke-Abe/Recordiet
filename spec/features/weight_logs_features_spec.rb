@@ -149,15 +149,6 @@ describe "体重履歴機能" do
 		FactoryGirl.reload
 	end
 
-	def expect_to_click_table_link(record_index, button_name, expect_path)
-		table_record(record_index).first(:link, button_name).click
-		current_path.should == expect_path
-	end
-
-	def table_record(record_index)
-		find("tbody").all("tr")[record_index]
-	end
-
 	def edit_weight_log_action(update_weight_log_data)
 		input_and_post_weight_log_action(update_weight_log_data, "更新する")
 	end

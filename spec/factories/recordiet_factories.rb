@@ -83,4 +83,11 @@ FactoryGirl.define do
     password "adminidtrator"
     is_administrator true
   end
+
+  factory :notification do
+    sequence(:start_date) {|n| Date.yesterday - n.days}
+    sequence(:end_date) {|n| Date.today + 1.days}
+    is_important true
+    sequence(:content) {|n| "テストお知らせ\n#{n}"}
+  end
 end

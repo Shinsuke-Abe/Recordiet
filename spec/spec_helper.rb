@@ -101,6 +101,15 @@ def table_has_records?(record_count)
   all("tr").length.should == (record_count + 1)
 end
 
+def expect_to_click_table_link(record_index, button_name, expect_path)
+  table_record(record_index).first(:link, button_name).click
+  current_path.should == expect_path
+end
+
+def table_record(record_index)
+  find("tbody").all("tr")[record_index]
+end
+
 def has_form_error?
   expect(page).to have_css "span.help-inline"
 end
