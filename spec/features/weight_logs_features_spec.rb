@@ -145,6 +145,9 @@ describe "体重履歴機能" do
 		end
 	end
 
+	# TODO 有効期間内のお知らせが表示される
+	# TODO I18nの登録
+
 	after do
 		FactoryGirl.reload
 	end

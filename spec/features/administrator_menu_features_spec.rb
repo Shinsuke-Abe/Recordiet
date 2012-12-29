@@ -2,11 +2,6 @@
 require 'spec_helper'
 
 describe "管理者メニュー機能" do
-	# TODO お知らせ管理メニューでは今の有効な一覧を表示する
-	# TODO お知らせの削除
-	# 以下はweight_logs_features_spec
-	# TODO 表示される
-	# TODO I18nの登録
 	before do
 		@admin = FactoryGirl.create(:admin)
 
@@ -62,12 +57,14 @@ describe "管理者メニュー機能" do
 		end
 
 		describe "お知らせ変更フォーム" do
+			before do
+				@notifications = FactoryGirl.create_list(:notification, 5)
+
+				visit admin_notifications_path
+			end
+
 			it "変更が正常に終了する" do
-			  notifications = FactoryGirl.create_list(:notification, 5)
-
-			  visit admin_notifications_path
-
-			  expect_to_click_table_link(1, "変更", edit_admin_notification_path(notifications[1].id))
+			  expect_to_click_table_link(1, "変更", edit_admin_notification_path(@notifications[1].id))
 
 			  edit_notification_action(
 			  	:start_date => Date.today - 30.days,
@@ -77,6 +74,32 @@ describe "管理者メニュー機能" do
 
 			  current_path.should == admin_notifications_path
 			end
+
+			it "変更でエラーが発生する" do
+			  expect_to_click_table_link(2, "変更", edit_admin_notification_path(@notifications[2].id))
+
+			  edit_notification_action(
+			  	:start_date => Date.today + 25.days,
+			  	:end_date => Date.today + 15.days,
+			  	:is_important => false,
+			  	:content => nil)
+
+			  current_path.should == admin_notification_path(@notifications[2].id)
+			  has_form_error?
+			end
+		end
+
+		it "指定したお知らせを削除できる" do
+		  notifications = FactoryGirl.create_list(:notification, 5)
+		  expected_length = notifications.length - 1
+
+		  visit admin_notifications_path
+
+		  table_has_records? notifications.length
+
+		  expect_to_click_table_link(3, "削除", admin_notifications_path)
+
+		  table_has_records? expected_length
 		end
 
 		def create_notification_action(new_notification)
@@ -104,5 +127,9 @@ describe "管理者メニュー機能" do
 
 		  click_button button_name
 		end
+	end
+
+	after do
+	  FactoryGirl.reload
 	end
 end

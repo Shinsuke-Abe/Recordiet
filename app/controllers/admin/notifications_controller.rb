@@ -2,7 +2,7 @@
 class Admin::NotificationsController < ApplicationController
 	before_filter :authenticate_user!
 	before_filter :authenticate_admin!
-	before_filter :load_notification, :only => [:edit, :update]
+	before_filter :load_notification, :only => [:edit, :update, :destroy]
 
 	def index
 		@notifications = Notification.all
@@ -32,6 +32,12 @@ class Admin::NotificationsController < ApplicationController
 		else
 			render :action => "edit"
 		end
+	end
+
+	def destroy
+		@notification.destroy
+
+		redirect_to admin_notifications_path
 	end
 
 	private
