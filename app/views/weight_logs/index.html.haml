@@ -1,3 +1,5 @@
+- if flash[:system_notification]
+  = render :partial => "system_notification", :object => flash[:system_notification]
 - if flash[:success]
   = render :partial => "success", :object => flash[:success]
 

@@ -201,6 +201,7 @@ ja:
         mail_address: "メールアドレス"
         password: "パスワード"
         height: "身長"
+        is_administrator: "管理者"
       weight_log:
         measured_date: "計測日"
         weight: "体重"
@@ -217,6 +218,11 @@ ja:
       menu:
         menu_type: "種類"
         detail: "食事内容"
+      notification:
+        start_date: "開始日"
+        end_date: "終了日"
+        is_important: "重要なお知らせ"
+        content: "内容"
   controllers:
       users: "ユーザ情報"
       weight_logs: "体重履歴"

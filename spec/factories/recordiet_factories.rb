@@ -90,4 +90,32 @@ FactoryGirl.define do
     is_important true
     sequence(:content) {|n| "テストお知らせ\n#{n}"}
   end
+
+  factory :notification_from_tomorrow_to_3days_after, class: Notification do
+    start_date Date.tomorrow
+    end_date Date.today + 3.days
+    is_important true
+    content "テストお知らせ。明日から"
+  end
+
+  factory :notification_from_today_to_tomorrow, class: Notification do
+    start_date Date.today
+    end_date Date.tomorrow
+    is_important false
+    content "テストお知らせ。今日から"
+  end
+
+  factory :notification_from_yesterday_to_tomorrow, class: Notification do
+    start_date Date.yesterday
+    end_date Date.tomorrow
+    is_important true
+    content "テストお知らせ。昨日から"
+  end
+
+  factory :notification_from_3days_ago_to_yesterday, class: Notification do
+    start_date Date.today - 3.days
+    end_date Date.yesterday
+    is_important false
+    content "テストお知らせ。昨日から"
+  end
 end

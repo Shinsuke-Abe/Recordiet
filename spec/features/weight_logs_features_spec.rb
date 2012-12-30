@@ -145,8 +145,29 @@ describe "体重履歴機能" do
 		end
 	end
 
-	# TODO 有効期間内のお知らせが表示される
-	# TODO I18nの登録
+	describe "お知らせ機能" do
+		it "お知らせがない場合はメッセージを表示しない" do
+			proc {
+				find("#system_notification")
+				}.should raise_error(Capybara::ElementNotFound)
+		end
+
+		it "お知らせがある場合はメッセージを表示する" do
+			notifications = [
+			  FactoryGirl.create(:notification_from_tomorrow_to_3days_after),
+			  FactoryGirl.create(:notification_from_today_to_tomorrow),
+			  FactoryGirl.create(:notification_from_yesterday_to_tomorrow),
+			  FactoryGirl.create(:notification_from_3days_ago_to_yesterday)]
+
+			visit weight_logs_path
+
+			expected_message = notifications[1..2].map { |notification| notification.display_content }
+
+			expect(find("#system_notification")).to have_content expected_message.join("\n")
+		end
+	end
+
+	# TODO 過去のお知らせ一覧を表示できる
 
 	after do
 		FactoryGirl.reload
