@@ -167,8 +167,6 @@ describe "体重履歴機能" do
 		end
 	end
 
-	# TODO 過去のお知らせ一覧を表示できる
-
 	after do
 		FactoryGirl.reload
 	end
