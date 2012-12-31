@@ -1,4 +1,4 @@
-=link_to "新規作成", new_admin_notification_path
+=link_to "新規作成", new_admin_notification_path, :class => "btn btn-primary"
 
 %table.table.table-striped
   %thead
@@ -16,9 +16,11 @@
         %td= notification.end_date.to_s
         %td
           - if notification.is_important
-            = "○"
+            %i.icon-ok
         %td= simple_format(notification.content)
         %td
+          - if notification.is_expired
+            %i.icon-ok
         %td
           = render :partial => "iterate_item_buttons",
                    :object => {:edit_path => edit_admin_notification_path(notification.id),

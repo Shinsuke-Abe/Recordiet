@@ -26,6 +26,21 @@ describe LoginsController do
     end
   end
 
+  describe "DELETE login" do
+    it "管理者認証済のユーザがログアウトした場合はセッションから管理者認証も削除する" do
+      admin = FactoryGirl.create(:admin)
+      session[:id] = admin.id
+      session[:is_administrator] = admin.is_administrator
+
+      delete :destroy
+
+      response.should redirect_to login_path
+
+      session[:id].should be_nil
+      session[:is_administrator].should be_nil
+    end
+  end
+
   after do
     FactoryGirl.reload
   end

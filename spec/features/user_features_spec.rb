@@ -206,7 +206,8 @@ describe "ユーザ機能" do
 			find_field("confirm_password").value.should be_nil
 
 			input_admin_confirm_password_and_post("invalid_password", false)
-			# TODO エラー表示
+
+			expect(find(".alert.alert-error")).to have_content application_message_for_test("administrator_confirm_incorrect")
 		end
 
 		it "管理者ログイン認証に成功した場合は管理者メニューが表示される" do

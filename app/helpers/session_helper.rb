@@ -35,6 +35,7 @@ module SessionHelper
 
   def sign_out
     session[:id] = nil
+    session[:is_administrator] = nil
   end
 
   def authenticable?(user)

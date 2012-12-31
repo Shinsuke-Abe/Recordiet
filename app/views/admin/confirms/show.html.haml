@@ -1,6 +1,10 @@
-ここから先は管理者メニューです。
-本人確認のため、再度パスワードを入力して下さい。
+%h4
+  ここから先は管理者メニューです。
+  本人確認のため、再度パスワードを入力して下さい。
+
+- if alert
+  .alert.alert-error= alert
 
 = simple_form_for :confirm, {url: admin_confirm_path} do |f|
-  .field= f.input :password
+  .field= f.input :password, :label => "パスワード"
   .actions= f.submit "確認", :class => "btn btn-success"

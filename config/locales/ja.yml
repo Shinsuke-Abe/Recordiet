@@ -223,12 +223,17 @@ ja:
         end_date: "終了日"
         is_important: "重要なお知らせ"
         content: "内容"
+      confirm:
+        password: "パスワード"
   controllers:
       users: "ユーザ情報"
       weight_logs: "体重履歴"
       milestones: "目標"
       achieved_milestone_logs: "目標達成履歴"
       menus: "食事内容"
+      admin_notifications: "システムからのお知らせ"
+      admin_confirms: "権限確認"
+      admin_menus: "管理者メニュー"
   actions:
       create: "登録"
       new: "登録"
@@ -242,3 +247,4 @@ ja:
       achieve_milestone: "目標を達成しました！おめでとうございます。\nご褒美は%sです、楽しんで下さい！"
       login_incorrect: "メールアドレスかパスワードが間違っています。"
       login_required: "Recordietの各機能を使うにはログインが必要です。"
+      administrator_confirm_incorrect: "管理者権限が確認できませんでした。\nもう一度パスワードを入力して下さい。"

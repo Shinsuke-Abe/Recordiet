@@ -118,4 +118,37 @@ describe Notification do
       actual_array[0].content.should == expected_content
     end
   end
+
+  describe ".is_expired" do
+    it "終了日付がnilの場合はfalse" do
+      notification = Notification.create(
+        :content => "テストお知らせ")
+
+      expect(notification.is_expired).to be_false
+    end
+
+    it "終了日付が昨日以前であればtrue" do
+      notification = Notification.create(
+        :end_date => Date.yesterday,
+        :content => "テストお知らせ。昨日まで")
+
+      expect(notification.is_expired).to be_true
+    end
+
+    it "終了日付が本日であればfalse" do
+      notification = Notification.create(
+        :end_date => Date.today,
+        :content => "テストお知らせ。今日まで")
+
+      expect(notification.is_expired).to be_false
+    end
+
+    it "終了日付が明日以降であればfalse" do
+      notification = Notification.create(
+        :end_date => Date.tomorrow,
+        :content => "テストお知らせ。明日まで")
+
+      expect(notification.is_expired).to be_false
+    end
+  end
 end

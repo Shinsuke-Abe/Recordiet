@@ -13,6 +13,10 @@ class Notification < ActiveRecord::Base
   	end
   end
 
+  def is_expired
+    end_date and end_date < Date.today
+  end
+
   def self.effective_notification
   	condition = "
   		(start_date IS NULL or start_date <= ?) and
