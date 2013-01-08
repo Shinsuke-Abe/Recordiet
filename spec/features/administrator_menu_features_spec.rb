@@ -20,6 +20,10 @@ describe "管理者メニュー機能" do
 	  page.should have_link "Twitter連携設定"
 	end
 
+	describe "Twitter連携設定メニュー" do
+
+	end
+
 	describe "お知らせ管理メニュー" do
 		before do
 			expect_to_click_link("お知らせ管理", admin_notifications_path)
