@@ -15,8 +15,9 @@ describe "管理者メニュー機能" do
 		current_path.should == admin_menu_path
 	end
 
-	it "管理者メニューにはお知らせ管理リンクが表示されている" do
+	it "管理者メニューのリンクが表示されている" do
 	  page.should have_link "お知らせ管理"
+	  page.should have_link "Twitter連携設定"
 	end
 
 	describe "お知らせ管理メニュー" do
