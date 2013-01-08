@@ -76,3 +76,6 @@ gem 'capybara'
 
 # To use kaminari to weight_log paging
 gem 'kaminari'
+
+# To use twitter api Ruby Gem
+gem 'twitter'
