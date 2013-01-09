@@ -23,6 +23,9 @@ describe "管理者メニュー機能" do
 	describe "Twitter連携設定メニュー" do
 		it "入力フォームを表示する" do
 		  expect_to_click_link("Twitter連携設定", admin_twitter_link_path)
+		  # TODO モデルの暗号化、複合化のテスト
+		  # TODO モデルのバリデーションテスト
+		  # TODO ルーティング(show,create,update)
 		end
 	end
 
