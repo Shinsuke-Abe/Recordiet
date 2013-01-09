@@ -1,4 +1,10 @@
 Recordiet::Application.routes.draw do
+  get "twitter_links/show"
+
+  get "twitter_links/create"
+
+  get "twitter_links/update"
+
   resource :login
   resource :user
 
