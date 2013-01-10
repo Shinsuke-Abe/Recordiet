@@ -1,0 +1,6 @@
+= simple_form_for @twitter_link, :url => admin_twitter_link_path, :html => {:class => "form-horizontal"} do |f|
+  .control-group
+    = f.input :consumer_key
+  .control-group
+    = f.input :consumer_secret
+  .form-actions= f.submit nil, :class => "btn btn-primary"

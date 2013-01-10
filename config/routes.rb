@@ -1,9 +1,4 @@
 Recordiet::Application.routes.draw do
-  get "twitter_links/show"
-
-  get "twitter_links/create"
-
-  get "twitter_links/update"
 
   resource :login
   resource :user
@@ -18,6 +13,7 @@ Recordiet::Application.routes.draw do
     resource :confirm
     resource :menu
     resources :notifications
+    resource :twitter_link
   end
 
   # The priority is based upon order of creation:
