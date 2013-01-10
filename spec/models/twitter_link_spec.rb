@@ -9,5 +9,12 @@ describe TwitterLink do
 
       expect(twitter_link.invalid?).to be_true
     end
+
+    it "コンシューマーシークレットが未入力" do
+      twitter_link = TwitterLink.new(
+        :consumer_key => "key")
+
+      expect(twitter_link.invalid?).to be_true
+    end
   end
 end
