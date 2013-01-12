@@ -27,8 +27,7 @@ describe "管理者メニュー機能" do
 		  find_field("twitter_link_consumer_key").value.should be_nil
 		  find_field("twitter_link_consumer_secret").value.should be_nil
 		  # TODO モデルの暗号化、複合化のテスト
-		  # TODO モデルのバリデーションテスト
-		  # TODO ルーティング(show,create,update)
+		  # TODO ルーティング(create,update)
 		end
 	end
 
