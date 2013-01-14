@@ -19,21 +19,48 @@ describe TwitterLink do
     end
   end
 
-  describe ".encrypt!" do
-    it "コンシューマーキーとシークレットを暗号化することができる" do
+  describe "暗号化" do
+    before do
       ENV['SECRET_KEY'] = "secret"
 
-      twitter_link = TwitterLink.new(
+      @twitter_link = TwitterLink.new(
         :consumer_key => "con_key",
         :consumer_secret => "con_secret")
+    end
 
-      expect_key = encrypt_string(twitter_link.consumer_key)
-      expect_secret = encrypt_string(twitter_link.consumer_secret)
+    it "コンシューマーキーとシークレットを暗号化することができる" do
+      expect_key = encrypt_string(@twitter_link.consumer_key)
+      expect_secret = encrypt_string(@twitter_link.consumer_secret)
 
-      twitter_link.encrypt!
+      @twitter_link.encrypt!
 
-      twitter_link.consumer_key.should == expect_key
-      twitter_link.consumer_secret.should == expect_secret
+      assert_twitter_link expect_key, expect_secret, @twitter_link
+    end
+
+    it "暗号化されたコンシューマーキーとシークレットを複合化することができる" do
+      expect_key = @twitter_link.consumer_key
+      expect_secret = @twitter_link.consumer_secret
+
+      @twitter_link.encrypt!
+      @twitter_link.decrypt!
+
+      assert_twitter_link expect_key, expect_secret, @twitter_link
+    end
+
+    it "永続化時に暗号化される" do
+      expect_key = encrypt_string(@twitter_link.consumer_key)
+      expect_secret = encrypt_string(@twitter_link.consumer_secret)
+
+      @twitter_link.save
+
+      actual_twitter_link = TwitterLink.find(:first)
+
+      assert_twitter_link expect_key, expect_secret, actual_twitter_link
+    end
+
+    def assert_twitter_link(expect_key, expect_secret, actual)
+      actual.consumer_key.should == expect_key
+      actual.consumer_secret.should == expect_secret
     end
 
     def encrypt_string(target)
@@ -41,7 +68,11 @@ describe TwitterLink do
       enc.encrypt
       enc.pkcs5_keyivgen(ENV['SECRET_KEY'])
 
-      ((enc.update(target) + enc.final).unpack("H*")).to_s
+      encrypted = ""
+      encrypted << enc.update(target)
+      encrypted << enc.final
+
+      Base64.encode64(encrypted).encode('utf-8')
     end
   end
 end
