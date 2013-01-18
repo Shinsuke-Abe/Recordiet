@@ -65,6 +65,10 @@ module WeightLogsHelper
   def min_data(data_arr, user)
     all_data_arr = data_arr.select{|data| data}
 
+    # value = yield user.milestone
+    # if user.milestone and value
+    #   all_data_arr << value
+    # end
     if user.milestone and
       yield user.milestone
       milestone = yield user.milestone
