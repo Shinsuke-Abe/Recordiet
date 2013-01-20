@@ -9,18 +9,15 @@ class WeightLogsController < ApplicationController
   def index
     # @weight_log = WeightLog.new
     # @weight_logs = current_user.weight_logs.page(params[:page])
+    # controllerのあり方
     @weight_log = User.find(current_user.id).weight_logs.build
 
     if current_user.weight_logs.empty?
-      # flash_add application_message(:weight_log_not_found)
-      flash[:notice] = application_message(:weight_log_not_found)
+      notice_add application_message :weight_log_not_found
     end
 
     unless current_user.milestone
-      # flase_add application_message(:milestone_not_found)
-      flash[:notice] = add_new_line(
-        flash[:notice],
-        application_message(:milestone_not_found))
+      notice_add application_message :milestone_not_found
     end
   end
 
