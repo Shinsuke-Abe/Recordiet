@@ -49,4 +49,12 @@ describe Milestone do
       expect(new_milestone.valid?).to be_true
     end
   end
+
+  describe ".achieve_message" do
+    it "目標達成メッセージを取得する" do
+      new_milesotne = Milestone.new(@new_milestone_data)
+
+      new_milesotne.achieve_message.should == sprintf(application_message_for_test(:achieve_milestone), new_milesotne.reward)
+    end
+  end
 end

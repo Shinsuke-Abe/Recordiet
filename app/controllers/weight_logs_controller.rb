@@ -33,7 +33,7 @@ class WeightLogsController < ApplicationController
     else
       if @weight_log.achieved?
         # TODO milestoneモデルのメソッドにする
-        flash[:success] = achieve_message(current_user.milestone.reward)
+        flash[:success] = current_user.milestone.achieve_message
       end
 
       redirect_to weight_logs_path
@@ -62,11 +62,6 @@ class WeightLogsController < ApplicationController
   end
 
   private
-  def achieve_message(reward)
-    # TODO milestoneの仕事では？
-    sprintf(application_message(:achieve_milestone), reward)
-  end
-
   def load_weight_log
     # @weight_log = current_user.weight_logs.find(params[:id])
     @weight_log = WeightLog.find(params[:id])

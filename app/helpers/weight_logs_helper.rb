@@ -30,8 +30,8 @@ module WeightLogsHelper
 
   private
   def chart_arrays(user, page_no)
-    return user.weight_logs.page(page_no).reverse.map{|weight_log| yield weight_log},
-           user.weight_logs.page(page_no).reverse.map{|weight_log| weight_log.measured_date.strftime("%m/%d")}
+    [user.weight_logs.page(page_no).reverse.map{|weight_log| yield weight_log},
+     user.weight_logs.page(page_no).reverse.map{|weight_log| weight_log.measured_date.strftime("%m/%d")}]
   end
 
   def chart_basic(data_arr, axis_arr, trim_range)
