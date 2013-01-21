@@ -68,10 +68,6 @@ class WeightLogsController < ApplicationController
   end
 
   def load_effective_notification
-    notifications = Notification.effective_notification
-    # TODO mapとjoinはモデルの責務として
-    unless notifications.empty?
-      flash[:system_notification] = notifications.map{|notification| notification.display_content}.join("\n")
-    end
+    flash[:system_notification] = Notification.join_effective_notification
   end
 end
