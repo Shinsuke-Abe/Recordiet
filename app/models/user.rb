@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
     4 => "肥満(肥満度2)",
     5 => "肥満(肥満度3)",
     6 => "肥満(肥満度4)"
-  }
+  }.freeze
 
   def ponderal_index
     if bmi

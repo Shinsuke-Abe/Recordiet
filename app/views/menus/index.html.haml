@@ -4,7 +4,7 @@
       %th 種類
       %th 内容
   %tbody
-    - current_weight_log.menus.each do |menu|
+    - @menus.each do |menu|
       %tr
         %td= Menu.display_menu_type(menu.menu_type)
         %td= simple_format(menu.detail)

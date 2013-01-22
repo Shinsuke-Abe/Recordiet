@@ -1,11 +1,12 @@
 class MenusController < ApplicationController
   before_filter :authenticate_user!
   before_filter :load_menu, :only => [:edit, :update, :destroy]
-  include MenusHelper
+
+  helper_method :current_weight_log
 
   # GET /weight_logs/:id/menu
   def index
-    # do nothing
+    @menus = current_weight_log.menus
   end
 
   # GET /weight_logs/:id/menu/new
@@ -48,5 +49,9 @@ class MenusController < ApplicationController
   private
   def load_menu
     @menu = Menu.find(params[:id])
+  end
+
+  def current_weight_log
+    @weight_log ||= WeightLog.find(params[:weight_log_id])
   end
 end
