@@ -45,7 +45,7 @@ module WeightLogsHelper
 
     chart_arg[:axis_labels] = [axis_arr]
     chart_arg[:axis_with_labels] = ["x", "y"]
-    chart_arg[:axis_range] = [nil, [trim_range, data_arr.select{ |data| data}.max, 5]]
+    chart_arg[:axis_range] = [nil, [trim_range, data_arr.compact.max, 5]]
 
     chart_arg
   end
@@ -63,7 +63,7 @@ module WeightLogsHelper
   end
 
   def min_data(data_arr, user)
-    all_data_arr = data_arr.select{|data| data}
+    all_data_arr = data_arr.compact
 
     # value = yield user.milestone
     # if user.milestone and value

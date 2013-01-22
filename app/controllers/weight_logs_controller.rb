@@ -10,6 +10,7 @@ class WeightLogsController < ApplicationController
     # @weight_log = WeightLog.new
     # @weight_logs = current_user.weight_logs.page(params[:page])
     # controllerのあり方
+    # TODO form => @weight_log || WeightLog.new
     @weight_log = User.find(current_user.id).weight_logs.build
 
     if current_user.weight_logs.empty?
