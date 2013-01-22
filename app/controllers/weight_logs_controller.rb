@@ -33,7 +33,7 @@ class WeightLogsController < ApplicationController
       render :action => "index"
     else
       if @weight_log.achieved?
-        # TODO milestoneモデルのメソッドにする
+        # 達成メッセージはalert-successクラスを使いたいのでflash[:success]を使う
         flash[:success] = current_user.milestone.achieve_message
       end
 
@@ -69,6 +69,6 @@ class WeightLogsController < ApplicationController
   end
 
   def load_effective_notification
-    flash[:system_notification] = Notification.join_effective_notification
+    notice_add Notification.join_effective_notification
   end
 end

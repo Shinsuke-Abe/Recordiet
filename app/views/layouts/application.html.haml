@@ -34,6 +34,8 @@
           %h2= page_title(controller)
           - if notice
             = render :partial => "notice", :object => notice
+          - if flash[:success]
+            = render :partial => "success", :object => flash[:success]
           = yield
         .span3
           .well.sidebar-nav
