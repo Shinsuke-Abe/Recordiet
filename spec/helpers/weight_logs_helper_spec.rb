@@ -11,7 +11,7 @@ describe WeightLogsHelper do
 	end
 
 	it "目標のある体重履歴でグラフを作成する" do
-		chart_url = create_chart(@eric, "体重", nil) do |data|
+		chart_url = create_chart(@eric.weight_logs.page(nil), @eric.milestone, "体重") do |data|
 			data.weight
 		end
 
@@ -27,7 +27,7 @@ describe WeightLogsHelper do
 	it "ページを指定してグラフを作成する" do
 	  FactoryGirl.create_list(:weight_log, 17, user: @eric)
 
-	  chart_url = create_chart(@eric, "体重", 2) do |data|
+	  chart_url = create_chart(@eric.weight_logs.page(2), @eric.milestone, "体重") do |data|
 	  	data.weight
 	  end
 
@@ -38,6 +38,24 @@ describe WeightLogsHelper do
 	  expect(chart_url.include? chart_legend(true)).to be_true
 	  expect(chart_url.include? chart_range(trim_range_num, @eric.weight_logs.page(2))).to be_true
 	  expect(chart_url.include? chart_datas(@eric.weight_logs.page(2), @eric.milestone.weight, trim_range_num)).to be_true
+	end
+
+	it "目標が存在しない状態でグラフを作成する" do
+		@eric.milestone.destroy
+		@eric.reload
+
+		chart_url = create_chart(@eric.weight_logs.page, @eric.milestone, "体重") do |data|
+	  	data.weight
+	  end
+
+	  trim_range_num = expected_trim_range(@eric.weight_logs.page, nil)
+
+	  expect(chart_url.include? "chco=3300FF").to be_true
+	  expect(chart_url.include? "chco=3300FF,FF99CC").to be_false
+	  expect(chart_url.include? chart_date_axis_label(@eric.weight_logs.page)).to be_true
+	  expect(chart_url.include? "chdl=").to be_false
+	  expect(chart_url.include? chart_range(trim_range_num, @eric.weight_logs.page)).to be_true
+	  expect(chart_url.include? chart_datas(@eric.weight_logs.page, nil, trim_range_num)).to be_true
 	end
 
 	after do
@@ -56,8 +74,6 @@ describe WeightLogsHelper do
 	def chart_legend(has_milestone)
 		if has_milestone
 			sprintf("chdl=%s|%s", URI.escape("体重"), URI.escape("目標"))
-		else
-			sprintf("chdl=%s", URI.escape("体重"))
 		end
 	end
 
@@ -67,9 +83,13 @@ describe WeightLogsHelper do
 
 	def chart_datas(weight_logs, milestone_weight, trim_range)
 		data_arr = weight_logs.reverse.map{ |weight_log| weight_log.weight - trim_range }
-		milestone_arr = Array.new(data_arr.length, milestone_weight - trim_range)
 
-		sprintf("chd=t:%s|%s", data_arr.join(","), milestone_arr.join(","))
+		if milestone_weight
+			milestone_arr = Array.new(data_arr.length, milestone_weight - trim_range)
+			sprintf("chd=t:%s|%s", data_arr.join(","), milestone_arr.join(","))
+		else
+			sprintf("chd=t:%s", data_arr.join(","))
+		end
 	end
 
 	def max_data(weight_logs)
@@ -77,7 +97,11 @@ describe WeightLogsHelper do
 	end
 
 	def expected_trim_range(weight_logs, milestone_weight)
-		min_value = (weight_logs.map{|weight_log| weight_log.weight} << milestone_weight).min
+		min_value = if milestone_weight
+			(weight_logs.map{|weight_log| weight_log.weight} << milestone_weight).min
+		else
+			weight_logs.map{|weight_log| weight_log.weight}.min
+		end
 		((min_value - 10) / 5).truncate * 5
 	end
 end

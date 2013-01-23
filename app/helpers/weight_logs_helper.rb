@@ -2,23 +2,23 @@
 require 'gchart'
 
 module WeightLogsHelper
-  def create_chart(user, data_legend, page_no)
-    unless user.weight_logs.empty?
-      data_arr, axis_arr = chart_arrays(user, page_no) do |weight_log|
+  def create_chart(weight_logs, milestone, data_legend)
+    unless weight_logs.blank?
+      data_arr, axis_arr = chart_arrays(weight_logs) do |weight_log|
         yield weight_log
       end
 
-      unless data_arr.select{|data| data}.empty?
-        trim_value = trim_range(data_arr, user) do |milestone|
+      unless data_arr.compact.blank?
+        milestone_data = if milestone
           yield milestone
         end
 
+        trim_value = trim_range(data_arr, milestone_data)
+
         chart_arg = chart_basic(data_arr, axis_arr, trim_value)
 
-        if user.milestone and
-           yield user.milestone
-          milestone = yield user.milestone
-          chart_arg[:data] << Array.new(data_arr.size, milestone - trim_value)
+        if milestone_data
+          chart_arg[:data] << Array.new(data_arr.size, milestone_data - trim_value)
           chart_arg[:bar_colors] += ",FF99CC"
           chart_arg[:legend] = [data_legend, "目標"]
         end
@@ -29,9 +29,11 @@ module WeightLogsHelper
   end
 
   private
-  def chart_arrays(user, page_no)
-    [user.weight_logs.page(page_no).reverse.map{|weight_log| yield weight_log},
-     user.weight_logs.page(page_no).reverse.map{|weight_log| weight_log.measured_date.strftime("%m/%d")}]
+  def chart_arrays(weight_logs)
+    reversed_weight_logs = weight_logs.reverse
+
+    [reversed_weight_logs.map{|weight_log| yield weight_log},
+     reversed_weight_logs.map{|weight_log| weight_log.measured_date.strftime("%m/%d")}]
   end
 
   def chart_basic(data_arr, axis_arr, trim_range)
@@ -50,10 +52,8 @@ module WeightLogsHelper
     chart_arg
   end
 
-  def trim_range(data_arr, user)
-    min_value = min_data(data_arr, user) do |milestone|
-      yield milestone
-    end
+  def trim_range(data_arr, milestone)
+    min_value = min_data(data_arr, milestone)
 
     if min_value <= 10
       0
@@ -62,18 +62,10 @@ module WeightLogsHelper
     end
   end
 
-  def min_data(data_arr, user)
+  def min_data(data_arr, milestone)
     all_data_arr = data_arr.compact
 
-    # value = yield user.milestone
-    # if user.milestone and value
-    #   all_data_arr << value
-    # end
-    if user.milestone and
-      yield user.milestone
-      milestone = yield user.milestone
-      all_data_arr << milestone
-    end
+    all_data_arr << milestone if milestone
 
     all_data_arr.min
   end
