@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
     flash[:alert] = nil
   end
 
-  def notice_add(new_line)
+  def add_notice(new_line)
     unless flash[:notice]
       flash[:notice] = new_line
     else
@@ -19,15 +19,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def add_new_line(target, new_line)
-    target ? target + "\n" + new_line : new_line
-  end
-
   private
   # filter method to check user logined
   def authenticate_user!
     unless signed_in?
-      flash[:notice] = application_message(:login_required)
+      add_notice application_message(:login_required)
       redirect_to login_path
     else
       current_user

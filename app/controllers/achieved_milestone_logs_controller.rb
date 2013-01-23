@@ -7,6 +7,6 @@ class AchievedMilestoneLogsController < ApplicationController
   def index
     @achieved_milestone_logs = current_user.achieved_milestone_logs
 
-    notice_add application_message :achieved_milestone_not_found if @achieved_milestone_logs.blank?
+    add_notice application_message :achieved_milestone_not_found if @achieved_milestone_logs.blank?
   end
 end
