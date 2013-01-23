@@ -21,7 +21,6 @@ class WeightLogsController < ApplicationController
   def create
     @weight_log = current_user.weight_logs.build(params[:weight_log])
 
-
     unless @weight_log.save
       # 履歴未登録状態での登録エラー時に右ペインメニューでエラーが発生しないように
       current_user.reload
