@@ -7,11 +7,8 @@ class WeightLogsController < ApplicationController
 
   # GET /weight_logs
   def index
-    # @weight_log = WeightLog.new
-    # @weight_logs = current_user.weight_logs.page(params[:page])
-    # controllerのあり方
-    # TODO form => @weight_log || WeightLog.new
-    @weight_log = User.find(current_user.id).weight_logs.build
+    # 新規体重履歴入力用のオブジェクト生成はformで行う
+    @weight_logs = current_user.weight_logs.page(params[:page])
 
     if current_user.weight_logs.empty?
       notice_add application_message :weight_log_not_found

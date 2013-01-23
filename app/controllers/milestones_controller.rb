@@ -10,6 +10,7 @@ class MilestonesController < ApplicationController
 
   # POST /milestone/
   def create
+    # TODO current_userに対して操作して、insertに失敗したときにreloadの方が良い？
     @milestone = User.find(current_user.id).build_milestone(params[:milestone])
 
     if @milestone.save
@@ -46,6 +47,7 @@ class MilestonesController < ApplicationController
 
   private
   def load_milestone
+    # TODO current_userに対して操作して、updateに失敗したときにreloadの方が良い？
     @milestone = User.find(current_user.id).milestone
   end
 end

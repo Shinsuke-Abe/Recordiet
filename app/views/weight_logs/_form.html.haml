@@ -1,4 +1,4 @@
-= simple_form_for @weight_log, :html => {:class => "form-horizontal"} do |f|
+= simple_form_for @weight_log || WeightLog.new, :html => {:class => "form-horizontal"} do |f|
   .control-group
     = f.input :measured_date
   .control-group
