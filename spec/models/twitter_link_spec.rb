@@ -3,6 +3,7 @@ require 'spec_helper'
 require 'openssl'
 
 describe TwitterLink do
+  # TODO テーブルでの管理はやめて環境変数にする
   describe ".invalid" do
     it "コンシューマーキーが未入力" do
       twitter_link = TwitterLink.new(

@@ -4,18 +4,18 @@ class MilestonesController < ApplicationController
 
   # GET /milestone/new
   def new
-    # TODO form => @milestone || Milestone.new
-    @milestone = User.find(current_user.id).build_milestone
+    # 新規目標入力用のオブジェクト生成はformで行う
   end
 
   # POST /milestone/
   def create
-    # TODO current_userに対して操作して、insertに失敗したときにreloadの方が良い？
-    @milestone = User.find(current_user.id).build_milestone(params[:milestone])
+    @milestone = current_user.build_milestone(params[:milestone])
 
     if @milestone.save
       redirect_to weight_logs_path
     else
+      # 履歴未登録状態での登録エラー時に右ペインメニューでエラーが発生しないように
+      current_user.reload
       render :action => "new"
     end
   end
@@ -47,7 +47,6 @@ class MilestonesController < ApplicationController
 
   private
   def load_milestone
-    # TODO current_userに対して操作して、updateに失敗したときにreloadの方が良い？
-    @milestone = User.find(current_user.id).milestone
+    @milestone = current_user.milestone
   end
 end
