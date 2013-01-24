@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130109122834) do
+ActiveRecord::Schema.define(:version => 20130124142158) do
 
   create_table "achieved_milestone_logs", :force => true do |t|
     t.date     "achieved_date"
@@ -53,13 +53,6 @@ ActiveRecord::Schema.define(:version => 20130109122834) do
     t.text     "content"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
-  end
-
-  create_table "twitter_links", :force => true do |t|
-    t.string   "consumer_key"
-    t.string   "consumer_secret"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
   end
 
   create_table "users", :force => true do |t|
