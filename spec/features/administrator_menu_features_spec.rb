@@ -15,11 +15,12 @@ describe "管理者メニュー機能" do
 		current_path.should == admin_menu_path
 	end
 
+	# TODO 設定確認メニューを作る
+	#   => heroku run とかでCPU時間使うよりは画面で確認できた方が
+	#   => 単なるビューア
 	it "管理者メニューのリンクが表示されている" do
 	  page.should have_link "お知らせ管理"
 	end
-	# TODO テストを流す
-	# TODO rails_configプラグインを使う
 
 	describe "お知らせ管理メニュー" do
 		before do
