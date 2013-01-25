@@ -78,3 +78,6 @@ gem 'kaminari'
 
 # To use twitter api Ruby Gem
 gem 'twitter'
+
+# To use rails config
+gem 'rails_config'
