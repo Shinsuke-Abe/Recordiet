@@ -20,6 +20,13 @@ describe "管理者メニュー機能" do
 	#   => 単なるビューア
 	it "管理者メニューのリンクが表示されている" do
 	  page.should have_link "お知らせ管理"
+	  page.should have_link "アプリケーション設定確認"
+	end
+
+	describe "アプリケーション設定確認" do
+		it "設定ビューアが開く" do
+			expect_to_click_link("アプリケーション設定確認", admin_app_setting_path)
+		end
 	end
 
 	describe "お知らせ管理メニュー" do

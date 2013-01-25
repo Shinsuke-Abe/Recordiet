@@ -234,6 +234,7 @@ ja:
       admin_notifications: "システムからのお知らせ"
       admin_confirms: "権限確認"
       admin_menus: "管理者メニュー"
+      admin_app_settings: "アプリケーション設定"
   actions:
       create: "登録"
       new: "登録"

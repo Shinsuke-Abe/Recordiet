@@ -1,5 +1,7 @@
 Recordiet::Application.routes.draw do
 
+  get "app_settings/show"
+
   resource :login
   resource :user
 
@@ -13,6 +15,7 @@ Recordiet::Application.routes.draw do
     resource :confirm
     resource :menu
     resources :notifications
+    resource :app_setting
   end
 
   # The priority is based upon order of creation:
