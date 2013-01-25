@@ -13,7 +13,6 @@ Recordiet::Application.routes.draw do
     resource :confirm
     resource :menu
     resources :notifications
-    resource :twitter_link
   end
 
   # The priority is based upon order of creation:
