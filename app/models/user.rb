@@ -3,11 +3,12 @@ require 'bcrypt'
 
 class User < ActiveRecord::Base
   attr_accessor :password
-  attr_accessible :display_name, :mail_address, :height, :password_digest, :password, :is_administrator
+  attr_accessible :display_name, :mail_address, :height, :password_digest, :password, :is_administrator, :twitter_link_flag, :hash_tag
 
   validates :mail_address, :display_name, :password, :presence => true
   validates :mail_address, :uniqueness => true, :email_format => true
   validates :height, :numericality => {greater_than_or_equal_to: 0.1}, :allow_blank => true
+  validate :twitter_link_flag_and_hash_tag_relativity
 
   has_many :weight_logs, :dependent => :destroy
   has_many :achieved_milestone_logs, :dependent => :destroy
@@ -92,5 +93,11 @@ class User < ActiveRecord::Base
 
   def display_ponderal_index
     @@ponderal_index_types[ponderal_index]
+  end
+
+  def twitter_link_flag_and_hash_tag_relativity
+    if twitter_link_flag and not hash_tag
+      errors.add(:hash_tag, "can't blank if twitter_link_flag is true")
+    end
   end
 end

@@ -77,6 +77,26 @@ describe User do
 
       expect(new_user.invalid?).to be_true
     end
+
+    it "twitter連携フラグがtrueかつハッシュタグがnilの場合はtrueが返る" do
+      @new_user_data[:twitter_link_flag] = true
+      new_user = User.new(@new_user_data)
+
+      expect(new_user.invalid?).to be_true
+    end
+  end
+
+  describe ".valid?" do
+    it "twitter連携フラグがtrueかつハッシュタグが入力されている場合はtrueが返る" do
+      new_user = User.new(
+        :mail_address => "newuser@mail.com",
+        :display_name => "new user name",
+        :password => "password",
+        :twitter_link_flag => true,
+        :hash_tag => "ハッシュタグ")
+
+      expect(new_user.valid?).to be_true
+    end
   end
 
   describe ".latest_weight_log" do
