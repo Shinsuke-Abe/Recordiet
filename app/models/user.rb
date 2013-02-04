@@ -96,8 +96,8 @@ class User < ActiveRecord::Base
   end
 
   def twitter_link_flag_and_hash_tag_relativity
-    if twitter_link_flag and not hash_tag
-      errors.add(:hash_tag, "can't blank if twitter_link_flag is true")
+    if twitter_link_flag and hash_tag.blank?
+      errors.add(:hash_tag, "can't blank when twitter_link_flag is true")
     end
   end
 end
