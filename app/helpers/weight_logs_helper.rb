@@ -3,12 +3,12 @@ require 'gchart'
 
 module WeightLogsHelper
   def create_chart(weight_logs, milestone, data_legend)
-    unless weight_logs.blank?
+    if weight_logs.present?
       data_arr, axis_arr = chart_arrays(weight_logs) do |weight_log|
         yield weight_log
       end
 
-      unless data_arr.compact.blank?
+      if data_arr.compact.present?
         milestone_data = if milestone
           yield milestone
         end
