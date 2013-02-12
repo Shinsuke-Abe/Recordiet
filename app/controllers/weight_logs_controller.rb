@@ -30,10 +30,14 @@ class WeightLogsController < ApplicationController
 
       render :action => "index"
     else
-      # 達成メッセージはalert-successクラスを使いたいのでflash[:success]を使う
-      flash[:success] = current_user.milestone.achieve_message if @weight_log.achieved?
+      if current_user.twitter_link_flag
+        redirect_to "/auth/twitter"
+      else
+        # 達成メッセージはalert-successクラスを使いたいのでflash[:success]を使う
+        flash[:success] = current_user.milestone.achieve_message if @weight_log.achieved?
 
-      redirect_to weight_logs_path
+        redirect_to weight_logs_path
+      end
     end
   end
 
@@ -55,6 +59,11 @@ class WeightLogsController < ApplicationController
   def destroy
     @weight_log.destroy
 
+    redirect_to weight_logs_path
+  end
+
+  # oauth callback method
+  def tweet_log
     redirect_to weight_logs_path
   end
 

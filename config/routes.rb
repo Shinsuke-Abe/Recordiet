@@ -1,7 +1,5 @@
 Recordiet::Application.routes.draw do
 
-  get "app_settings/show"
-
   resource :login
   resource :user
 
@@ -17,6 +15,9 @@ Recordiet::Application.routes.draw do
     resources :notifications
     resource :app_setting
   end
+
+  # twitter oauth callback
+  match "/auth/:providor/callback" => "weight_logs#tweet_log"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
