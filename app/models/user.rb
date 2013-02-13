@@ -64,6 +64,21 @@ class User < ActiveRecord::Base
     end
   end
 
+  def tweet_created_log(auth, weight_logs_id)
+    Twitter.configure do |config|
+      config.oauth_token = auth['credentials']['token']
+      config.oauth_token_secret = auth['credentials']['secret']
+    end
+
+    tweet_weight_log = weight_logs.find(weight_logs_id)
+
+    if tweet_weight_log.fat_percentage
+      Twitter.update("##{hash_tag} #{tweet_weight_log.weight}kg #{tweet_weight_log.fat_percentage}%")
+    else
+      Twitter.update("##{hash_tag} #{tweet_weight_log.weight}kg")
+    end
+  end
+
   @@ponderal_index_types = {
     1 => "やせ型",
     2 => "標準",
