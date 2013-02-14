@@ -31,7 +31,6 @@ class WeightLogsController < ApplicationController
       render :action => "index"
     else
       if current_user.twitter_link_flag
-        # Twitter連携を行う場合は認証にリダイレクト
         session[:tweet_weight_log_id] = @weight_log.id
 
         redirect_to "/auth/twitter"
@@ -68,6 +67,10 @@ class WeightLogsController < ApplicationController
   # oauth callback method
   def tweet_log
     current_user.tweet_created_log(request.env["omniauth.auth"], session[:tweet_weight_log_id])
+
+    if current_user.weight_logs.find(session[:tweet_weight_log_id]).achieved?
+      flash[:success] = current_user.milestone.achieve_message
+    end
 
     session[:tweet_weight_log_id] = nil
 

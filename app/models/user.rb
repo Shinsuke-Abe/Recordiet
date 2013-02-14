@@ -65,17 +65,23 @@ class User < ActiveRecord::Base
   end
 
   def tweet_created_log(auth, weight_logs_id)
-    Twitter.configure do |config|
-      config.oauth_token = auth['credentials']['token']
-      config.oauth_token_secret = auth['credentials']['secret']
-    end
+    File.open('lockfile', 'w') do |f|
+      f.flock(File::LOCK_EX)
 
-    tweet_weight_log = weight_logs.find(weight_logs_id)
+      Twitter.configure do |config|
+        config.oauth_token = auth['credentials']['token']
+        config.oauth_token_secret = auth['credentials']['secret']
+      end
 
-    if tweet_weight_log.fat_percentage
-      Twitter.update("##{hash_tag} #{tweet_weight_log.weight}kg #{tweet_weight_log.fat_percentage}%")
-    else
-      Twitter.update("##{hash_tag} #{tweet_weight_log.weight}kg")
+      tweet_weight_log = weight_logs.find(weight_logs_id)
+
+      if tweet_weight_log.fat_percentage
+        Twitter.update("##{hash_tag} #{tweet_weight_log.weight}kg #{tweet_weight_log.fat_percentage}%")
+      else
+        Twitter.update("##{hash_tag} #{tweet_weight_log.weight}kg")
+      end
+
+      f.flock(File::LOCK_UN)
     end
   end
 
